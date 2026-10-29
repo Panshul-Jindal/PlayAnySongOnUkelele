@@ -4,8 +4,8 @@
 .DS_store
 .ipynb_checkpoints
 __pycache__
-data/chords
-data/lab_files
+# data/chords
+# data/lab_files
 wandb
 not needed
 predicted_values
