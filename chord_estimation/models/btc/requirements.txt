@@ -1,5 +1,0 @@
-torch
-numpy
-librosa
-transformers
-huggingface_hub
