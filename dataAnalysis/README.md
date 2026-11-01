@@ -13,7 +13,9 @@ Scripts behind the chord-vocabulary numbers. Stdlib only — no extra deps.
 | `tempo_check.py` | how steady the tempo is between neighbouring phrases, from the hand-aligned phrase starts |
 | `compare_versions.py` | the playability repo's copies against McGill Billboard 2.0 (finding 9) |
 | `duplicates.py` | which song folders hold the same song, and whether their annotations are copies (finding 10) |
-| `test_harte.py` | 41 assertions copied from the source documents below |
+
+Tests for these scripts live in `tests/dataAnalysis/`: `test_harte.py` holds 41
+assertions copied from the source documents below.
 
 ## Sources
 
@@ -56,7 +58,7 @@ python3 dataAnalysis/compare_versions.py playability-billboard-guitar/data/chord
 python3 dataAnalysis/duplicates.py --show 10 data/McGillBillboard
 
 # check the parser against the source documents
-python3 dataAnalysis/test_harte.py
+uv run pytest tests/dataAnalysis/test_harte.py
 ```
 
 Quote the globs so the shell doesn't expand them — the scripts expand them
@@ -81,6 +83,17 @@ metric (chord symbol recall) is itself duration-weighted.
 | unique pitch-class sets (bass included) | 292 | 434 |
 | unique (root, pc-set) pairs | 347 | 556 |
 | unique shapes (set relative to its root) | 75 | 110 |
+
+
+I split the 93 just now ([ORIGINAL]
+|form|distinct|share of chord time|most used|
+|---|---|---|---|
+|shorthand alone|24|94.2%|all 25 shorthands except `maj11`, which never appears|
+|shorthand + (degrees)|57|5.6%|`maj(9)` 41 min, `7(#9)` 27 min, `sus4(b7,9)` 26 min, `sus4(b7)` 25 min|
+|(degrees) only|12|0.2%|`(11)`, `(b3,b7)`, `(b7)`|
+|**total**|**93**|||
+
+
 
 ### What the chord count measures
 
@@ -468,7 +481,7 @@ There's one counterargument, for completeness. People may mostly ask for hit son
 
 ## Harte parser notes
 
-Correctness rests on `test_harte.py` — 41 assertions whose expected values are
+Correctness rests on `tests/dataAnalysis/test_harte.py` — 41 assertions whose expected values are
 copied from [H05] (Tables 1–2, §3, §4), [dHB12] Table 1 and [ME] `encode()`,
 **not** from this parser's own
 output. `SHORTHAND` is grouped into a 16-entry [H05] block and a 9-entry

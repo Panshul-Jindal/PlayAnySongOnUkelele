@@ -6,6 +6,6 @@ Proposes a playability rubric with seven criteria, expert annotations for 200 so
 -> So it means human generated ground truth is definitely need for ukelele
 
 
-[[Can Playability be measured?]]
+[[Can Playability be measured]]
 
 [[Can  Playability Be Predicted ]]

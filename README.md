@@ -13,6 +13,15 @@ chmod +x download_McGillBillBoardDataset.sh
 ./download_McGillBillBoardDataset.sh
 ```
 
+## Run the tests
+
+```bash
+uv run pytest
+```
+
+Tests live in `tests/`, mirroring the source folders. Tests that need the
+dataset skip when `data/` is missing.
+
 
 ## Running Autochord
 

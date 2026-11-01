@@ -26,3 +26,14 @@ at a glance.
   from our own implementation's output.
 - When a reference table mixes sources, group and label the blocks by source.
 - "It runs without errors" is not evidence of correctness.
+
+## Tests
+
+- Tests live in `tests/`, mirroring the source tree: tests for
+  `preprocessing/remove_duplicates.py` go in
+  `tests/preprocessing/test_remove_duplicates.py`. Run them all with
+  `uv run pytest` from the repository root.
+- Expected values come from a source document or from inputs built by hand,
+  so the answer is known. A value copied from our own output only detects
+  change; the test says so.
+- Tests that need `data/` skip when it isn't there.
