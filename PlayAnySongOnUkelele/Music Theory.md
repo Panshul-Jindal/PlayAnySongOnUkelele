@@ -60,7 +60,8 @@ i.e 3 up from B-> D
 
 
 
-
+## Chord
+![[Pasted image 20261101191719.png]]
 
 **Fixes off the size of universe**
 12 pitch classes

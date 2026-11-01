@@ -9,3 +9,28 @@ I've now looked. There are three kinds:
 3. **An exact halving or doubling.** In _If I Could Turn Back Time_ the **identical written 4-bar line** takes 4.5 s in one phrase and 8.9 s in the next; _Kokomo_ and _Need You Tonight_ show the same pattern. A band doesn't normally play the same pattern twice as fast for one phrase, so I read these as a bar count or timestamp that doesn't match the audio. If so, the computed chord times inside those phrases are off by up to a factor of two. Only listening can confirm it.
 
 You can list them yourself with `tempo_check.py --worst N`.
+
+
+
+
+
+
+
+
+
+## What a model actually faces
+
+A model never sees every possible chord, only the ones in the data. The merge cascade from finding 3 and the table in finding 6 give the observed counts. These counts of distinct things are unchanged by deduplication.
+
+|full McGill, root ignored|classes|
+|---|---|
+|same notes + same lowest note|790|
+|same notes, lowest note forgotten (bass still counted as a note)|434|
+|**slash dropped entirely: the chord alone**|**389**|
+
+Two things to notice:
+
+- **790 vs 793 is a coincidence.** One is an observed count of chords with a lowest note. The other is a theoretical count of chords without one.
+- **Your hypothesis matches the last row, not the middle one.** Your formula forgets which note is lowest but keeps every note. A beginner ignoring the bass also drops the bass note itself, so `A:maj/2`, {A, B, C#, E}, becomes A major, {A, C#, E}. That's 790 → 389, so dropping the bass roughly halves the observed vocabulary.
+
+The ~400 classes that go away cover at most 8.8% of the time, since that's all the slash-chord time (finding 6). So the cut falls almost entirely on rare chords, the long tail in your "Not Explored Yet" note. That is a real benefit.

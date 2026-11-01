@@ -75,14 +75,23 @@ def main():
     slashed = {l: d for l, d in chords.items() if harte.split(l)[2] is not None}
     outside = {l: d for l, d in slashed.items()
                if harte.bass_pitch_class(l) not in chord_only(l)}
+    # A slash can name the root itself: E:1/1 is a lone bass note E
+    # (de Haas & Burgoyne 2012, p.3), not an inversion.
+    on_root = {l: d for l, d in slashed.items()
+               if harte.bass_pitch_class(l) == harte.note_to_pc(harte.split(l)[0])}
 
     heading("slash basses")
     slash_time = sum(slashed.values())
     out_time = sum(outside.values())
+    root_time = sum(on_root.values())
     print(f"files                          {len(paths)}")
     print(f"time with a slash bass         {slash_time / 60:7.1f} min "
           f"({100 * slash_time / total:.1f}% of corpus)")
-    print(f"  bass IS a chord tone         {(slash_time - out_time) / 60:7.1f} min")
+    print(f"  bass IS the root             {root_time / 60:7.1f} min "
+          f"({100 * root_time / total:.2f}% of corpus, {len(on_root)} label types, "
+          f"e.g. {max(on_root, key=on_root.get)})")
+    print(f"  bass IS another chord tone   {(slash_time - out_time - root_time) / 60:7.1f} min "
+          f"({100 * (slash_time - out_time - root_time) / total:.2f}% of corpus)")
     print(f"  bass is NOT in the chord     {out_time / 60:7.1f} min "
           f"({100 * out_time / total:.2f}% of corpus, {len(outside)} label types)")
     print(f"songs with >=1 such bass       {len(songs_with_outside)} of {len(paths)}")

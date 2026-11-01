@@ -9,6 +9,7 @@ Scripts behind the chord-vocabulary numbers. Stdlib only — no extra deps.
 | `chord_vocab_stats.py` | the main report: alphabet size, factorisation, tail, pitch-class collapse |
 | `vocab_reductions.py` | alphabet size of each of the five McGill vocabulary levels |
 | `bass_analysis.py` | how often the bass lies outside the chord, pitch-class sets with and without it, and which same-sounding labels the bass-excluded sets split apart (finding 6) |
+| `bass_reach.py` | which annotated basses a ukulele can put at the bottom when no string is fretted above fret k (finding 11) |
 | `beat_from_lab.py` | the common time unit (approximate GCD) of one `.lab` file's segment lengths |
 | `tempo_check.py` | how steady the tempo is between neighbouring phrases, from the hand-aligned phrase starts |
 | `compare_versions.py` | the playability repo's copies against McGill Billboard 2.0 (finding 9) |
@@ -42,6 +43,9 @@ python3 dataAnalysis/vocab_reductions.py data/McGillBillboard/McGill-Billboard
 
 # basses outside the chord, and sets with / without the bass (finding 6, per song)
 python3 dataAnalysis/bass_analysis.py 'data/preprocessed/McGill-Billboard/*/full.lab'
+
+# basses a ukulele can put at the bottom, frets 0..k (finding 11, per song)
+python3 dataAnalysis/bass_reach.py 'data/preprocessed/McGill-Billboard/*/full.lab'
 
 # common time unit (approximate GCD) of one song's segment lengths
 python3 dataAnalysis/beat_from_lab.py data/McGillBillboard/McGill-Billboard/0078/full.lab
@@ -255,7 +259,8 @@ folder per song), with `bass_analysis.py`, **[ORIGINAL]**:
 | measure | per song (739 folders, 44.5 h) |
 |---|---|
 | time with a slash bass | 235.3 min, 8.8% of all time |
-| bass is a chord tone (a true inversion) | 167.2 min, 6.3% |
+| bass is the root, written `/1` (17 labels such as `E:1/1`, a lone bass note) | 45.9 min, 1.72% |
+| bass is another chord tone (a true inversion) | 121.3 min, 4.54% |
 | bass is not in the chord | 68.1 min, 2.55% |
 | label types with a bass outside the chord | 176 |
 | songs with at least one such bass | 232 of 739 (31.4%) |
@@ -464,8 +469,8 @@ counts of distinct labels, chords and sets in this README (974 strings, 790
 chords, 434 sets, …) are the same with or without the copies. Everything that
 adds up time or counts songs (hours, shares of time, tail coverage, runs,
 segment and tempo statistics) counts each folder, that is each chart slot,
-once, as the dataset is distributed. Finding 6 is the exception: it has been
-recomputed per song.
+once, as the dataset is distributed. Findings 6 and 11 are the exceptions:
+they are counted per song.
 
 |kind of number|changes without copies?|why|
 |---|---|---|
@@ -485,6 +490,69 @@ The authors wanted a fair picture of the Billboard charts. They ran a lottery ov
 The copies also carry no new information: 131 of them are byte-identical files. Keeping them doesn't teach the model anything new. It only tells the model "these 132 songs matter 2–4 times more than the others", and nothing in your goal says that. So one folder per song is the right choice for you. It also removes the train/test leakage problem entirely, because a song can't end up on both sides if there's only one copy of it.
 
 There's one counterargument, for completeness. People may mostly ask for hit songs, and chart weight loosely tracks how big a hit was. But that's a guess about future users, not something we know. Equal weight per song is the neutral starting point, and it's our decision, so we'd label it [ORIGINAL].
+
+## Findings for the ukulele arrangement
+
+**11. With frets 0 to k, a ukulele's lowest note can only be C to C+k** — **[ORIGINAL]**
+
+Assumptions, not yet checked against a primary source:
+- the strings are tuned G4 C4 E4 A4 (re-entrant: the G string is above the C string);
+- each fret raises a string by one semitone;
+- all four strings are strummed;
+- no string is fretted above fret k.
+
+In semitones above C4 the open strings are 7, 0, 4 and 9. With each string's
+fret f between 0 and k, the lowest note of a shape is
+
+    lowest = min(7 + f_G, f_C, 4 + f_E, 9 + f_A)
+
+and the possible lowest notes are exactly C4, C4+1, …, C4+k:
+
+1. **Never below C4.** Fretting only raises a string, and C4 is the lowest open string.
+2. **Never above C4+k.** A minimum is never larger than any one of its terms, so lowest ≤ f_C ≤ k.
+3. **Each one occurs.** Fret all four strings at the same fret m ≤ k: the minimum is m.
+
+`bass_reach.py` also checks this against every shape, all (k+1)⁴ of them, for
+k = 0 to 11. For k ≥ 5 the lowest note is not always on the C string (C at
+fret 5 is F4, the open E string is E4), which is why step 2 says "never
+above", not "is the C string".
+
+So a label's bass can be at the bottom of a shape only if its pitch class is
+between C and C+k. Counted per song, on the 739 folders left after
+preprocessing step 1, weighted by time, `N` and `X` left out:
+
+| max fret k | possible lowest notes | all chord time (2535.1 min) | time where the bass is not the root (189.4 min) |
+|---|---|---|---|
+| 0 | C | 11.3% | 11.1% |
+| 1 | C–C# | 16.0% | 17.0% |
+| 2 | C–D | 28.4% | 28.3% |
+| 3 | C–D# | 33.8% | 32.0% |
+| 4 | C–E | 44.8% | 41.5% |
+| 5 | C–F | 52.9% | 47.7% |
+| 6 | C–F# | 57.7% | 54.3% |
+| 7 | C–G | 69.6% | 62.9% |
+| 8 | C–G# | 74.8% | 70.4% |
+| 9 | C–A | 87.5% | 87.3% |
+| 10 | C–A# | 93.3% | 92.3% |
+| 11 | all 12 | 100% | 100% |
+
+Each share is an **upper bound**: a shape with the right lowest note may not
+also play the chord, and a beginner may not be able to finger it. At k = 4, at
+most 44.8% of chord time can have its annotated bass at the bottom.
+
+The share barely depends on slash chords. Bass notes are spread over all 12
+pitch classes, so the table mostly reflects which keys the songs are in:
+
+| bass pitch class, % of time | C | C# | D | D# | E | F | F# | G | G# | A | A# | B |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| all chords | 11.3 | 4.8 | 12.4 | 5.4 | 11.0 | 8.1 | 4.8 | 11.8 | 5.2 | 12.7 | 5.8 | 6.7 |
+| bass is not the root | 11.1 | 5.9 | 11.3 | 3.7 | 9.4 | 6.2 | 6.7 | 8.6 | 7.5 | 16.9 | 5.0 | 7.7 |
+
+Even a plain `G:maj`, whose bass is its root G, is out of reach at k = 4.
+
+The exact share, rather than a bound, needs the shapes beginners actually play
+(which k, how wide a stretch), from a cited chord chart. That belongs to the
+playability stage, which has to list every shape of every chord anyway.
 
 ## Harte parser notes
 
