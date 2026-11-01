@@ -8,7 +8,7 @@ Scripts behind the chord-vocabulary numbers. Stdlib only — no extra deps.
 | `lab.py` | reader for MIREX-style `.lab` files |
 | `chord_vocab_stats.py` | the main report: alphabet size, factorisation, tail, pitch-class collapse |
 | `vocab_reductions.py` | alphabet size of each of the five McGill vocabulary levels |
-| `bass_analysis.py` | how often the bass lies outside the chord, and pitch-class sets with and without it |
+| `bass_analysis.py` | how often the bass lies outside the chord, pitch-class sets with and without it, and which same-sounding labels the bass-excluded sets split apart (finding 6) |
 | `beat_from_lab.py` | the common time unit (approximate GCD) of one `.lab` file's segment lengths |
 | `tempo_check.py` | how steady the tempo is between neighbouring phrases, from the hand-aligned phrase starts |
 | `compare_versions.py` | the playability repo's copies against McGill Billboard 2.0 (finding 9) |
@@ -40,8 +40,8 @@ python3 dataAnalysis/chord_vocab_stats.py --csv vocab.csv 'data/McGillBillboard/
 # what each of the five .lab variants keeps, and what a label becomes in each
 python3 dataAnalysis/vocab_reductions.py data/McGillBillboard/McGill-Billboard
 
-# basses outside the chord, and sets with / without the bass (finding 6)
-python3 dataAnalysis/bass_analysis.py 'data/McGillBillboard/McGill-Billboard/*/full.lab'
+# basses outside the chord, and sets with / without the bass (finding 6, per song)
+python3 dataAnalysis/bass_analysis.py 'data/preprocessed/McGill-Billboard/*/full.lab'
 
 # common time unit (approximate GCD) of one song's segment lengths
 python3 dataAnalysis/beat_from_lab.py data/McGillBillboard/McGill-Billboard/0078/full.lab
@@ -248,11 +248,17 @@ major chords. **[ORIGINAL]**: that is 2,319 segments in the corpus.
 
 **6. A bass note isn't in the chord**
 A:maj/2    notes = {A, C#, E}    lowest note = B    ← B is not in A major
-```
-time with a slash bass        283.3 min   (8.8% of corpus)
-bass IS a chord tone        199.4 min   ← a true inversion
-bass is NOT in the chord     84.0 min   (2.62%, 176 label types)
-```
+
+Counted per song, on the 739 folders left after preprocessing step 1 (one
+folder per song), with `bass_analysis.py`, **[ORIGINAL]**:
+
+| measure | per song (739 folders, 44.5 h) |
+|---|---|
+| time with a slash bass | 235.3 min, 8.8% of all time |
+| bass is a chord tone (a true inversion) | 167.2 min, 6.3% |
+| bass is not in the chord | 68.1 min, 2.55% |
+| label types with a bass outside the chord | 176 |
+| songs with at least one such bass | 232 of 739 (31.4%) |
 
 Though inversions shouldn't change the pitch classes, but in these cases it does. 
 
@@ -263,7 +269,7 @@ separate note underneath.
 
 Measured with `bass_analysis.py`, **[ORIGINAL]**:
 
-- **280 of 890 songs** contain at least one such bass, so these are deliberate
+- **232 of 739 songs** contain at least one such bass, so these are deliberate
   annotations, not typos.
 - Most are a 7th, 9th, 6th or 11th placed under a triad: `A:min/b7` puts G
   under A minor; `D:maj/2` puts E under D major.
@@ -288,8 +294,8 @@ And grammer allows it on  purpose ,
 
 
 **Excluding the bass breaks the merge rule below**, **[ORIGINAL]**: 28 groups
-of labels (57 labels, 33.4 min) sound identical — same root, same notes, same
-lowest note — but get different sets. Example: `A:min/b7` (3.7 min) and
+of labels (57 labels, 26.7 min) sound identical — same root, same notes, same
+lowest note — but get different sets. Example: `A:min/b7` (1.8 min) and
 `A:min7/b7` (0.4 min) are both A, C, E, G with G lowest, yet the excluded
 policy gives {A,C,E} and {A,C,E,G}.
 
@@ -457,13 +463,14 @@ Every copy carries the same `.lab` label sequence as its first folder, so the
 counts of distinct labels, chords and sets in this README (974 strings, 790
 chords, 434 sets, …) are the same with or without the copies. Everything that
 adds up time or counts songs (hours, shares of time, tail coverage, runs,
-segment and tempo statistics, "280 of 890 songs") counts each folder, that is
-each chart slot, once, as the dataset is distributed.
+segment and tempo statistics) counts each folder, that is each chart slot,
+once, as the dataset is distributed. Finding 6 is the exception: it has been
+recomputed per song.
 
 |kind of number|changes without copies?|why|
 |---|---|---|
 |distinct counts: 974 strings, 790 chords, 434 sets, 110 shapes|**no**|every copy has the identical label sequence, so it adds no new labels|
-|totals of time or songs: 53.5 h, % of time, tail coverage, runs, tempo statistics, "280 of 890 songs"|**yes**|each folder is counted, so a song in 3 folders counts 3 time|
+|totals of time or songs: 53.5 h, % of time, tail coverage, runs, tempo statistics|**yes**|each folder is counted, so a song in 3 folders counts 3 time|
 
 The second kind isn't wrong. It describes the dataset per chart slot, as distributed,
 
