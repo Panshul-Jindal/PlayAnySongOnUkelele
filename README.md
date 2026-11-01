@@ -21,3 +21,16 @@ for seg in chords[:10]:
 ```
 
 For full documentation and benchmark details, see [`chord_estimation/README.md`](chord_estimation/README.md).
+
+## Third-party projects
+
+### AutoChord
+
+This project incorporates AutoChord, which is
+licensed under the Apache License 2.0.
+
+Original copyright and attribution notices have
+been retained.
+
+Source: <ORIGINAL_AUTOCHORD_GITHUB_URL>
+License: Apache License 2.0
