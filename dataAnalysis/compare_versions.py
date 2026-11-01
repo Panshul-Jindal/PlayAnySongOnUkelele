@@ -26,7 +26,8 @@ import os
 import re
 import sys
 
-sys.path.insert(0, __file__.rsplit("/", 1)[0])
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "common"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tempo_check, in this folder
 
 import lab
 from tempo_check import phrase_beats

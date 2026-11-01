@@ -1,11 +1,11 @@
-"""Checks of dataAnalysis/harte.py against the primary sources for this notation.
+"""Checks of common/harte.py against the primary sources for this notation.
 
   Harte et al., ISMIR 2005 -- the base syntax and 16 shorthands.
   de Haas & Burgoyne, UU-CS-2012-018 -- the 8 Billboard extensions.
   mir_eval chord.py, commit fe73b35 -- encode() adds the bass to the set.
 
 Every assertion below is copied from the paper, not from memory. Run with:
-    uv run pytest tests/dataAnalysis/test_harte.py
+    uv run pytest tests/common/test_harte.py
 """
 
 import pytest

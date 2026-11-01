@@ -4,8 +4,6 @@ Scripts behind the chord-vocabulary numbers. Stdlib only — no extra deps.
 
 | file | what it is |
 |---|---|
-| `harte.py` | parser for Harte chord symbols (`A:maj/2`, `G:sus4(b7,9)`) → scale degrees → pitch classes |
-| `lab.py` | reader for MIREX-style `.lab` files |
 | `chord_vocab_stats.py` | the main report: alphabet size, factorisation, tail, pitch-class collapse |
 | `vocab_reductions.py` | alphabet size of each of the five McGill vocabulary levels |
 | `bass_analysis.py` | how often the bass lies outside the chord, pitch-class sets with and without it, and which same-sounding labels the bass-excluded sets split apart (finding 6) |
@@ -15,8 +13,8 @@ Scripts behind the chord-vocabulary numbers. Stdlib only — no extra deps.
 | `compare_versions.py` | the playability repo's copies against McGill Billboard 2.0 (finding 9) |
 | `duplicates.py` | which song folders hold the same song, and whether their annotations are copies (finding 10) |
 
-Tests for these scripts live in `tests/dataAnalysis/`: `test_harte.py` holds 41
-assertions copied from the source documents below.
+The chord-symbol parser (`harte.py`) and the `.lab` reader (`lab.py`) that
+these scripts use live in `common/`, with their tests and the parser notes.
 
 ## Sources
 
@@ -60,9 +58,6 @@ python3 dataAnalysis/compare_versions.py playability-billboard-guitar/data/chord
 
 # song folders that hold the same song (finding 10)
 python3 dataAnalysis/duplicates.py --show 10 data/McGillBillboard
-
-# check the parser against the source documents
-uv run pytest tests/dataAnalysis/test_harte.py
 ```
 
 Quote the globs so the shell doesn't expand them — the scripts expand them
@@ -553,33 +548,6 @@ Even a plain `G:maj`, whose bass is its root G, is out of reach at k = 4.
 The exact share, rather than a bound, needs the shapes beginners actually play
 (which k, how wide a stretch), from a cited chord chart. That belongs to the
 playability stage, which has to list every shape of every chord anyway.
-
-## Harte parser notes
-
-Correctness rests on `tests/dataAnalysis/test_harte.py` — 41 assertions whose expected values are
-copied from [H05] (Tables 1–2, §3, §4), [dHB12] Table 1 and [ME] `encode()`,
-**not** from this parser's own
-output. `SHORTHAND` is grouped into a 16-entry [H05] block and a 9-entry
-[dHB12] block so provenance stays visible.
-
-> **"Parses without errors" proved nothing.** An earlier version reported 0
-> failures on all 976 corpus symbols while silently computing wrong notes for 29
-> of them: it treated the explicit degree-list form `A:(11,9)` as a major triad
-> plus extras. [H05] §4.2 states `C:min7 ≡ C:(b3,5,b7)` — the list is literal.
-> Only the source document caught this. **[ORIGINAL]**
-
-- `pitch_classes()` includes the bass by default, as [ME] `encode()` does:
-  `A:maj/2` gives `{9,11,1,4}`. For a true inversion this changes nothing —
-  `A:maj/3` gives `{9,1,4}`. `include_bass=False` gives the chord alone, and
-  `bass_pitch_class()` returns the bass on its own (finding 6).
-- Bare `C` and `A/3` (no colon) are legal and mean major — [H05] §4.2. The
-  corpus never uses them.
-- Omitted degrees (`*3`, [H05] Table 1 `<degree-list>`) are compared by
-  semitone, so `*3` removes `b3` too. The corpus contains no `*` symbols.
-- The parser is strict: malformed roots, unknown shorthands and bad degrees
-  raise `HarteError` rather than silently returning a wrong pitch class.
-
-
 
 ## Actionable Guidelines for Data Preprocessing 
 

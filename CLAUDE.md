@@ -27,6 +27,21 @@ at a glance.
 - When a reference table mixes sources, group and label the blocks by source.
 - "It runs without errors" is not evidence of correctness.
 
+## Where things go
+
+Put each thing where everything that needs it can reach it, and nowhere else.
+
+- Code used by one folder stays in that folder. Code used by more than one
+  goes in `common/`: when a second folder needs something, move it there
+  rather than importing across folders or copying it. Folders import from
+  `common/`, never from each other. Vendored code, such as
+  `playability-billboard-guitar/`, keeps its own layout.
+- `data/` holds inputs: what people made (recordings, lyrics, annotations,
+  including times tapped by hand) and the prepared copies of it in
+  `data/preprocessed/`. `results/` holds what our methods produce from those
+  inputs, one folder per step, e.g. `results/chord-estimation/autochord/`.
+- Copyrighted material, such as recordings and lyrics, stays out of git.
+
 ## Tests
 
 - Tests live in `tests/`, mirroring the source tree: tests for

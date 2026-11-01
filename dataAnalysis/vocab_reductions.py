@@ -22,7 +22,7 @@ import os
 import sys
 from collections import Counter, defaultdict
 
-sys.path.insert(0, __file__.rsplit("/", 1)[0])
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "common"))
 
 import harte
 import lab
