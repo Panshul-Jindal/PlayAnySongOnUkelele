@@ -1,0 +1,1 @@
+Given a song recording, such as a YouTube song, generate a time-synchronized ukulele chord arrangement that is easier for a beginner to play while preserving the essential harmonic structure of the original song.
