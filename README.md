@@ -1,22 +1,23 @@
 # PlayAnySongOnUkelele
 
-## Setup Environment
+A comprehensive system for automatic chord estimation, ukulele chord transformation, and playability evaluation.
 
-```bash
-uv sync
+## Chord Estimation Module
+
+The automatic chord estimation module is located in `chord_estimation/`.
+Currently implemented approach:
+- **BTC (Big Chord Transformer)**: Bi-directional Transformer taking Constant-Q Transform (CQT) log-spectrograms with a 170-class large chord vocabulary.
+
+### Quick Usage
+
+```python
+from btc_estimator import estimate_chords
+
+# Run chord estimation on an MP3
+chords = estimate_chords("data/Custom_Songs/Idina Menzel - Let It Go (From FrozenSing-Along).mp3")
+
+for seg in chords[:10]:
+    print(f"{seg['start']:6.2f}s - {seg['end']:6.2f}s : {seg['chord']}")
 ```
 
-
-
-
-## Running Autochord
-
-```bash
-
-
-python chord-estimation/estimate_chords.py data/Custom_Songs/Idina\ Menzel\ -\ Let\ It\ Go\ \(From\ FrozenSing-Along\).mp3
-```
-
-
-
-
+For full documentation and benchmark details, see [`chord_estimation/README.md`](chord_estimation/README.md).
