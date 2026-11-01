@@ -40,6 +40,7 @@ Existing chord-annotated datasets can be used to evaluate the arrangement stage 
 
 A separate ukulele-specific playability dataset is not assumed to exist for this project. If required, a small human evaluation can be collected to assess whether automatically generated arrangements agree with perceived beginner playability. The need, size, and annotation protocol for such a dataset are pending investigation.
 
+
 6. [[Evaluation]] 
 
 The generated arrangements will be evaluated from three perspectives:
@@ -127,3 +128,6 @@ Chord-shape repetition: Investigate whether repeated familiar shapes reduce cogn
 Harmonic-fidelity constraint: Limit simplifications that alter essential harmonic information beyond an acceptable level.
 
 Multi-objective optimization: Balance estimated playability against harmonic fidelity.
+
+
+

@@ -1,22 +1,24 @@
 [[Data Analysis]]
 [[Scientific Paper]]
+[[Music Theory]]
+[[Hypothesis (Unknown)]]
+[[Hypothesis (Verified)]]
+[[Curios Questions ]]
+[[Different Feature Representation of a song]]
 
-## To learn function 
-
-def diff_estimator(chords):-> int ## 2nd
-	return diff
-## Related Work 
-1. Quantifying the Ease of Playing Song Chords on the Guitar (2023)
-https://archives.ismir.net/ismir2023/paper/000086.pdf
-
-Proposes a playability rubric with seven criteria, expert annotations for 200 songs, and automated prediction using rule-based and machine-learning approaches.
+[[Algorithms for extracting chords from a song]]
 
 
-2. Searching google scholar for 
-guitar ukulele song playability metric
-ukulele chord fingering difficulty
+## Input (What we have)
 
-I didn't get anything 
+### Chrome Representationms
+
+A **chroma** vector is 12 numbers per moment, one per note name (C, C#, … B), saying how strongly that note sounds in any octave. Mauch & Dixon 2010 (§2.5), the paper [MBP] cites for these features, computes two of them:
+
+- _"one general-purpose chromagram that covers all pitches"_
+- _"one bass-specific chromagram that is restricted to the lower frequencies"_
+
+Our `bothchroma.csv` has 24 numbers per frame, which fits 12 + 12.
 
 
 
