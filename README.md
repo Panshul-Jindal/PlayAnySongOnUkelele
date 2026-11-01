@@ -28,8 +28,16 @@ dataset skip when `data/` is missing.
 ```bash
 export TF_USE_LEGACY_KERAS=1                                                                    
 
-python chord-estimation/estimate_chords.py data/Custom_Songs/Idina\ Menzel\ -\ Let\ It\ Go\ \(From\ FrozenSing-Along\).mp3
+uv run python chord-estimation/estimate_chords.py data/Custom_Songs/Idina\ Menzel\ -\ Let\ It\ Go\ \(From\ FrozenSing-Along\).mp3
+
+# also write the chords as a .lab file
+uv run python chord-estimation/estimate_chords.py "data/Custom_Songs/Train_-_Hey,_Soul_Sister_(Official_Video).wav" \
+    results/chord-estimation/autochord/hey_soul_sister.lab
 ```
+
+With `TF_USE_LEGACY_KERAS=1`, autochord needs the legacy Keras package
+`tf-keras`, which is a project dependency. Estimated chords for our songs, and
+the audio file each one came from, are in `results/chord-estimation/autochord/`.
 
 
 
