@@ -2,7 +2,14 @@
 
 ## Billboard 2.0  Billboard 1.0 Release
 
-**[The McGill Billboard Project](https://ddmal.ca/research/The_McGill_Billboard_Project_\(Chord_Analysis_Dataset\)/)**
+
+[[The McGill Billboard Project]]
+
+
+
+
+
+
 
 
 
@@ -10,4 +17,3 @@
 
 One thing to watch: the copies in `playability-billboard-guitar/` are **not** byte-identical to the ones in `data/McGillBillboard/` — they're a different release. Song 78 has `A:maj/2` in the playability copy vs `A:maj/9` in the McGill copy, and the lab segmentation granularity differs. If you mix the two directories you'll get inconsistent bass-degree labels
 
-[[1st Learning Session]]
