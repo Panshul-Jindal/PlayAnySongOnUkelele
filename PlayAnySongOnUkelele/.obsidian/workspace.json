@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "3260154f3f7d08d2",
+        "id": "9cdaf87f5378c974",
         "type": "tabs",
         "children": [
           {
-            "id": "d680f9df99cb7d5b",
+            "id": "5df2fce60c8e968e",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Hypothesis (Unknown).md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Hypothesis (Unknown)"
             }
           }
         ]
@@ -181,36 +185,36 @@
       "bases:Create new base": false
     }
   },
-  "active": "d680f9df99cb7d5b",
+  "active": "5df2fce60c8e968e",
   "lastOpenFiles": [
-    "Datasets.md",
-    "Scientific Paper.md",
+    "Hypothesis (Verified).md",
+    "Music Theory.md",
+    "Quantifying the Ease of Playing Song Chords on the Guitar (2023).md",
+    "Quantifying_the_playability_of_song_chord_arrangements_for_ukelele.md",
+    "Can Playability be measured.md",
+    "Algorithms for extracting chords from a song.md",
+    "Clippings/Chroma feature.md",
+    "Data Analysis.md",
+    "Data Preprocessing.md",
+    "Curios Questions.md",
+    "Different Feature Representation of a song.md",
+    "Different Music Representation format.md",
+    "Mapping of chords to it's fingering pattern on ukelele.md",
+    "Problem Statement.md",
+    "Proposed System.md",
     "Possible Ukulele Arrangement Optimizations.md",
     "Clippings/The McGill Billboard Project.md",
-    "Global transposition.md",
-    "Music Theory.md",
-    "Related Work.md",
-    "Different Music Representation format.md",
-    "Clippings/Chroma feature.md",
-    "To Understand! Claude.md.md",
-    "Data Preprocessing.md",
-    "Data Analysis.md",
-    "Background and Motivation.md",
-    "Can Playability be measured?.md",
+    "Scientific Paper.md",
     "Hypothesis (Unknown).md",
-    "Hypothesis (Verified).md",
-    "Curios Questions.md",
-    "Quantifying_the_playability_of_song_chord_arrangements_for_ukelele.md",
-    "Different Feature Representation of a song.md",
-    "Quantifying the Ease of Playing Song Chords on the Guitar (2023).md",
+    "Background and Motivation.md",
+    "Strumming Patterns.md",
+    "Global transposition.md",
+    "Datasets.md",
+    "Extracting chords from songs.md",
+    "Related Work.md",
+    "To Understand! Claude.md.md",
     "metadata",
     "metadata/Pasted image 20261031210725.png",
-    "Clippings",
-    "Background Knowledge.md",
-    "Problem Statement.md",
-    "Extracting chords from songs.md",
-    "Key References.md",
-    "Potential Contributions.md",
-    "Proposed System.md"
+    "Clippings"
   ]
 }

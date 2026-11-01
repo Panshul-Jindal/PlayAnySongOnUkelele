@@ -5,6 +5,24 @@
 [[Hypothesis (Verified)]]
 [[Curios Questions ]]
 [[Different Feature Representation of a song]]
+
+[[Algorithms for extracting chords from a song]]
+
+
+## Input (What we have)
+
+### Chrome Representationms
+
+A **chroma** vector is 12 numbers per moment, one per note name (C, C#, … B), saying how strongly that note sounds in any octave. Mauch & Dixon 2010 (§2.5), the paper [MBP] cites for these features, computes two of them:
+
+- _"one general-purpose chromagram that covers all pitches"_
+- _"one bass-specific chromagram that is restricted to the lower frequencies"_
+
+Our `bothchroma.csv` has 24 numbers per frame, which fits 12 + 12.
+
+
+
+
 ## Pipeline 
 
 ```python

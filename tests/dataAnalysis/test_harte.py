@@ -1,16 +1,14 @@
-#!/usr/bin/env python3
-"""Checks against the primary sources for this notation.
+"""Checks of dataAnalysis/harte.py against the primary sources for this notation.
 
   Harte et al., ISMIR 2005 -- the base syntax and 16 shorthands.
   de Haas & Burgoyne, UU-CS-2012-018 -- the 8 Billboard extensions.
   mir_eval chord.py, commit fe73b35 -- encode() adds the bass to the set.
 
 Every assertion below is copied from the paper, not from memory. Run with:
-    python3 dataAnalysis/test_harte.py
+    uv run pytest tests/dataAnalysis/test_harte.py
 """
 
-import sys
-sys.path.insert(0, __file__.rsplit("/", 1)[0])
+import pytest
 
 import harte
 
@@ -63,57 +61,33 @@ BILLBOARD_TABLE_1 = {
 }
 
 
-def main():
-    failures = []
+@pytest.mark.parametrize("a, b", EQUIVALENT)
+def test_equivalent_spellings(a, b):
+    assert harte.pitch_classes(a) == harte.pitch_classes(b)
 
-    for a, b in EQUIVALENT:
-        if harte.pitch_classes(a) != harte.pitch_classes(b):
-            failures.append(f"{a} != {b}: "
-                            f"{sorted(harte.pitch_classes(a))} vs "
-                            f"{sorted(harte.pitch_classes(b))}")
 
-    for shorthand, components in TABLE_2.items():
-        got = harte.pitch_classes(f"C:{shorthand}")
-        want = harte.pitch_classes(f"C:{components}")
-        if got != want:
-            failures.append(f"Table 2 {shorthand}={components}: "
-                            f"got {sorted(got)}, want {sorted(want)}")
+@pytest.mark.parametrize("shorthand, components", TABLE_2.items())
+def test_harte_table_2(shorthand, components):
+    assert harte.pitch_classes(f"C:{shorthand}") == harte.pitch_classes(f"C:{components}")
 
-    for shorthand, components in BILLBOARD_TABLE_1.items():
-        got = harte.pitch_classes(f"C:{shorthand}")
-        want = harte.pitch_classes(f"C:{components}")
-        if got != want:
-            failures.append(f"Billboard Table 1 {shorthand}={components}: "
-                            f"got {sorted(got)}, want {sorted(want)}")
 
-    for symbol, want in BASS.items():
-        got = harte.bass_pitch_class(symbol)
-        if got != want:
-            failures.append(f"bass of {symbol}: got {got}, want {want}")
+@pytest.mark.parametrize("shorthand, components", BILLBOARD_TABLE_1.items())
+def test_billboard_table_1(shorthand, components):
+    assert harte.pitch_classes(f"C:{shorthand}") == harte.pitch_classes(f"C:{components}")
 
-    for symbol, include_bass, want in WITH_BASS:
-        got = harte.pitch_classes(symbol, include_bass=include_bass)
-        if got != want:
-            failures.append(f"{symbol} include_bass={include_bass}: "
-                            f"got {sorted(got)}, want {sorted(want)}")
 
+@pytest.mark.parametrize("symbol, want", BASS.items())
+def test_bass(symbol, want):
+    assert harte.bass_pitch_class(symbol) == want
+
+
+@pytest.mark.parametrize("symbol, include_bass, want", WITH_BASS)
+def test_bass_in_the_set(symbol, include_bass, want):
+    assert harte.pitch_classes(symbol, include_bass=include_bass) == want
+
+
+def test_every_shorthand_has_a_cited_source():
     # Every shorthand must come from one of the two cited tables, plus '1',
     # which the tech report describes in prose rather than in its table.
     cited = set(TABLE_2) | set(BILLBOARD_TABLE_1) | {"1"}
-    uncited = set(harte.SHORTHAND) - cited
-    if uncited:
-        failures.append(f"shorthands with no cited source: {sorted(uncited)}")
-
-    checks = (len(EQUIVALENT) + len(TABLE_2) + len(BILLBOARD_TABLE_1)
-              + len(BASS) + len(WITH_BASS) + 1)
-    if failures:
-        print(f"FAIL ({len(failures)} of {checks})")
-        for f in failures:
-            print("  " + f)
-        return 1
-    print(f"ok - {checks} checks against the cited tables")
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+    assert set(harte.SHORTHAND) - cited == set()

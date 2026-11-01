@@ -7,7 +7,7 @@ https://ismir2011.ismir.net/papers/PS4-14.pdf
 
 
 
-**Salami** , **Lab format**
+## **Salami** , **Lab format**
 So `full.lab` is just salami with one calculation applied: spread each phrase's beats evenly between its two timestamps. The salami file holds everything the lab holds, and more. So the question isn't really "which one is right?". It's "which form does each part of my project need?"
 
 
@@ -19,7 +19,7 @@ So `full.lab` is just salami with one calculation applied: spread each phrase's 
 | which times a human measured                    | ✅ (the timestamps)              | ❌ (you need the salami to tell; 20.2% of starts)                                 |
 | `&pause`, `silence`                             | ✅ marked                        | turned into `N`                                                                  |
 | read directly by mir_eval and other chord tools | ❌                               | ✅                                                                                |
-## My project needs both, for different jobs
+ My project needs both, for different jobs
 
 The same _Disco Inferno_ phrase looks like this in three forms:
 
@@ -96,3 +96,7 @@ Finding beats in audio is its own research problem, called **beat tracking** or 
 You might ask whether the salami beats are good enough as an answer key, since most of them were computed by spreading, not measured. The dataset page says the constant-tempo assumption "is remarkably robust" for this sample: _"less than one percent of all possible eighth-note positions (tatums) in the sample are more then 10 percent faster or slower than the average tempo of the songs to which they belong"_ [MBP], citing [dHB12]. Our worst-1% tempo cases (finding 7) are where that is weakest.
 
 **Updated recommendation:** train the chord part on `full.lab`. Treat salami as the **answer key** for the beats-and-bars part and for the final chord sheet. Don't treat it as an optional extra kept beside the lab.
+
+
+## Chords Over Lyrics Format
+

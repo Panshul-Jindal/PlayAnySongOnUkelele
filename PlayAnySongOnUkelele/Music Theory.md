@@ -252,6 +252,21 @@ The label records only the bottom note
 
 /number -> defined as degrees, relative to the root node
 
+`A:min/b3` means “A minor with its flat 3rd (C) in the bass”.
+
+wait it does 
+
+```bash
+Take A minor: A, C, E. You can stack those three notes in different orders:
+
+- A at the bottom (A, C, E): plain **Am**. Sounds settled and solid.
+- C at the bottom (C, E, A): **Am/C**. Same three notes, but it sounds a bit lighter and less “planted”.
+- E at the bottom (E, A, C): **Am/E**. Sounds slightly unresolved, like it wants to move on.
+```
+Why it matters on guitar or piano
+
+Those instruments have deep low notes, and the lowest one strongly colours the sound. Songwriters use it to make bass lines that walk smoothly, e.g. C → C/B → Am, where the bass steps down C, B, A while the chords barely change. That’s why the Billboard transcribers wrote it down: they were describing the full recording, including the bass guitar.
+
 
 **Beat**
 The **beat** is the steady pulse you tap your foot or nod your head to.
@@ -303,3 +318,29 @@ One more symbol: .
 A period means "the chord has not changed" on that beat ([BWF11] §3). So: G for beat 1, F# for beat 2, E for beats 3 and 4.
 
 `x4` (repeat this phrase 4 times), `(2/4)` (one bar with a different metre), `*` (a passage too complex to annotate) and `&pause`.
+
+## Tablature
+https://www.ukulele-tabs.com/uke-songs/yiruma/river-flows-in-you-uke-tab-47255.html
+
+
+
+
+## Questions in mind 
+
+1. how unique qualities can 93 I mean you gave 25 list of degrees combinations.. And isn't quality that?
+**The rule.** [H05] Table 1 gives the grammar:
+```
+<chord>       ::= <note> ":" <shorthand> ["(" <degree-list> ")"] ["/" <degree>]
+                | <note> ":" "(" <degree-list> ")" ["/" <degree>]
+                | <note> ["/" <degree>] | "N"
+<degree-list> ::= ["*"] <degree> ["," <degree-list>]
+```
+So after the colon you can write any of these:
+
+- a shorthand on its own, like `maj`;
+- a shorthand plus degrees in brackets, like `maj(9)`;
+- just a list of degrees, like `(b3,b7)`.
+§4.2 says: _"Provision for extra degrees in parentheses is left so that additional intervals may be added to common chords."_ A `*` removes a degree. The paper's example is `C:min7(*5,11)`, which is C minor seventh without the 5th and with an added 11th.
+- **As written labels, no limit.** The grammar accepts any list of degrees.
+- **As sounds, at most 2,048.** A quality fixes which of the 11 other pitch classes sound above the root, and each one is either in or out: 2¹¹ = 2,048 (**[ORIGINAL]** arithmetic).
+
