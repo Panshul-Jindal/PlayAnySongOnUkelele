@@ -116,6 +116,22 @@ def main():
     for label, d, others in collisions[:args.top]:
         print(f"  {label:<14} {d / 60:5.1f} min   same set as {', '.join(sorted(others)[:3])}")
 
+    # With the bass excluded, labels that sound the same (same root, same notes
+    # with the bass, same lowest note) can get different sets: A:min/b7 gives
+    # {A,C,E} but A:min7/b7 gives {A,C,E,G}, though both are A C E G over G.
+    same_sound = {}
+    for l in chords:
+        key = (harte.note_to_pc(harte.split(l)[0]), included(l), harte.bass_pitch_class(l))
+        same_sound.setdefault(key, []).append(l)
+    split_up = [g for g in same_sound.values() if len({chord_only(l) for l in g}) > 1]
+    split_up.sort(key=lambda g: -sum(chords[l] for l in g))
+    heading("excluded policy: labels that sound the same but get different sets")
+    print(f"  {len(split_up)} groups, {sum(map(len, split_up))} labels, "
+          f"{sum(chords[l] for g in split_up for l in g) / 60:.1f} min")
+    for g in split_up[:args.top]:
+        print("  " + ", ".join(f"{l} {chords[l] / 60:.1f} min"
+                               for l in sorted(g, key=lambda l: -chords[l])))
+
 
 if __name__ == "__main__":
     main()
