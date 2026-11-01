@@ -9,6 +9,21 @@ Currently implemented approach:
 - **BTC (Big Chord Transformer)**: Bi-directional Transformer taking Constant-Q Transform (CQT) log-spectrograms with a 170-class large chord vocabulary.
 
 ### Quick Usage
+## Download the dataset
+
+```bash
+chmod +x download_McGillBillBoardDataset.sh
+./download_McGillBillBoardDataset.sh
+```
+
+## Run the tests
+
+```bash
+uv run pytest
+```
+
+Tests live in `tests/`, mirroring the source folders. Tests that need the
+dataset skip when `data/` is missing.
 
 ```python
 from btc_estimator import estimate_chords
@@ -21,6 +36,8 @@ for seg in chords[:10]:
 ```
 
 For full documentation and benchmark details, see [`chord_estimation/README.md`](chord_estimation/README.md).
+```bash
+export TF_USE_LEGACY_KERAS=1                                                                    
 
 ## Third-party projects
 
