@@ -130,7 +130,8 @@ Every musical rule is in Python, under test, and the page only displays.
 
 ## Chord diagrams
 
-**Status: specified; not yet built.**
+**Status: built.** The automated checks pass; check 6 by hand (below) is still
+to do.
 
 A beginner needs the shape, not only the name. Under *now* and *next* the page
 draws the shape to play, the current one large and the next one smaller:
@@ -153,7 +154,8 @@ plays exactly its notes on four strings; its diagram says "no 4-string shape".
 **Which shape: a provisional rule.** Every chord has many shapes, and
 `common/ukulele.py` lists them all. Until there is a difficulty score, the page
 shows the one lowest on the neck: the smallest highest fret, then the fewest
-fretted strings, then the smallest sum of frets. That is a stand-in, not a
+fretted strings, then the smallest sum of frets, then the first in fret order,
+so the choice is always the same. That is a stand-in, not a
 measure of difficulty, so the page labels its diagrams "provisional shape".
 **[ORIGINAL]** rule. Two of its choices, worked out by hand:
 

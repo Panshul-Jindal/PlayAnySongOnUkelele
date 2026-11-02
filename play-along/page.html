@@ -28,11 +28,22 @@ h1 { margin: 0; font-size: 20px; font-weight: 600; }
 #messages .info { padding-left: 0; color: var(--muted); }
 #messages .warn { background: var(--warn-bg); color: var(--warn-fg); }
 main, #list { padding: 20px 24px 110px; }
-.chords { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; align-items: end; }
+.chords { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; align-items: start; }
 .label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-#now { font-size: clamp(72px, 15vw, 200px); font-weight: 700; line-height: 1.05; white-space: nowrap; }
+#now { font-size: clamp(64px, 11vw, 150px); font-weight: 700; line-height: 1.05; white-space: nowrap; }
 #sounding { min-height: 1.4em; color: var(--muted); }
-#next { font-size: clamp(40px, 7vw, 96px); font-weight: 600; line-height: 1.05; white-space: nowrap; }
+#next { font-size: clamp(36px, 5.5vw, 80px); font-weight: 600; line-height: 1.05; white-space: nowrap; }
+.shape { min-height: 24px; margin-top: 12px; }
+.shape svg { display: block; width: 104px; height: auto; }
+.shape.big svg { width: 156px; }
+.shape .string, .shape .fret { stroke: var(--fg); stroke-width: 1.2; }
+.shape .nut { stroke: var(--fg); stroke-width: 4; }
+.shape .dot { fill: var(--fg); }
+.shape .open { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+.shape text { fill: var(--muted); font: 11px system-ui, sans-serif; text-anchor: middle; }
+.shape text.pos { text-anchor: start; }
+.noshape { margin: 0; color: var(--muted); }
+#shapenote { margin: 14px 0 0; }
 .bar { height: 10px; margin-top: 14px; border-radius: 5px; background: var(--line); overflow: hidden; }
 #fill { width: 0; height: 100%; background: var(--accent); }
 #lyrics { min-height: 7em; margin: 36px 0 28px; }
@@ -71,13 +82,16 @@ button:disabled { opacity: .5; }
       <div class="label">now</div>
       <div id="now"></div>
       <div id="sounding"></div>
+      <div id="nowshape" class="shape big"></div>
     </div>
     <div>
       <div class="label">next</div>
       <div id="next"></div>
       <div class="bar"><div id="fill"></div></div>
+      <div id="nextshape" class="shape"></div>
     </div>
   </section>
+  <p id="shapenote" class="label"></p>
   <section id="lyrics">
     <pre id="chordline"></pre>
     <pre id="lyricline"></pre>
@@ -165,6 +179,31 @@ function tapView(lyrics, tapped) {
   // what tap mode shows after `tapped` taps, laid out as when playing along:
   // the line being sung (the last one tapped) and the line the next tap starts
   return [tapped ? lyrics[tapped - 1] : "…", lyrics[tapped] || ""];
+}
+
+function diagram(shape) {
+  // an SVG chord diagram: strings G C E A from left to right, a dot on each
+  // pressed fret, an open circle above each open string, the frets written
+  // underneath; four frets, starting further up the neck when the shape needs it
+  const pressed = shape.filter(f => f > 0);
+  const high = pressed.length ? Math.max(...pressed) : 0;
+  const first = high > 4 ? Math.min(...pressed) : 1;   // the fret in the top row
+  const rows = Math.max(4, high - first + 1);
+  const x = i => 16 + 20 * i, y = r => 34 + 20 * r;    // string i; the line above row r
+  const out = [`<svg viewBox="0 0 ${x(3) + 30} ${y(rows) + 22}" role="img" aria-label="frets ${shape.join(" ")}">`];
+  ["G", "C", "E", "A"].forEach((s, i) => out.push(`<text x="${x(i)}" y="10">${s}</text>`));
+  for (let r = 0; r <= rows; r++) {
+    const kind = r === 0 && first === 1 ? "nut" : "fret";
+    out.push(`<line class="${kind}" x1="${x(0)}" y1="${y(r)}" x2="${x(3)}" y2="${y(r)}"/>`);
+  }
+  for (let i = 0; i < 4; i++) out.push(`<line class="string" x1="${x(i)}" y1="${y(0)}" x2="${x(i)}" y2="${y(rows)}"/>`);
+  if (first > 1) out.push(`<text class="pos" x="${x(3) + 10}" y="${y(0) + 14}">${first}</text>`);
+  shape.forEach((f, i) => out.push(f > 0
+    ? `<circle class="dot" cx="${x(i)}" cy="${y(f - first) + 10}" r="6.5"/>`
+    : `<circle class="open" cx="${x(i)}" cy="24" r="4.5"/>`));
+  shape.forEach((f, i) => out.push(`<text x="${x(i)}" y="${y(rows) + 16}">${f}</text>`));
+  out.push("</svg>");
+  return out.join("");
 }
 
 function linesLab(starts, end) {
@@ -286,6 +325,12 @@ function stopTapping() {
   updateButtons();
 }
 
+function renderShape(box, seg) {
+  if (!seg || seg.label === "N" || seg.label === "X") box.innerHTML = "";
+  else if (!seg.shapes[capo]) box.innerHTML = '<p class="noshape">no 4-string shape</p>';
+  else box.innerHTML = diagram(seg.shapes[capo]);
+}
+
 function renderUpcoming(i) {
   const box = $("upcoming");
   box.textContent = "";
@@ -333,6 +378,9 @@ function render(force) {
     $("now").textContent = seg.names[capo];
     $("sounding").textContent = capo ? "sounds as " + seg.names[0] : "";
     $("next").textContent = i + 1 < SEGS.length ? SEGS[i + 1].names[capo] : "end";
+    renderShape($("nowshape"), seg);
+    renderShape($("nextshape"), SEGS[i + 1]);
+    $("shapenote").textContent = "provisional shapes" + (capo ? " · frets counted from the capo" : "");
     renderUpcoming(i);
   }
   const progress = Math.min(1, Math.max(0, (t - seg.start) / (seg.end - seg.start)));

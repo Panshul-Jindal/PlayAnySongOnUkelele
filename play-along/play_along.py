@@ -23,19 +23,39 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "common"))
 
+import harte
 import lab
 import names
+import ukulele
 from transpose import transpose
 
 TEMPLATE = os.path.join(HERE, "page.html")
 CAPOS = range(12)
+SHAPES = ukulele.shape_index()
+
+
+def provisional_shape(label):
+    """The shape the page draws until there is a difficulty score.
+
+    Of every shape that sounds exactly the label's notes, the one lowest on the
+    neck: the smallest highest fret, then the fewest fretted strings, then the
+    smallest sum of frets, then the first in fret order. None for N and X, and
+    for chords of more than four notes, which no 4-string shape plays exactly.
+    """
+    notes = harte.pitch_classes(label)
+    if notes not in SHAPES:
+        return None
+    return min(SHAPES[notes], key=lambda s: (max(s), sum(f > 0 for f in s), sum(s), s))
 
 
 def song_data(lab_path, title, lines_path=None):
-    """What the page embeds: each chord with its name at every capo, and line times."""
-    segments = [{"start": s.start, "end": s.end, "label": s.label,
-                 "names": [names.name(transpose(s.label, -capo)) for capo in CAPOS]}
-                for s in lab.read_lab(lab_path)]
+    """What the page embeds: each chord with its name and shape at every capo, and line times."""
+    segments = []
+    for s in lab.read_lab(lab_path):
+        played = [transpose(s.label, -capo) for capo in CAPOS]   # the chord your fingers form
+        segments.append({"start": s.start, "end": s.end, "label": s.label,
+                         "names": [names.name(l) for l in played],
+                         "shapes": [provisional_shape(l) for l in played]})
     if not segments:
         sys.exit(f"{lab_path}: no chords")
     lines = None

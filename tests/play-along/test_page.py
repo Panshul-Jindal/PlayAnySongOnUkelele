@@ -94,5 +94,33 @@ def test_tap_mode_shows_the_line_being_sung():
     assert js(f"[0, 1, 3].map(n => tapView({lyrics}, n))") == [["…", "one"], ["one", "two"], ["three", ""]]
 
 
+@pytest.mark.parametrize("shape, dots, opens", [
+    ([2, 0, 0, 0], 1, 3),   # Am
+    ([2, 0, 1, 0], 2, 2),   # F
+    ([4, 3, 2, 2], 4, 0),   # B: every string pressed
+    ([0, 0, 0, 0], 0, 4),   # all open
+])
+def test_diagram_has_a_dot_per_pressed_string_and_a_circle_per_open_one(shape, dots, opens):
+    svg = js(f"diagram({shape})")
+    assert svg.count('class="dot"') == dots
+    assert svg.count('class="open"') == opens
+
+
+def test_diagram_writes_the_frets_underneath():
+    svg = js("diagram([2, 0, 1, 0])")
+    numbers = re.findall(r'<text x="\d+" y="(\d+)">(\d+)</text>', svg)
+    bottom = max(int(y) for y, _ in numbers)
+    assert [n for y, n in numbers if int(y) == bottom] == ["2", "0", "1", "0"]
+
+
+def test_diagram_moves_up_the_neck_for_high_shapes():
+    # a shape up to fret 4 starts at the nut; one reaching fret 7 starts at its
+    # lowest pressed fret, 5, and says so
+    assert 'class="nut"' in js("diagram([2, 0, 1, 0])")
+    high = js("diagram([5, 5, 7, 0])")
+    assert 'class="nut"' not in high
+    assert '<text class="pos" x="86" y="48">5</text>' in high
+
+
 def test_lines_lab():
     assert js("linesLab([1, 2.5], 4)") == "1.000\t2.500\tline 1\n2.500\t4.000\tline 2\n"

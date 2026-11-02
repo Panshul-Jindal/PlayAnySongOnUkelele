@@ -27,7 +27,7 @@ So the assumption isn't hidden. It's written into finding 11, the `ukulele.py` d
 
 
 
-## Will come next !
+## Which shape to show and which fingering pattern ? 
 
 **The open question: which shape?** Every chord has many shapes, and we don't have the difficulty score yet. Until then, the rule would be **provisional**: the shape lowest on the neck, preferring frets 0–4. For your songs that picks C `0003`, G `0232`, Am `2000`, F `2010`, Dm `2210`, D `2220`, and B `4322`. I believe most of those are the shapes beginners learn, but I can't claim that without a chord chart; that's the answer-key check that comes later. So the page would label the diagrams "provisional shape". Once the difficulty score exists, it replaces the rule, and the page doesn't change.
 

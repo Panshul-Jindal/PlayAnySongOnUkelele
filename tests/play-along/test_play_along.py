@@ -41,6 +41,30 @@ def test_names_at_every_capo(lab_file):
     assert [s["names"][4] for s in segments] == ["–", "C", "Am"]   # E - 4 = C, C# - 4 = A
 
 
+@pytest.mark.parametrize("label, shape", [
+    ("C:maj", (0, 0, 0, 3)),    # worked out in play-along/README.md
+    ("A:min", (2, 0, 0, 0)),    # likewise
+    ("D:maj", (2, 2, 2, 0)),    # G, C, E strings need fret 2 for A, D, F#; open A
+    ("G:maj", (0, 2, 3, 2)),    # the E string needs fret 3 (G)
+    ("F:maj", (2, 0, 1, 0)),    # G string needs fret 2 (A); E string fret 1 (F)
+    ("E:maj", (1, 4, 0, 2)),    # C string needs fret 4; 1402 frets 3 strings, 1442 and 4442 four
+    ("Db:min", (1, 1, 0, 4)),   # A string needs fret 4; ties 1404 on frets used, smaller sum
+])
+def test_provisional_shape(label, shape):
+    assert play_along.provisional_shape(label) == shape
+
+
+@pytest.mark.parametrize("label", ["N", "X", "C:9"])   # C:9 has five notes
+def test_no_provisional_shape(label):
+    assert play_along.provisional_shape(label) is None
+
+
+def test_shapes_at_every_capo(lab_file):
+    segments = play_along.song_data(lab_file, "Song")["segments"]
+    assert [s["shapes"][0] for s in segments] == [None, (1, 4, 0, 2), (1, 1, 0, 4)]
+    assert [s["shapes"][4] for s in segments] == [None, (0, 0, 0, 3), (2, 0, 0, 0)]   # C, Am
+
+
 def test_line_times(lab_file, tmp_path):
     lines = tmp_path / "lines.lab"
     lines.write_text("0.5\t2.0\tline 1\n2.0\t4.25\tline 2\n")
