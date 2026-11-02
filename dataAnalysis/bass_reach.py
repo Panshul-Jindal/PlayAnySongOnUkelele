@@ -34,11 +34,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 
 import harte
 import lab
+from ukulele import OPEN, lowest
 
 NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-
-#: open strings G4 C4 E4 A4, in semitones above C4
-OPEN = (7, 0, 4, 9)
 
 
 def heading(text):
@@ -47,8 +45,7 @@ def heading(text):
 
 def lowest_notes(k):
     """Every possible lowest note with frets 0..k, in semitones above C4."""
-    return {min(o + f for o, f in zip(OPEN, frets))
-            for frets in itertools.product(range(k + 1), repeat=len(OPEN))}
+    return {lowest(frets) for frets in itertools.product(range(k + 1), repeat=len(OPEN))}
 
 
 def share(time, k):

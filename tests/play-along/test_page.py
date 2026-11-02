@@ -1,0 +1,98 @@
+"""Checks of the page's own logic in play-along/page.html, run with Node.js.
+
+The functions between the page's "pure functions" and "the page" markers have
+no page state, so they run outside a browser. Inputs are built by hand and the
+expected values worked out from the rules in play-along/README.md. Skips when
+node isn't installed.
+"""
+
+import json
+import os
+import re
+import shutil
+import subprocess
+
+import pytest
+
+NODE = shutil.which("node")
+pytestmark = pytest.mark.skipif(NODE is None, reason="needs Node.js")
+
+PAGE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "play-along", "page.html")
+
+
+def page():
+    with open(PAGE, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def js(expression):
+    """The value of a JavaScript expression evaluated after the pure functions."""
+    pure = re.search(r"// ---- pure functions.*?\n(.*?)// ---- the page", page(), re.S).group(1)
+    script = pure + "\nconsole.log(JSON.stringify(" + expression + "));"
+    done = subprocess.run([NODE, "-e", script], capture_output=True, text=True, check=True)
+    return json.loads(done.stdout)
+
+
+def test_the_script_parses(tmp_path):
+    scripts = re.findall(r"<script>(.*?)</script>", page(), re.S)
+    path = tmp_path / "page.js"
+    path.write_text("\n".join(scripts))
+    subprocess.run([NODE, "--check", str(path)], check=True)
+
+
+def test_every_element_the_script_uses_exists():
+    text = page()
+    used = set(re.findall(r'\$\("([\w-]+)"\)', text)) | set(re.findall(r'getElementById\("([\w-]+)"\)', text))
+    present = set(re.findall(r'\bid="([\w-]+)"', text))
+    assert used and used <= present, used - present
+
+
+def test_index_at():
+    # starts 0, 1.5, 3: before the first, inside each, exactly on a start, after the last
+    assert js("[-1, 0, 2.9, 3, 99].map(t => indexAt([0, 1.5, 3], t))") == [-1, 0, 1, 2, 2]
+
+
+def test_clock():
+    assert js("[7, 65.34, 59.96].map(clock)") == ["0:07.0", "1:05.3", "1:00.0"]
+
+
+def test_lyric_lines_skip_labels_and_chord_lines():
+    text = ("Bridge:\\nEm B7 Em B7\\nWalking down the road\\n\\n[Chorus]\\n"
+            "Source: www.example.com\\n  Be a friend  \\nAm I\\nCmaj7 Dsus4 A7sus4 F#m/E")
+    assert js(f'lyricLines("{text}")') == ["Walking down the road", "Be a friend", "Am I"]
+
+
+# "walk down the road today": walk 0-3, down 5-8, the 10-12, road 14-17, today 19-23; 24 characters
+LINE = '"walk down the road today"'
+SEGS = '[{names: ["–", "–"]}, {names: ["Am", "Gm"]}, {names: ["F", "E"]}, {names: ["G", "F"]}]'
+
+
+def test_a_change_mid_word_goes_to_the_word_start():
+    # sung from 10 to 14 s; the change at 12 s is half way: 0.5 * 24 = 12, inside "the", so 10
+    assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 12], 0)") == "Am" + " " * 8 + "F"
+
+
+def test_a_change_on_a_space_goes_to_the_next_word():
+    # 10 + 13/6 s is 13/24 of the line: character 13, the space before "road", so 14
+    assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 10 + 13 / 6], 0)") == "Am" + " " * 12 + "F"
+
+
+def test_names_never_overlap():
+    # changes at 10.1 and 10.2 s both land on character 0; each moves past the one before
+    assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 10.1, 10.2], 0)") == "Am F G"
+
+
+def test_chord_line_uses_the_capo_column():
+    assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 12], 1)") == "Gm" + " " * 8 + "E"
+
+
+def test_tap_mode_shows_the_line_being_sung():
+    # before any tap nothing is sung yet and line 1 is next; after tapping
+    # line 1 it is the line being sung and line 2 is next; after the last tap
+    # nothing is left to tap
+    lyrics = '["one", "two", "three"]'
+    assert js(f"[0, 1, 3].map(n => tapView({lyrics}, n))") == [["…", "one"], ["one", "two"], ["three", ""]]
+
+
+def test_lines_lab():
+    assert js("linesLab([1, 2.5], 4)") == "1.000\t2.500\tline 1\n2.500\t4.000\tline 2\n"

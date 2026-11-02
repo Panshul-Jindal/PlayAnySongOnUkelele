@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}} · play along</title>
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1d1d1b; --muted: #75736c; --line: #dedbd2; --panel: #f1efe9;
+  --accent: #2f6f5e; --on-accent: #ffffff; --warn-bg: #fff1cc; --warn-fg: #634700;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615; --fg: #ecebe7; --muted: #9b988f; --line: #3a3934; --panel: #22221f;
+    --accent: #6cc3a5; --on-accent: #10201b; --warn-bg: #3d3216; --warn-fg: #f3d68a;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+       font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+         padding: 14px 24px; border-bottom: 1px solid var(--line); }
+h1 { margin: 0; font-size: 20px; font-weight: 600; }
+.load { cursor: pointer; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px;
+        background: var(--panel); }
+.load input { display: none; }
+#messages p { margin: 10px 24px 0; padding: 8px 12px; border-radius: 8px; }
+#messages .info { padding-left: 0; color: var(--muted); }
+#messages .warn { background: var(--warn-bg); color: var(--warn-fg); }
+main, #list { padding: 20px 24px 110px; }
+.chords { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; align-items: end; }
+.label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+#now { font-size: clamp(72px, 15vw, 200px); font-weight: 700; line-height: 1.05; white-space: nowrap; }
+#sounding { min-height: 1.4em; color: var(--muted); }
+#next { font-size: clamp(40px, 7vw, 96px); font-weight: 600; line-height: 1.05; white-space: nowrap; }
+.bar { height: 10px; margin-top: 14px; border-radius: 5px; background: var(--line); overflow: hidden; }
+#fill { width: 0; height: 100%; background: var(--accent); }
+#lyrics { min-height: 7em; margin: 36px 0 28px; }
+#lyrics pre { margin: 0; white-space: pre; overflow-x: auto;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+#chordline { min-height: 1.3em; color: var(--accent); font-weight: 700; font-size: clamp(18px, 2.4vw, 30px); }
+#lyricline { min-height: 1.3em; font-size: clamp(18px, 2.4vw, 30px); }
+#nextline { margin-top: 8px; color: var(--muted); font-size: clamp(14px, 1.8vw, 22px); }
+.tapping #chordline { color: var(--muted); font-weight: 400; }
+#upcoming { display: flex; gap: 4px; }
+.chip { min-width: 48px; padding: 8px 6px; border-radius: 6px; background: var(--panel);
+        text-align: center; font-weight: 600; white-space: nowrap; overflow: hidden; }
+.chip.current { background: var(--accent); color: var(--on-accent); }
+#chordlist { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+footer { position: fixed; left: 0; right: 0; bottom: 0; display: flex; flex-wrap: wrap; align-items: center;
+         gap: 12px; padding: 12px 24px; border-top: 1px solid var(--line); background: var(--panel); }
+footer label, .keys { color: var(--muted); }
+button, select { padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px;
+                 background: var(--bg); color: var(--fg); font: inherit; }
+button:disabled { opacity: .5; }
+#play { min-width: 52px; }
+#seek { flex: 1; min-width: 160px; accent-color: var(--accent); }
+#time { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>{{TITLE}}</h1>
+  <label class="load">Load audio + lyrics<input id="files" type="file" multiple accept="audio/*,.txt"></label>
+</header>
+<div id="messages"></div>
+
+<main id="player" hidden>
+  <section class="chords">
+    <div>
+      <div class="label">now</div>
+      <div id="now"></div>
+      <div id="sounding"></div>
+    </div>
+    <div>
+      <div class="label">next</div>
+      <div id="next"></div>
+      <div class="bar"><div id="fill"></div></div>
+    </div>
+  </section>
+  <section id="lyrics">
+    <pre id="chordline"></pre>
+    <pre id="lyricline"></pre>
+    <pre id="nextline"></pre>
+  </section>
+  <section id="upcoming"></section>
+</main>
+
+<section id="list">
+  <p>Load the song's audio file, and its lyrics if you have them, to start.
+     You can also drop them onto this page. The chords:</p>
+  <pre id="chordlist"></pre>
+</section>
+
+<footer>
+  <button id="play" disabled>▶</button>
+  <input id="seek" type="range" min="0" step="0.1" value="0" disabled>
+  <span id="time"></span>
+  <label>capo <select id="capo"></select></label>
+  <label>speed <select id="speed">
+    <option value="1">1×</option><option value="0.75">0.75×</option><option value="0.5">0.5×</option>
+  </select></label>
+  <button id="tap" disabled>Tap lines</button>
+  <button id="download" hidden>Download lines.lab</button>
+  <span class="keys">Space play/pause · ← → 5 s</span>
+</footer>
+
+<script id="song-data" type="application/json">{{DATA}}</script>
+<script>
+"use strict";
+
+// ---- pure functions: no page state, so they also run outside a browser ----
+
+function indexAt(starts, t) {
+  // the index of the last start at or before t, or -1 if t comes before them all
+  let lo = 0, hi = starts.length - 1, found = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (starts[mid] <= t) { found = mid; lo = mid + 1; } else hi = mid - 1;
+  }
+  return found;
+}
+
+function clock(t) {
+  // 65.34 -> "1:05.3"
+  const tenths = Math.round(t * 10), m = Math.floor(tenths / 600), s = (tenths - 600 * m) / 10;
+  return m + ":" + (s < 10 ? "0" : "") + s.toFixed(1);
+}
+
+const CHORD_TOKEN = /^[A-G][#b]?(m|maj|min|dim|aug|sus|add|M)?\d*(\(?[#b]?\d+\)?)*(sus\d)?(\/[A-G][#b]?)?$/;
+
+function lyricLines(text) {
+  // the sung lines of a lyrics file; skips blank lines, labels such as
+  // "[Chorus]", "Bridge:" or "Source: www.example.com", and lines made only of
+  // chord names, so lyrics can be pasted from a tab site as they are
+  return text.split(/\r?\n/).map(l => l.trim()).filter(l => {
+    if (l === "" || /^\[.*\]$/.test(l)) return false;
+    const words = l.split(/\s+/);
+    const label = words.length <= 3 && (words[0].endsWith(":") || words[words.length - 1].endsWith(":"));
+    return !label && !words.every(w => CHORD_TOKEN.test(w));
+  });
+}
+
+function chordLine(text, s, e, segs, starts, capo) {
+  // chord names over a lyric line sung from s until e: first the chord sounding
+  // at s, then each change above the point of the line it falls on in time,
+  // moved to the start of a word; names never overlap
+  let out = "";
+  const put = (pos, name) => {
+    pos = Math.max(pos, out.length ? out.length + 1 : 0);
+    out += " ".repeat(pos - out.length) + name;
+  };
+  let i = Math.max(0, indexAt(starts, s));
+  put(0, segs[i].names[capo]);
+  for (i++; i < segs.length && starts[i] < e; i++) {
+    let pos = e > s ? Math.round((starts[i] - s) / (e - s) * text.length) : 0;
+    if (text[pos] === " ") while (pos < text.length && text[pos] === " ") pos++;
+    else while (pos > 0 && text[pos - 1] !== " ") pos--;
+    put(pos, segs[i].names[capo]);
+  }
+  return out;
+}
+
+function tapView(lyrics, tapped) {
+  // what tap mode shows after `tapped` taps, laid out as when playing along:
+  // the line being sung (the last one tapped) and the line the next tap starts
+  return [tapped ? lyrics[tapped - 1] : "…", lyrics[tapped] || ""];
+}
+
+function linesLab(starts, end) {
+  // tapped line starts as a .lab file: each line ends where the next begins
+  return starts.map((t, i) => t.toFixed(3) + "\t" +
+    (i + 1 < starts.length ? starts[i + 1] : end).toFixed(3) + "\tline " + (i + 1)).join("\n") + "\n";
+}
+
+// ---- the page ----
+
+const DATA = JSON.parse(document.getElementById("song-data").textContent);
+const SEGS = DATA.segments;
+const STARTS = SEGS.map(s => s.start);
+const STORE = "play-along:" + DATA.source + ":lines";
+const TAPPED = "tapped in this browser";
+const $ = id => document.getElementById(id);
+const audio = new Audio();
+audio.preservesPitch = true;  // slowing down must not change the key
+
+let capo = 0, audioName = "", lyrics = null, lineStarts = null, lineSource = "";
+let tapping = false, taps = [], seeking = false;
+const shown = {seg: -1, capo: -1, line: -2};
+const notes = {};
+
+function say(key, kind, text) {
+  notes[key] = {kind, text};
+  const box = $("messages");
+  box.textContent = "";
+  for (const k in notes) {
+    const p = document.createElement("p");
+    p.className = notes[k].kind;
+    p.textContent = notes[k].text;
+    box.appendChild(p);
+  }
+}
+
+function loadLineTimes() {
+  let stored = null;
+  try { stored = JSON.parse(localStorage.getItem(STORE)); } catch (e) { stored = null; }
+  if (Array.isArray(stored) && stored.length) { lineStarts = stored; lineSource = TAPPED; }
+  else if (DATA.lines) { lineStarts = DATA.lines.map(l => l.start); lineSource = "embedded in this page"; }
+  $("download").hidden = lineSource !== TAPPED;
+}
+
+function checkLyrics() {
+  if (!lyrics) return;
+  if (!lineStarts) {
+    say("lyrics", "info", "Lyrics: " + lyrics.length + " lines. Press “Tap lines” to time them.");
+  } else if (lineStarts.length !== lyrics.length) {
+    say("lyrics", "warn", "The lyrics file has " + lyrics.length + " lines but there are " +
+        lineStarts.length + " line times (" + lineSource + "), so no lyrics are shown. " +
+        "Tap the lines again, or fix the file.");
+  } else {
+    say("lyrics", "info", "Lyrics: " + lyrics.length + " lines, times " + lineSource + ".");
+  }
+}
+
+function updateButtons() {
+  const ready = audio.readyState > 0;
+  $("play").disabled = !ready;
+  $("seek").disabled = !ready || tapping;
+  $("tap").disabled = !ready || !lyrics;
+  $("tap").textContent = tapping ? "Stop tapping" : "Tap lines";
+}
+
+function loadFiles(files) {
+  for (const f of files) {
+    if (/\.txt$/i.test(f.name)) {
+      f.text().then(text => {
+        lyrics = lyricLines(text);
+        shown.line = -2;
+        checkLyrics();
+        updateButtons();
+      });
+    } else if (f.type.startsWith("audio/") || /\.(wav|mp3|m4a|flac|ogg|aac)$/i.test(f.name)) {
+      audioName = f.name;
+      audio.src = URL.createObjectURL(f);
+    }
+  }
+}
+
+function togglePlay() {
+  if (audio.paused) audio.play(); else audio.pause();
+}
+
+function startTapping() {
+  tapping = true;
+  taps = [];
+  document.body.classList.add("tapping");
+  audio.pause();
+  audio.currentTime = 0;
+  say("tap", "info", "Tap mode: press Space to start the song, then Space each time a new line starts. " +
+      "Backspace undoes the last tap; Esc stops.");
+  updateButtons();
+}
+
+function tap() {
+  if (audio.paused) { audio.play(); return; }  // starting or resuming the song is not a tap
+  const t = audio.currentTime;
+  if (taps.length && t <= taps[taps.length - 1]) return;
+  taps.push(t);
+  if (taps.length === lyrics.length) stopTapping();
+}
+
+function stopTapping() {
+  tapping = false;
+  document.body.classList.remove("tapping");
+  if (taps.length === lyrics.length) {
+    try { localStorage.setItem(STORE, JSON.stringify(taps)); } catch (e) { /* kept for this visit only */ }
+    lineStarts = taps.slice();
+    lineSource = TAPPED;
+    $("download").hidden = false;
+    say("tap", "info", "All " + taps.length + " lines tapped. Download lines.lab and save it in the song's folder.");
+  } else {
+    say("tap", "warn", "Stopped after " + taps.length + " of " + lyrics.length + " lines; nothing was saved.");
+  }
+  shown.line = -2;
+  checkLyrics();
+  updateButtons();
+}
+
+function renderUpcoming(i) {
+  const box = $("upcoming");
+  box.textContent = "";
+  for (let k = i; k < Math.min(SEGS.length, i + 9); k++) {
+    const chip = document.createElement("div");
+    chip.className = k === i ? "chip current" : "chip";
+    chip.style.flexGrow = SEGS[k].end - SEGS[k].start;
+    chip.textContent = SEGS[k].names[capo];
+    box.appendChild(chip);
+  }
+}
+
+function renderLyrics(t, changed) {
+  const chord = $("chordline"), line = $("lyricline"), next = $("nextline");
+  if (tapping) {
+    chord.textContent = audio.paused ? "press Space to play" :
+      taps.length + " of " + lyrics.length + " lines tapped · Space when the next line starts";
+    [line.textContent, next.textContent] = tapView(lyrics, taps.length);
+    return;
+  }
+  if (!lyrics || !lineStarts || lineStarts.length !== lyrics.length) {
+    chord.textContent = line.textContent = next.textContent = "";
+    return;
+  }
+  const j = indexAt(lineStarts, t);
+  if (j === shown.line && !changed) return;
+  shown.line = j;
+  if (j < 0) {
+    chord.textContent = "";
+    line.textContent = "…";
+    next.textContent = lyrics[0];
+    return;
+  }
+  const end = j + 1 < lineStarts.length ? lineStarts[j + 1] : (audio.duration || DATA.duration);
+  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo);
+  line.textContent = lyrics[j];
+  next.textContent = lyrics[j + 1] || "";
+}
+
+function render(force) {
+  const t = audio.currentTime || 0;
+  const i = Math.max(0, indexAt(STARTS, t));
+  const seg = SEGS[i];
+  if (force || i !== shown.seg || capo !== shown.capo) {
+    $("now").textContent = seg.names[capo];
+    $("sounding").textContent = capo ? "sounds as " + seg.names[0] : "";
+    $("next").textContent = i + 1 < SEGS.length ? SEGS[i + 1].names[capo] : "end";
+    renderUpcoming(i);
+  }
+  const progress = Math.min(1, Math.max(0, (t - seg.start) / (seg.end - seg.start)));
+  $("fill").style.width = (100 * progress) + "%";
+  renderLyrics(t, force || capo !== shown.capo);
+  shown.seg = i;
+  shown.capo = capo;
+  $("time").textContent = clock(t) + " / " + clock(audio.duration || DATA.duration);
+  if (!seeking) $("seek").value = t;
+}
+
+audio.addEventListener("loadedmetadata", () => {
+  $("player").hidden = false;
+  $("list").hidden = true;
+  $("seek").max = audio.duration;
+  if (Math.abs(audio.duration - DATA.duration) > 1) {
+    say("audio", "warn", "This audio is " + audio.duration.toFixed(1) + " s long, but the chords end at " +
+        DATA.duration.toFixed(1) + " s: it may not be the file they were made from.");
+  } else {
+    say("audio", "info", "Audio: " + audioName);
+  }
+  updateButtons();
+  render(true);
+});
+audio.addEventListener("play", () => { $("play").textContent = "❚❚"; });
+audio.addEventListener("pause", () => { $("play").textContent = "▶"; });
+audio.addEventListener("ended", () => { if (tapping) stopTapping(); });
+
+$("chordlist").textContent = SEGS.map(s =>
+  clock(s.start) + "  " + s.names[0].padEnd(6) + " for " + (s.end - s.start).toFixed(1) + " s").join("\n");
+for (let c = 0; c < 12; c++) $("capo").add(new Option(c ? "fret " + c : "none", c));
+
+$("files").addEventListener("change", e => loadFiles(e.target.files));
+document.addEventListener("dragover", e => e.preventDefault());
+document.addEventListener("drop", e => { e.preventDefault(); loadFiles(e.dataTransfer.files); });
+// buttons and menus give focus back, so Space always reaches the shortcuts below
+$("play").addEventListener("click", e => { togglePlay(); e.currentTarget.blur(); });
+$("tap").addEventListener("click", e => { if (tapping) stopTapping(); else startTapping(); e.currentTarget.blur(); });
+$("download").addEventListener("click", e => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([linesLab(lineStarts, audio.duration || DATA.duration)], {type: "text/plain"}));
+  a.download = "lines.lab";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  e.currentTarget.blur();
+});
+$("capo").addEventListener("change", e => { capo = Number(e.target.value); e.target.blur(); });
+$("speed").addEventListener("change", e => { audio.playbackRate = Number(e.target.value); e.target.blur(); });
+$("seek").addEventListener("input", e => { seeking = true; audio.currentTime = Number(e.target.value); });
+$("seek").addEventListener("change", e => { seeking = false; e.target.blur(); });
+document.addEventListener("keydown", e => {
+  if (audio.readyState === 0 || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.code === "Space") { e.preventDefault(); if (tapping) tap(); else togglePlay(); }
+  else if (tapping && e.code === "Backspace") { e.preventDefault(); taps.pop(); }
+  else if (tapping && e.code === "Escape") { audio.pause(); stopTapping(); }
+  else if (!tapping && e.code === "ArrowLeft") audio.currentTime = Math.max(0, audio.currentTime - 5);
+  else if (!tapping && e.code === "ArrowRight") audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+});
+
+loadLineTimes();
+(function frame() { render(false); requestAnimationFrame(frame); })();
+</script>
+</body>
+</html>

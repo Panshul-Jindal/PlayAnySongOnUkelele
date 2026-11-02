@@ -40,6 +40,17 @@ With `TF_USE_LEGACY_KERAS=1`, autochord needs the legacy Keras package
 in `results/chord-estimation/autochord/`, one `.lab` per song, named after the
 song's folder in `data/Custom_Songs/`.
 
+## Play along
+
+```bash
+uv run python play-along/play_along.py results/chord-estimation/autochord/hey_soul_sister.lab \
+    results/play-along/hey_soul_sister.html --title "Hey, Soul Sister"
+```
+
+Open the page in a browser and load the song's audio from its folder in
+`data/Custom_Songs/`. It shows the chord to play now and the next one, with a
+capo menu. See `play-along/README.md`.
+
 
 
 

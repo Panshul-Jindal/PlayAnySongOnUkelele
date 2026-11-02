@@ -79,3 +79,5 @@ https://github.com/tombatossals/chords-db/tree/master/src/db/ukulele
 
 
 ***Harte-label to bitmask converter**
+
+

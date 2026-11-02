@@ -8,9 +8,14 @@ from each other. Scripts find these modules by adding `common/` to
 |---|---|
 | `harte.py` | parser for Harte chord symbols (`A:maj/2`, `G:sus4(b7,9)`) → scale degrees → pitch classes |
 | `lab.py` | reader for MIREX-style `.lab` files: `start <TAB> end <TAB> label`, one segment per line |
+| `transpose.py` | moves a Harte label by *n* semitones; a capo at fret *c* moves it by −*c* |
+| `names.py` | a Harte label → the name a player reads: `Db:min` → C#m, `A:min/b7` → Am/G |
+| `ukulele.py` | ukulele shapes: the notes four fret numbers sound, the lowest one, and every shape for each set of notes |
 
-Tests live in `tests/common/`: `test_harte.py` holds 41 assertions copied from
-the source documents below.
+Tests live in `tests/common/`. `test_harte.py` holds 41 assertions copied from
+the source documents below. `test_transpose.py` and `test_names.py` check
+values worked out by hand on the 12-note circle, and that moving a chord by
+*n* moves each of its notes, the bass too, by *n*.
 
 ```sh
 uv run pytest tests/common

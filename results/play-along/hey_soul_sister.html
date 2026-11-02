@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hey_soul_sister · play along</title>
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1d1d1b; --muted: #75736c; --line: #dedbd2; --panel: #f1efe9;
+  --accent: #2f6f5e; --on-accent: #ffffff; --warn-bg: #fff1cc; --warn-fg: #634700;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615; --fg: #ecebe7; --muted: #9b988f; --line: #3a3934; --panel: #22221f;
+    --accent: #6cc3a5; --on-accent: #10201b; --warn-bg: #3d3216; --warn-fg: #f3d68a;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+       font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+         padding: 14px 24px; border-bottom: 1px solid var(--line); }
+h1 { margin: 0; font-size: 20px; font-weight: 600; }
+.load { cursor: pointer; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px;
+        background: var(--panel); }
+.load input { display: none; }
+#messages p { margin: 10px 24px 0; padding: 8px 12px; border-radius: 8px; }
+#messages .info { padding-left: 0; color: var(--muted); }
+#messages .warn { background: var(--warn-bg); color: var(--warn-fg); }
+main, #list { padding: 20px 24px 110px; }
+.chords { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; align-items: end; }
+.label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+#now { font-size: clamp(72px, 15vw, 200px); font-weight: 700; line-height: 1.05; white-space: nowrap; }
+#sounding { min-height: 1.4em; color: var(--muted); }
+#next { font-size: clamp(40px, 7vw, 96px); font-weight: 600; line-height: 1.05; white-space: nowrap; }
+.bar { height: 10px; margin-top: 14px; border-radius: 5px; background: var(--line); overflow: hidden; }
+#fill { width: 0; height: 100%; background: var(--accent); }
+#lyrics { min-height: 7em; margin: 36px 0 28px; }
+#lyrics pre { margin: 0; white-space: pre; overflow-x: auto;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+#chordline { min-height: 1.3em; color: var(--accent); font-weight: 700; font-size: clamp(18px, 2.4vw, 30px); }
+#lyricline { min-height: 1.3em; font-size: clamp(18px, 2.4vw, 30px); }
+#nextline { margin-top: 8px; color: var(--muted); font-size: clamp(14px, 1.8vw, 22px); }
+.tapping #chordline { color: var(--muted); font-weight: 400; }
+#upcoming { display: flex; gap: 4px; }
+.chip { min-width: 48px; padding: 8px 6px; border-radius: 6px; background: var(--panel);
+        text-align: center; font-weight: 600; white-space: nowrap; overflow: hidden; }
+.chip.current { background: var(--accent); color: var(--on-accent); }
+#chordlist { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+footer { position: fixed; left: 0; right: 0; bottom: 0; display: flex; flex-wrap: wrap; align-items: center;
+         gap: 12px; padding: 12px 24px; border-top: 1px solid var(--line); background: var(--panel); }
+footer label, .keys { color: var(--muted); }
+button, select { padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px;
+                 background: var(--bg); color: var(--fg); font: inherit; }
+button:disabled { opacity: .5; }
+#play { min-width: 52px; }
+#seek { flex: 1; min-width: 160px; accent-color: var(--accent); }
+#time { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>hey_soul_sister</h1>
+  <label class="load">Load audio + lyrics<input id="files" type="file" multiple accept="audio/*,.txt"></label>
+</header>
+<div id="messages"></div>
+
+<main id="player" hidden>
+  <section class="chords">
+    <div>
+      <div class="label">now</div>
+      <div id="now"></div>
+      <div id="sounding"></div>
+    </div>
+    <div>
+      <div class="label">next</div>
+      <div id="next"></div>
+      <div class="bar"><div id="fill"></div></div>
+    </div>
+  </section>
+  <section id="lyrics">
+    <pre id="chordline"></pre>
+    <pre id="lyricline"></pre>
+    <pre id="nextline"></pre>
+  </section>
+  <section id="upcoming"></section>
+</main>
+
+<section id="list">
+  <p>Load the song's audio file, and its lyrics if you have them, to start.
+     You can also drop them onto this page. The chords:</p>
+  <pre id="chordlist"></pre>
+</section>
+
+<footer>
+  <button id="play" disabled>▶</button>
+  <input id="seek" type="range" min="0" step="0.1" value="0" disabled>
+  <span id="time"></span>
+  <label>capo <select id="capo"></select></label>
+  <label>speed <select id="speed">
+    <option value="1">1×</option><option value="0.75">0.75×</option><option value="0.5">0.5×</option>
+  </select></label>
+  <button id="tap" disabled>Tap lines</button>
+  <button id="download" hidden>Download lines.lab</button>
+  <span class="keys">Space play/pause · ← → 5 s</span>
+</footer>
+
+<script id="song-data" type="application/json">{"title": "hey_soul_sister", "source": "hey_soul_sister.lab", "duration": 217.45, "segments": [{"start": 0.0, "end": 4.71, "label": "N", "names": ["–", "–", "–", "–", "–", "–", "–", "–", "–", "–", "–", "–"]}, {"start": 4.71, "end": 7.11, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 7.11, "end": 9.54, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 9.54, "end": 12.17, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 12.17, "end": 14.63, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 14.63, "end": 17.16, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 17.16, "end": 19.55, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 19.55, "end": 22.08, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 22.08, "end": 24.52, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 24.52, "end": 26.98, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 26.98, "end": 29.49, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 29.49, "end": 30.74, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 30.74, "end": 32.0, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 32.0, "end": 34.39, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 34.39, "end": 36.92, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 36.92, "end": 39.4, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 39.4, "end": 41.91, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 41.91, "end": 44.28, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 44.28, "end": 46.81, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 46.81, "end": 49.27, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 49.27, "end": 50.55, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 50.55, "end": 51.73, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 51.73, "end": 54.24, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 54.24, "end": 56.75, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 56.75, "end": 59.21, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 59.21, "end": 61.65, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 61.65, "end": 64.13, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 64.13, "end": 66.73, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 66.73, "end": 69.01, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 69.01, "end": 71.56, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 71.56, "end": 73.98, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 73.98, "end": 76.53, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 76.53, "end": 78.99, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 78.99, "end": 81.43, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 81.43, "end": 83.89, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 83.89, "end": 86.45, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 86.45, "end": 88.91, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 88.91, "end": 91.35, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 91.35, "end": 93.83, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 93.83, "end": 96.34, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 96.34, "end": 98.82, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 98.82, "end": 100.01, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 100.01, "end": 101.26, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 101.26, "end": 103.72, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 103.72, "end": 106.23, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 106.23, "end": 108.72, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 108.72, "end": 111.13, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 111.13, "end": 113.62, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 113.62, "end": 116.12, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 116.12, "end": 118.58, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 118.58, "end": 119.84, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 119.84, "end": 121.02, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 121.02, "end": 123.51, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 123.51, "end": 124.78, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 124.78, "end": 125.39, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 125.39, "end": 125.99, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 125.99, "end": 128.48, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 128.48, "end": 129.73, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 129.73, "end": 130.36, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 130.36, "end": 130.94, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 130.94, "end": 133.42, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 133.42, "end": 134.65, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 134.65, "end": 135.28, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 135.28, "end": 135.88, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 135.88, "end": 138.34, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 138.34, "end": 140.83, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 140.83, "end": 143.31, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 143.31, "end": 145.77, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 145.77, "end": 148.84, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 148.84, "end": 150.77, "label": "A:maj/3", "names": ["A/C#", "Ab/C", "G/B", "F#/Bb", "F/A", "E/Ab", "Eb/G", "D/F#", "C#/F", "C/E", "B/Eb", "Bb/D"]}, {"start": 150.77, "end": 153.14, "label": "E:maj/5", "names": ["E/B", "Eb/Bb", "D/A", "C#/Ab", "C/G", "B/F#", "Bb/F", "A/E", "Ab/Eb", "G/D", "F#/C#", "F/C"]}, {"start": 153.14, "end": 155.69, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 155.69, "end": 156.94, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 156.94, "end": 158.15, "label": "C#:min/b7", "names": ["C#m/B", "Cm/Bb", "Bm/A", "Bbm/Ab", "Am/G", "Abm/F#", "Gm/F", "F#m/E", "Fm/Eb", "Em/D", "Ebm/C#", "Dm/C"]}, {"start": 158.15, "end": 159.43, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 159.43, "end": 160.66, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 160.66, "end": 163.12, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 163.12, "end": 165.51, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 165.51, "end": 168.04, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 168.04, "end": 169.25, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 169.25, "end": 169.92, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 169.92, "end": 170.5, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 170.5, "end": 172.99, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 172.99, "end": 174.22, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 174.22, "end": 174.87, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 174.87, "end": 175.47, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 175.47, "end": 177.93, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 177.93, "end": 180.4, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 180.4, "end": 182.93, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 182.93, "end": 184.11, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 184.11, "end": 184.81, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 184.81, "end": 185.36, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 185.36, "end": 187.83, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 187.83, "end": 190.31, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 190.31, "end": 192.8, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 192.8, "end": 195.23, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 195.23, "end": 197.76, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 197.76, "end": 199.02, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 199.02, "end": 200.2, "label": "A:maj/2", "names": ["A/B", "Ab/Bb", "G/A", "F#/Ab", "F/G", "E/F#", "Eb/F", "D/E", "C#/Eb", "C/D", "B/C#", "Bb/C"]}, {"start": 200.2, "end": 202.69, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 202.69, "end": 205.15, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 205.15, "end": 207.66, "label": "C#:min", "names": ["C#m", "Cm", "Bm", "Bbm", "Am", "Abm", "Gm", "F#m", "Fm", "Em", "Ebm", "Dm"]}, {"start": 207.66, "end": 208.91, "label": "A:maj", "names": ["A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C", "B", "Bb"]}, {"start": 208.91, "end": 210.77, "label": "B:maj", "names": ["B", "Bb", "A", "Ab", "G", "F#", "F", "E", "Eb", "D", "C#", "C"]}, {"start": 210.77, "end": 213.28, "label": "E:maj", "names": ["E", "Eb", "D", "C#", "C", "B", "Bb", "A", "Ab", "G", "F#", "F"]}, {"start": 213.28, "end": 217.45, "label": "N", "names": ["–", "–", "–", "–", "–", "–", "–", "–", "–", "–", "–", "–"]}], "lines": [{"start": 4.247, "end": 12.067}, {"start": 12.067, "end": 15.314}, {"start": 15.314, "end": 20.812}, {"start": 20.812, "end": 22.954}, {"start": 22.954, "end": 31.52}, {"start": 31.52, "end": 34.724}, {"start": 34.724, "end": 40.509}, {"start": 40.509, "end": 42.414}, {"start": 42.414, "end": 51.311}, {"start": 51.311, "end": 53.628}, {"start": 53.628, "end": 58.834}, {"start": 58.834, "end": 61.596}, {"start": 61.596, "end": 63.802}, {"start": 63.802, "end": 71.327}, {"start": 71.327, "end": 73.352}, {"start": 73.352, "end": 81.441}, {"start": 81.441, "end": 84.52}, {"start": 84.52, "end": 90.089}, {"start": 90.089, "end": 92.403}, {"start": 92.403, "end": 101.042}, {"start": 101.042, "end": 104.25}, {"start": 104.25, "end": 109.813}, {"start": 109.813, "end": 114.248}, {"start": 114.248, "end": 120.996}, {"start": 120.996, "end": 123.318}, {"start": 123.318, "end": 128.245}, {"start": 128.245, "end": 130.933}, {"start": 130.933, "end": 132.89}, {"start": 132.89, "end": 140.608}, {"start": 140.608, "end": 141.822}, {"start": 141.822, "end": 143.324}, {"start": 143.324, "end": 145.878}, {"start": 145.878, "end": 148.035}, {"start": 148.035, "end": 150.806}, {"start": 150.806, "end": 153.373}, {"start": 153.373, "end": 156.744}, {"start": 156.744, "end": 160.464}, {"start": 160.464, "end": 162.603}, {"start": 162.603, "end": 167.488}, {"start": 167.488, "end": 170.475}, {"start": 170.475, "end": 172.588}, {"start": 172.588, "end": 180.188}, {"start": 180.188, "end": 182.62}, {"start": 182.62, "end": 190.201}, {"start": 190.201, "end": 192.15}, {"start": 192.15, "end": 200.046}, {"start": 200.046, "end": 202.033}, {"start": 202.033, "end": 209.919}, {"start": 209.919, "end": 217.432}]}</script>
+<script>
+"use strict";
+
+// ---- pure functions: no page state, so they also run outside a browser ----
+
+function indexAt(starts, t) {
+  // the index of the last start at or before t, or -1 if t comes before them all
+  let lo = 0, hi = starts.length - 1, found = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (starts[mid] <= t) { found = mid; lo = mid + 1; } else hi = mid - 1;
+  }
+  return found;
+}
+
+function clock(t) {
+  // 65.34 -> "1:05.3"
+  const tenths = Math.round(t * 10), m = Math.floor(tenths / 600), s = (tenths - 600 * m) / 10;
+  return m + ":" + (s < 10 ? "0" : "") + s.toFixed(1);
+}
+
+const CHORD_TOKEN = /^[A-G][#b]?(m|maj|min|dim|aug|sus|add|M)?\d*(\(?[#b]?\d+\)?)*(sus\d)?(\/[A-G][#b]?)?$/;
+
+function lyricLines(text) {
+  // the sung lines of a lyrics file; skips blank lines, labels such as
+  // "[Chorus]", "Bridge:" or "Source: www.example.com", and lines made only of
+  // chord names, so lyrics can be pasted from a tab site as they are
+  return text.split(/\r?\n/).map(l => l.trim()).filter(l => {
+    if (l === "" || /^\[.*\]$/.test(l)) return false;
+    const words = l.split(/\s+/);
+    const label = words.length <= 3 && (words[0].endsWith(":") || words[words.length - 1].endsWith(":"));
+    return !label && !words.every(w => CHORD_TOKEN.test(w));
+  });
+}
+
+function chordLine(text, s, e, segs, starts, capo) {
+  // chord names over a lyric line sung from s until e: first the chord sounding
+  // at s, then each change above the point of the line it falls on in time,
+  // moved to the start of a word; names never overlap
+  let out = "";
+  const put = (pos, name) => {
+    pos = Math.max(pos, out.length ? out.length + 1 : 0);
+    out += " ".repeat(pos - out.length) + name;
+  };
+  let i = Math.max(0, indexAt(starts, s));
+  put(0, segs[i].names[capo]);
+  for (i++; i < segs.length && starts[i] < e; i++) {
+    let pos = e > s ? Math.round((starts[i] - s) / (e - s) * text.length) : 0;
+    if (text[pos] === " ") while (pos < text.length && text[pos] === " ") pos++;
+    else while (pos > 0 && text[pos - 1] !== " ") pos--;
+    put(pos, segs[i].names[capo]);
+  }
+  return out;
+}
+
+function tapView(lyrics, tapped) {
+  // what tap mode shows after `tapped` taps, laid out as when playing along:
+  // the line being sung (the last one tapped) and the line the next tap starts
+  return [tapped ? lyrics[tapped - 1] : "…", lyrics[tapped] || ""];
+}
+
+function linesLab(starts, end) {
+  // tapped line starts as a .lab file: each line ends where the next begins
+  return starts.map((t, i) => t.toFixed(3) + "\t" +
+    (i + 1 < starts.length ? starts[i + 1] : end).toFixed(3) + "\tline " + (i + 1)).join("\n") + "\n";
+}
+
+// ---- the page ----
+
+const DATA = JSON.parse(document.getElementById("song-data").textContent);
+const SEGS = DATA.segments;
+const STARTS = SEGS.map(s => s.start);
+const STORE = "play-along:" + DATA.source + ":lines";
+const TAPPED = "tapped in this browser";
+const $ = id => document.getElementById(id);
+const audio = new Audio();
+audio.preservesPitch = true;  // slowing down must not change the key
+
+let capo = 0, audioName = "", lyrics = null, lineStarts = null, lineSource = "";
+let tapping = false, taps = [], seeking = false;
+const shown = {seg: -1, capo: -1, line: -2};
+const notes = {};
+
+function say(key, kind, text) {
+  notes[key] = {kind, text};
+  const box = $("messages");
+  box.textContent = "";
+  for (const k in notes) {
+    const p = document.createElement("p");
+    p.className = notes[k].kind;
+    p.textContent = notes[k].text;
+    box.appendChild(p);
+  }
+}
+
+function loadLineTimes() {
+  let stored = null;
+  try { stored = JSON.parse(localStorage.getItem(STORE)); } catch (e) { stored = null; }
+  if (Array.isArray(stored) && stored.length) { lineStarts = stored; lineSource = TAPPED; }
+  else if (DATA.lines) { lineStarts = DATA.lines.map(l => l.start); lineSource = "embedded in this page"; }
+  $("download").hidden = lineSource !== TAPPED;
+}
+
+function checkLyrics() {
+  if (!lyrics) return;
+  if (!lineStarts) {
+    say("lyrics", "info", "Lyrics: " + lyrics.length + " lines. Press “Tap lines” to time them.");
+  } else if (lineStarts.length !== lyrics.length) {
+    say("lyrics", "warn", "The lyrics file has " + lyrics.length + " lines but there are " +
+        lineStarts.length + " line times (" + lineSource + "), so no lyrics are shown. " +
+        "Tap the lines again, or fix the file.");
+  } else {
+    say("lyrics", "info", "Lyrics: " + lyrics.length + " lines, times " + lineSource + ".");
+  }
+}
+
+function updateButtons() {
+  const ready = audio.readyState > 0;
+  $("play").disabled = !ready;
+  $("seek").disabled = !ready || tapping;
+  $("tap").disabled = !ready || !lyrics;
+  $("tap").textContent = tapping ? "Stop tapping" : "Tap lines";
+}
+
+function loadFiles(files) {
+  for (const f of files) {
+    if (/\.txt$/i.test(f.name)) {
+      f.text().then(text => {
+        lyrics = lyricLines(text);
+        shown.line = -2;
+        checkLyrics();
+        updateButtons();
+      });
+    } else if (f.type.startsWith("audio/") || /\.(wav|mp3|m4a|flac|ogg|aac)$/i.test(f.name)) {
+      audioName = f.name;
+      audio.src = URL.createObjectURL(f);
+    }
+  }
+}
+
+function togglePlay() {
+  if (audio.paused) audio.play(); else audio.pause();
+}
+
+function startTapping() {
+  tapping = true;
+  taps = [];
+  document.body.classList.add("tapping");
+  audio.pause();
+  audio.currentTime = 0;
+  say("tap", "info", "Tap mode: press Space to start the song, then Space each time a new line starts. " +
+      "Backspace undoes the last tap; Esc stops.");
+  updateButtons();
+}
+
+function tap() {
+  if (audio.paused) { audio.play(); return; }  // starting or resuming the song is not a tap
+  const t = audio.currentTime;
+  if (taps.length && t <= taps[taps.length - 1]) return;
+  taps.push(t);
+  if (taps.length === lyrics.length) stopTapping();
+}
+
+function stopTapping() {
+  tapping = false;
+  document.body.classList.remove("tapping");
+  if (taps.length === lyrics.length) {
+    try { localStorage.setItem(STORE, JSON.stringify(taps)); } catch (e) { /* kept for this visit only */ }
+    lineStarts = taps.slice();
+    lineSource = TAPPED;
+    $("download").hidden = false;
+    say("tap", "info", "All " + taps.length + " lines tapped. Download lines.lab and save it in the song's folder.");
+  } else {
+    say("tap", "warn", "Stopped after " + taps.length + " of " + lyrics.length + " lines; nothing was saved.");
+  }
+  shown.line = -2;
+  checkLyrics();
+  updateButtons();
+}
+
+function renderUpcoming(i) {
+  const box = $("upcoming");
+  box.textContent = "";
+  for (let k = i; k < Math.min(SEGS.length, i + 9); k++) {
+    const chip = document.createElement("div");
+    chip.className = k === i ? "chip current" : "chip";
+    chip.style.flexGrow = SEGS[k].end - SEGS[k].start;
+    chip.textContent = SEGS[k].names[capo];
+    box.appendChild(chip);
+  }
+}
+
+function renderLyrics(t, changed) {
+  const chord = $("chordline"), line = $("lyricline"), next = $("nextline");
+  if (tapping) {
+    chord.textContent = audio.paused ? "press Space to play" :
+      taps.length + " of " + lyrics.length + " lines tapped · Space when the next line starts";
+    [line.textContent, next.textContent] = tapView(lyrics, taps.length);
+    return;
+  }
+  if (!lyrics || !lineStarts || lineStarts.length !== lyrics.length) {
+    chord.textContent = line.textContent = next.textContent = "";
+    return;
+  }
+  const j = indexAt(lineStarts, t);
+  if (j === shown.line && !changed) return;
+  shown.line = j;
+  if (j < 0) {
+    chord.textContent = "";
+    line.textContent = "…";
+    next.textContent = lyrics[0];
+    return;
+  }
+  const end = j + 1 < lineStarts.length ? lineStarts[j + 1] : (audio.duration || DATA.duration);
+  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo);
+  line.textContent = lyrics[j];
+  next.textContent = lyrics[j + 1] || "";
+}
+
+function render(force) {
+  const t = audio.currentTime || 0;
+  const i = Math.max(0, indexAt(STARTS, t));
+  const seg = SEGS[i];
+  if (force || i !== shown.seg || capo !== shown.capo) {
+    $("now").textContent = seg.names[capo];
+    $("sounding").textContent = capo ? "sounds as " + seg.names[0] : "";
+    $("next").textContent = i + 1 < SEGS.length ? SEGS[i + 1].names[capo] : "end";
+    renderUpcoming(i);
+  }
+  const progress = Math.min(1, Math.max(0, (t - seg.start) / (seg.end - seg.start)));
+  $("fill").style.width = (100 * progress) + "%";
+  renderLyrics(t, force || capo !== shown.capo);
+  shown.seg = i;
+  shown.capo = capo;
+  $("time").textContent = clock(t) + " / " + clock(audio.duration || DATA.duration);
+  if (!seeking) $("seek").value = t;
+}
+
+audio.addEventListener("loadedmetadata", () => {
+  $("player").hidden = false;
+  $("list").hidden = true;
+  $("seek").max = audio.duration;
+  if (Math.abs(audio.duration - DATA.duration) > 1) {
+    say("audio", "warn", "This audio is " + audio.duration.toFixed(1) + " s long, but the chords end at " +
+        DATA.duration.toFixed(1) + " s: it may not be the file they were made from.");
+  } else {
+    say("audio", "info", "Audio: " + audioName);
+  }
+  updateButtons();
+  render(true);
+});
+audio.addEventListener("play", () => { $("play").textContent = "❚❚"; });
+audio.addEventListener("pause", () => { $("play").textContent = "▶"; });
+audio.addEventListener("ended", () => { if (tapping) stopTapping(); });
+
+$("chordlist").textContent = SEGS.map(s =>
+  clock(s.start) + "  " + s.names[0].padEnd(6) + " for " + (s.end - s.start).toFixed(1) + " s").join("\n");
+for (let c = 0; c < 12; c++) $("capo").add(new Option(c ? "fret " + c : "none", c));
+
+$("files").addEventListener("change", e => loadFiles(e.target.files));
+document.addEventListener("dragover", e => e.preventDefault());
+document.addEventListener("drop", e => { e.preventDefault(); loadFiles(e.dataTransfer.files); });
+// buttons and menus give focus back, so Space always reaches the shortcuts below
+$("play").addEventListener("click", e => { togglePlay(); e.currentTarget.blur(); });
+$("tap").addEventListener("click", e => { if (tapping) stopTapping(); else startTapping(); e.currentTarget.blur(); });
+$("download").addEventListener("click", e => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([linesLab(lineStarts, audio.duration || DATA.duration)], {type: "text/plain"}));
+  a.download = "lines.lab";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  e.currentTarget.blur();
+});
+$("capo").addEventListener("change", e => { capo = Number(e.target.value); e.target.blur(); });
+$("speed").addEventListener("change", e => { audio.playbackRate = Number(e.target.value); e.target.blur(); });
+$("seek").addEventListener("input", e => { seeking = true; audio.currentTime = Number(e.target.value); });
+$("seek").addEventListener("change", e => { seeking = false; e.target.blur(); });
+document.addEventListener("keydown", e => {
+  if (audio.readyState === 0 || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.code === "Space") { e.preventDefault(); if (tapping) tap(); else togglePlay(); }
+  else if (tapping && e.code === "Backspace") { e.preventDefault(); taps.pop(); }
+  else if (tapping && e.code === "Escape") { audio.pause(); stopTapping(); }
+  else if (!tapping && e.code === "ArrowLeft") audio.currentTime = Math.max(0, audio.currentTime - 5);
+  else if (!tapping && e.code === "ArrowRight") audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+});
+
+loadLineTimes();
+(function frame() { render(false); requestAnimationFrame(frame); })();
+</script>
+</body>
+</html>
