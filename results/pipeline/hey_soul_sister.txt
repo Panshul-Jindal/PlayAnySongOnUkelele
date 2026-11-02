@@ -1,0 +1,35 @@
+hey_soul_sister.lab: 108 segments, 204.9 s of chords
+
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  9.28     0.0%
+   1  9.69     0.0%
+   2  5.46     0.0%
+   3 11.38     0.0%
+   4  4.01   100.0%   <- recommended
+   5 11.01     0.0%
+   6  7.39     0.0%   above fret 5: not considered
+   7  7.27     0.0%   above fret 5: not considered
+   8 10.72     0.0%   above fret 5: not considered
+   9  3.70     0.0%   above fret 5: not considered
+  10 10.92     0.0%   above fret 5: not considered
+  11  5.33     0.0%   above fret 5: not considered
+
+capo 4: the shapes to play, by share of chord time
+  G (sounds B)        31.7%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  C (sounds E)        26.4%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  F (sounds A)        23.0%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Dm (sounds F#m)      9.4%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  Am (sounds C#m)      8.8%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  Em (sounds Abm)      0.4%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  D (sounds F#)        0.3%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+
+capo 0: the shapes to play, by share of chord time
+  B                   31.7%   frets 4322  fingers 3211   span 2  fingers 3  barre 1   d 10
+  E                   26.4%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  A                   23.0%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  F#m                  9.4%   frets 2120  fingers 2130   span 1  fingers 3  barre 0   d 6
+  C#m                  8.8%   frets 1444  fingers 1234   span 3  fingers 4  barre 0   d 13
+  Abm                  0.4%   frets 1342  fingers 1342   span 3  fingers 4  barre 0   d 13
+  F#                   0.3%   frets 3121  fingers 3121   span 2  fingers 3  barre 1   d 10

@@ -94,20 +94,41 @@ def test_tap_mode_shows_the_line_being_sung():
     assert js(f"[0, 1, 3].map(n => tapView({lyrics}, n))") == [["…", "one"], ["one", "two"], ["three", ""]]
 
 
-@pytest.mark.parametrize("shape, dots, opens", [
+@pytest.mark.parametrize("frets, dots, opens", [
     ([2, 0, 0, 0], 1, 3),   # Am
     ([2, 0, 1, 0], 2, 2),   # F
     ([4, 3, 2, 2], 4, 0),   # B: every string pressed
     ([0, 0, 0, 0], 0, 4),   # all open
 ])
-def test_diagram_has_a_dot_per_pressed_string_and_a_circle_per_open_one(shape, dots, opens):
-    svg = js(f"diagram({shape})")
+def test_without_fingers_a_dot_per_pressed_string_and_a_circle_per_open_one(frets, dots, opens):
+    svg = js(f"diagram({frets}, null)")
     assert svg.count('class="dot"') == dots
     assert svg.count('class="open"') == opens
+    assert 'class="finger"' not in svg and 'class="barre"' not in svg
+
+
+def fingers_drawn(svg):
+    return re.findall(r'<text class="finger" x="[\d.]+" y="[\d.]+">(\d)</text>', svg)
+
+
+def test_each_dot_carries_its_finger():
+    # Am 2000, fingers 2000: one dot, finger 2
+    svg = js("diagram([2, 0, 0, 0], [2, 0, 0, 0])")
+    assert svg.count('class="dot"') == 1 and fingers_drawn(svg) == ["2"]
+
+
+def test_a_barre_is_one_bar_with_one_number():
+    # B 4322, fingers 3211: finger 1 presses the E and A strings at fret 2, a
+    # barre drawn as one bar from string 2 (x 56) to string 3 (x 76); fingers
+    # 3 and 2 get dots on the G and C strings
+    svg = js("diagram([4, 3, 2, 2], [3, 2, 1, 1])")
+    assert svg.count('class="dot"') == 2 and svg.count('class="barre"') == 1
+    assert '<rect class="barre" x="49.5" y="57.5" width="33" height="13" rx="6.5"/>' in svg
+    assert sorted(fingers_drawn(svg)) == ["1", "2", "3"]
 
 
 def test_diagram_writes_the_frets_underneath():
-    svg = js("diagram([2, 0, 1, 0])")
+    svg = js("diagram([2, 0, 1, 0], [2, 0, 1, 0])")
     numbers = re.findall(r'<text x="\d+" y="(\d+)">(\d+)</text>', svg)
     bottom = max(int(y) for y, _ in numbers)
     assert [n for y, n in numbers if int(y) == bottom] == ["2", "0", "1", "0"]
@@ -116,8 +137,8 @@ def test_diagram_writes_the_frets_underneath():
 def test_diagram_moves_up_the_neck_for_high_shapes():
     # a shape up to fret 4 starts at the nut; one reaching fret 7 starts at its
     # lowest pressed fret, 5, and says so
-    assert 'class="nut"' in js("diagram([2, 0, 1, 0])")
-    high = js("diagram([5, 5, 7, 0])")
+    assert 'class="nut"' in js("diagram([2, 0, 1, 0], null)")
+    high = js("diagram([5, 5, 7, 0], null)")
     assert 'class="nut"' not in high
     assert '<text class="pos" x="86" y="48">5</text>' in high
 

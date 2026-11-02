@@ -11,6 +11,7 @@ from each other. Scripts find these modules by adding `common/` to
 | `transpose.py` | moves a Harte label by *n* semitones; a capo at fret *c* moves it by −*c* |
 | `names.py` | a Harte label → the name a player reads: `Db:min` → C#m, `A:min/b7` → Am/G |
 | `ukulele.py` | ukulele shapes: the notes four fret numbers sound, the lowest one, and every shape for each set of notes |
+| `chart.py` | chords-db's ukulele chart: a Harte label → the chart's shapes, with fingers and barres (`difficulty/README.md`) |
 
 Tests live in `tests/common/`. `test_harte.py` holds 41 assertions copied from
 the source documents below. `test_transpose.py` and `test_names.py` check

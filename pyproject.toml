@@ -16,5 +16,5 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # Our scripts are not packages, so tests import them from their folders.
-pythonpath = ["common", "play-along", "preprocessing"]
+pythonpath = ["common", "difficulty", "play-along", "preprocessing", "transformations", "."]
 addopts = ["--import-mode=importlib"]

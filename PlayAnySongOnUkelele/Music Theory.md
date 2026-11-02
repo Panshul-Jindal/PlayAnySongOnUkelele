@@ -345,3 +345,10 @@ So after the colon you can write any of these:
 - **As written labels, no limit.** The grammar accepts any list of degrees.
 - **As sounds, at most 2,048.** A quality fixes which of the 11 other pitch classes sound above the root, and each one is either in or out: 2¹¹ = 2,048 (**[ORIGINAL]** arithmetic).
 
+
+
+
+- **A letter on its own means the major chord on that note.**
+
+
+[[Capo]]

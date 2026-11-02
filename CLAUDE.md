@@ -34,8 +34,10 @@ Put each thing where everything that needs it can reach it, and nowhere else.
 - Code used by one folder stays in that folder. Code used by more than one
   goes in `common/`: when a second folder needs something, move it there
   rather than importing across folders or copying it. Folders import from
-  `common/`, never from each other. Vendored code, such as
-  `playability-billboard-guitar/`, keeps its own layout.
+  `common/`, never from each other. `main.py`, the pipeline, is the
+  exception: it chains the step folders and is the only code that imports
+  from them. Vendored code, such as `playability-billboard-guitar/`, keeps its
+  own layout.
 - `data/` holds inputs: what people made (recordings, lyrics, annotations,
   including times tapped by hand) and the prepared copies of it in
   `data/preprocessed/`. `results/` holds what our methods produce from those

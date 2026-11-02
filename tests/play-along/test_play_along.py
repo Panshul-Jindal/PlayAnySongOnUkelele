@@ -9,6 +9,7 @@ import re
 import pytest
 
 import play_along
+from chart import Position
 
 LAB = "0.0\t1.5\tN\n1.5\t3.0\tE:maj\n3.0\t4.25\tDb:min\n"
 
@@ -59,10 +60,41 @@ def test_no_provisional_shape(label):
     assert play_along.provisional_shape(label) is None
 
 
-def test_shapes_at_every_capo(lab_file):
-    segments = play_along.song_data(lab_file, "Song")["segments"]
-    assert [s["shapes"][0] for s in segments] == [None, (1, 4, 0, 2), (1, 1, 0, 4)]
-    assert [s["shapes"][4] for s in segments] == [None, (0, 0, 0, 3), (2, 0, 0, 0)]   # C, Am
+# a small chart, positions copied from chords-db (src/db/ukulele/chords/<key>/<type>.js)
+TABLE = {
+    ("E", "major"): [Position((1, 4, 0, 2), (1, 4, 0, 2), ())],
+    ("Db", "minor"): [Position((1, 4, 4, 4), (1, 2, 3, 4), ())],
+    ("C", "major"): [Position((0, 0, 0, 3), (0, 0, 0, 3), ())],
+    ("A", "minor"): [Position((2, 0, 0, 0), (2, 0, 0, 0), ())],
+}
+
+
+def chart_shape(frets, fingers):
+    return {"frets": frets, "fingers": fingers, "chart": True}
+
+
+def test_shapes_at_every_capo_come_from_the_chart(lab_file):
+    segments = play_along.song_data(lab_file, "Song", table=TABLE)["segments"]
+    assert [s["shapes"][0] for s in segments] == [
+        None, chart_shape((1, 4, 0, 2), (1, 4, 0, 2)), chart_shape((1, 4, 4, 4), (1, 2, 3, 4))]
+    assert [s["shapes"][4] for s in segments] == [   # C and Am
+        None, chart_shape((0, 0, 0, 3), (0, 0, 0, 3)), chart_shape((2, 0, 0, 0), (2, 0, 0, 0))]
+
+
+def test_a_chord_the_chart_lacks_takes_the_provisional_rule():
+    assert play_along.shape("B:maj", TABLE) == {"frets": (4, 3, 2, 2), "fingers": None, "chart": False}
+
+
+def test_a_slash_chord_takes_the_provisional_rule():
+    # A:min/b7 sounds A C E G, which the four open strings G C E A play
+    assert play_along.shape("A:min/b7", TABLE) == {"frets": (0, 0, 0, 0), "fingers": None, "chart": False}
+
+
+def test_the_page_opens_at_the_capo_given(lab_file):
+    assert play_along.song_data(lab_file, "Song")["capo"] == 0
+    assert embedded(play_along.render(play_along.song_data(lab_file, "Song", capo=4)))["capo"] == 4
+    with pytest.raises(SystemExit):
+        play_along.song_data(lab_file, "Song", capo=12)
 
 
 def test_line_times(lab_file, tmp_path):

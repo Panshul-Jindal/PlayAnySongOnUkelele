@@ -60,11 +60,12 @@ be pasted from a tab site as they are. **[ORIGINAL]** rules.
 │                                                              │
 │      G C E A                          G C E A                 │
 │      ╒═╤═╤═╕                          ╒═╤═╤═╕                 │
-│      │ │ │ │ 1                        │ │ ● │ 1               │
-│      ● │ │ │ 2                        ● │ │ │ 2               │
+│      │ │ │ │ 1                        │ │ ① │ 1               │
+│      ② │ │ │ 2                        ② │ │ │ 2               │
 │      │ │ │ │ 3                        │ │ │ │ 3               │
 │      │ │ │ │ 4                        │ │ │ │ 4               │
-│      2 0 0 0   provisional shape      2 0 1 0                 │
+│      2 0 0 0                          2 0 1 0                 │
+│      fingers: 1 index · 2 middle · 3 ring · 4 little         │
 │                                                              │
 │      C                    G                                   │
 │      ‹the lyric line being sung›                             │
@@ -114,8 +115,9 @@ Roots and basses are spelled one fixed way per pitch class: C, C#, D, Eb, E,
 F, F#, G, Ab, A, Bb, B. So `Db:min` and `C#:min` both show as C#m. Spelling
 by the song's key would need the key first.
 
-**Capo.** The menu runs from 0 to 11, default 0. The page doesn't judge which
-positions are practical. A shape name is the sounding chord moved down by the
+**Capo.** The menu runs from 0 to 11. The page opens at the capo given with
+`--capo`, such as the one `main.py` recommends, and otherwise at 0. The page
+doesn't judge which positions are practical. A shape name is the sounding chord moved down by the
 capo fret, root and bass alike: with the capo at fret 4, *Hey, Soul Sister*'s
 E, B, C#m, A show as C, G, Am, F.
 
@@ -141,9 +143,11 @@ draws the shape to play, the current one large and the next one smaller:
 - the frets as horizontal lines, with the nut at the top. Four frets are
   shown; when a shape needs a fret above 4, the diagram starts further up the
   neck, with the number of its first fret beside it;
-- a dot on each string at the fret to press, and an open circle above each
-  string played open. All four strings are strummed, so no string is marked
-  as muted;
+- a dot on each string at the fret to press, with the finger that presses it
+  (1 index, 2 middle, 3 ring, 4 little, as the chart numbers them); where one
+  finger presses several strings, a barre, one bar across them with one
+  number; an open circle above each string played open. All four strings are
+  strummed, so no string is marked as muted;
 - the frets written underneath, G string first: `2000` for Am;
 - with a capo set, frets count from the capo: fret 1 is the first fret above
   it, and the diagram says so.
@@ -151,13 +155,20 @@ draws the shape to play, the current one large and the next one smaller:
 `N` and `X` get no diagram. A chord of more than four notes has no shape that
 plays exactly its notes on four strings; its diagram says "no 4-string shape".
 
-**Which shape: a provisional rule.** Every chord has many shapes, and
-`common/ukulele.py` lists them all. Until there is a difficulty score, the page
-shows the one lowest on the neck: the smallest highest fret, then the fewest
-fretted strings, then the smallest sum of frets, then the first in fret order,
-so the choice is always the same. That is a stand-in, not a
-measure of difficulty, so the page labels its diagrams "provisional shape".
-**[ORIGINAL]** rule. Two of its choices, worked out by hand:
+**Which shape: the chart's.** The page shows the shape the difficulty step
+scores: the chord chart's first position that plays the chord, with its
+fingers (`common/chart.py`; the chart, and why its first position, are in
+`difficulty/README.md`). A barre is found as there: one finger on more than
+one string.
+
+**When the chart has no shape: a provisional rule.** For a chord type the chart
+lacks, and for a slash chord, since the chart has none, the page falls back to
+the shape lowest on the neck among all those that sound the chord's notes
+(`common/ukulele.py`): the smallest highest fret, then the fewest fretted
+strings, then the smallest sum of frets, then the first in fret order, so the
+choice is always the same. It has no fingers, and the diagram is labelled
+"provisional shape". **[ORIGINAL]** rule. Two of its choices, worked out by
+hand:
 
 - **C major** (C, E, G). Up to fret 2 the A string plays A, A# or B, none of
   them in the chord, so some fret must reach 3. Up to fret 3 the G and C
@@ -168,9 +179,11 @@ measure of difficulty, so the page labels its diagrams "provisional shape".
   needs fret 2 (A) at least. With every fret at most 2, the other strings can
   only stay open, sounding C, E and A. So Am is `2000`.
 
-**No finger numbers yet.** A shape gives frets, not fingers: several
-fingerings press the same frets. Finger numbers come with the difficulty step,
-which also replaces the provisional rule; the page itself doesn't change.
+The two rules mostly agree on the first shape, but not always: Em is `0432`
+in the chart and `0402` by the provisional rule.
+
+Below the diagrams the page says what the finger numbers mean, and, with a
+capo set, that frets count from the capo.
 
 **Where the rules live.** As with the names, `play_along.py` chooses the shape
 for every chord at every capo and embeds it, and the page only draws it.
@@ -245,7 +258,8 @@ Exact placement needs a time for each word. **[ORIGINAL]**
 | `common/transpose.py` | moves a Harte label by *n* semitones | yes |
 | `common/names.py` | a Harte label → the name a player reads | yes |
 | `common/ukulele.py` | every shape that sounds a set of notes | yes |
-| `play-along/play_along.py` | makes a page from a `.lab`, and line times if given: names and provisional shapes at every capo; prints the chord list as text | yes |
+| `common/chart.py` | the chord chart's shapes, with fingers | yes |
+| `play-along/play_along.py` | makes a page from a `.lab`, and line times if given: names and shapes at every capo; prints the chord list as text | yes |
 | `play-along/page.html` | the page's template: its layout, and the script that finds the current chord and line and draws the diagrams | yes |
 | `tests/common/test_transpose.py`, `tests/common/test_names.py` | the capo and name rules, against values worked out by hand | yes |
 | `tests/play-along/test_play_along.py` | what the generated page embeds | yes |
@@ -268,6 +282,12 @@ uv run python play-along/play_along.py \
     results/chord-estimation/autochord/hey_soul_sister.lab \
     results/play-along/hey_soul_sister.html --title "Hey, Soul Sister" \
     --lines data/Custom_Songs/hey_soul_sister/lines.lab
+
+# from the pipeline: its chords without basses, opening at its capo
+uv run python play-along/play_along.py \
+    results/pipeline/hey_soul_sister.lab \
+    results/play-along/hey_soul_sister.html --title "Hey, Soul Sister" \
+    --lines data/Custom_Songs/hey_soul_sister/lines.lab --capo 4
 ```
 
 ## Checks
@@ -278,16 +298,21 @@ Automated, with expected values worked out by hand:
 - capo 4: `E:maj`, `B:maj`, `Db:min`, `A:maj` → C, G, Am, F;
 - capo 2: `D:maj` → C;
 - moving a chord by *n* moves each of its notes, the bass too, by *n*;
-- provisional shapes: C → `0003` and Am → `2000` (worked out above); at capo 4,
-  `E:maj` → `0003`, the C shape; a chord of five notes → no shape; `N` → no
-  diagram;
+- shapes from a small chart copied from chords-db: E `1402` with fingers
+  `1402`, and at capo 4 the C shape `0003` with fingers `0003`; a chord the
+  chart lacks, and a slash chord, take the provisional rule, without fingers:
+  B `4322`, and `A:min/b7` all open, `0000`, since it sounds A C E G;
+- provisional shapes: C → `0003` and Am → `2000` (worked out above); a chord
+  of five notes → no shape; `N` → no diagram;
 - the page embeds every segment of its `.lab`, and nothing from the audio or
   the lyrics;
 - the page's script: it parses, every element it uses exists, the current
   segment and line are found at, between and outside their start times,
   lyric files skip labels and chord-only lines, chord names land on the word
   their time falls on without overlapping, and a diagram has one dot per
-  fretted string and one open circle per open string.
+  fretted string, with its finger when fingers are known, one bar per barre
+  (B `4322`, fingers `3211`: one bar across the E and A strings) and one open
+  circle per open string.
 
 By hand, with the two songs:
 
@@ -303,15 +328,15 @@ By hand, with the two songs:
 5. Tap mode: the times survive a reload, and the downloaded `lines.lab`
    reads with `lab.read_lab`.
 6. Diagrams: the current and next shapes change with the chords and with the
-   capo. *Hey, Soul Sister* at capo 4 shows C `0003`, G `0232`, Am `2000`,
-   F `2010`.
+   capo, and the finger numbers are readable on the dots. *Hey, Soul Sister*
+   at capo 4 shows C `0003` (finger 3), G `0232` (fingers 1, 3, 2), Am `2000`
+   (finger 2), F `2010` (fingers 2, 1).
 
 ## Not in this version
 
 - beats, bars and strum cues;
-- finger numbers, and choosing each shape by difficulty rather than by the
-  provisional rule; both need the difficulty step;
-- choosing the capo automatically, which needs a difficulty score;
+- choosing the capo inside the page: `main.py` chooses it, and the page opens
+  at it with `--capo`;
 - a time for each word, or lining up lyrics automatically;
 - editing chords in the page, a phone layout, hosting online (the audio and
   lyrics are copyrighted and stay on your machine).

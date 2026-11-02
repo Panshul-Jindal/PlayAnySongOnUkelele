@@ -114,3 +114,16 @@ That's the same split as your `main.py` sketch: `easy_transform`, `diff_estimato
 2. **"Chord extension removal" from your list isn't automatically a simplification on the ukulele.** Am7 → Am may be easier on guitar, but B7 → B is harder here. Every transformation has to be judged by its shapes, not by how simple the chord name looks. **[ORIGINAL]** observation, so far only by this crude ordering.
 
 
+
+
+
+## Results
+
+|song|recommended|weight settings it wins|
+|---|---|---|
+|_Hey, Soul Sister_|**capo 4** (C, G, Am, F)|**100%**, up from capo 9 at 66% before the limit|
+|_Can't Help Falling in Love_|capo 2|96%|
+|_Let It Go_|capo 1|100%|
+
+
+
