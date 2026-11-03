@@ -170,3 +170,9 @@ They're two different "frequencies", and the click already has the one you mean.
 A metronome is the same: it ticks 97 times a minute (the beat rate), and each tick has its own sound, high or low (the pitch). Changing one doesn't change the other.
 
 I set the pitch high, at 1500 Hz, so it stands apart from the music, which mostly sits lower. If it would help, I can make it a lower, softer tone like a wood block. The timing wouldn't change.
+
+
+
+
+## TODO 
+* Trying out Beat this to estimate the down beats as well !!
