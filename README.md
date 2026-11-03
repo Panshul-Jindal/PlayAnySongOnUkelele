@@ -54,6 +54,17 @@ Open the page in a browser and load the song's audio from its folder in
 `data/Custom_Songs/`. It shows the chord to play now and the next one, with a
 capo menu. See `play-along/README.md`.
 
+## Beat tracking
+
+```bash
+uv run python beat-tracking/track_beats.py \
+    "data/Custom_Songs/hey_soul_sister/Train_-_Hey,_Soul_Sister_(Official_Video).wav" \
+    results/beat-tracking/librosa/hey_soul_sister.txt
+```
+
+Give the beat file to the play-along page with `--beats`, and it shows a pulse
+on each beat, the tempo, and an optional click. See `beat-tracking/README.md`.
+
 ## The pipeline: main.py
 
 **Status: built.** `main.py` chains the steps, in the order of its first

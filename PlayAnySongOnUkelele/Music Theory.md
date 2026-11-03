@@ -271,11 +271,26 @@ Those instruments have deep low notes, and the lowest one strongly colours the s
 
 **Beat**
 The **beat** is the steady pulse you tap your foot or nod your head to.
+In [music](https://en.wikipedia.org/wiki/Music "Music") and [music theory](https://en.wikipedia.org/wiki/Music_theory "Music theory"), the **beat** is the basic unit of time,
+
 
 **Tempo** is how fast that pulse goes, in beats per minute (BPM).
 
-**Bar**: beats come in groups that you count _"1-2-3-4, 1-2-3-4"_. Each group is one bar. In the file, `|` marks the bar lines: _"Pipes (|) denote barlines"_ ([BWF11] §3).
+**Bar** or measure : beats come in groups that you count _"1-2-3-4, 1-2-3-4"_. Each group is one bar. In the file, `|` marks the bar lines: _"Pipes (|) denote barlines"_ ([BWF11] §3).
 **Metre**: how many beats make a bar.
+#### What's an upbeat and down beat 
+The _downbeat_ is the first beat of the [bar](https://en.wikipedia.org/wiki/Bar_\(music\) "Bar (music)"), i.e. number 1]
+The _upbeat_ is the last beat in the previous bar which immediately precedes, and hence anticipates, the downbeat
+
+In typical Western music [**4**  
+**4** time](https://en.wikipedia.org/wiki/Quadruple_time "Quadruple time"), [counted](https://en.wikipedia.org/wiki/Counting_\(music\) "Counting (music)") as "1 2 3 4, 1 2 3 4...", the first beat of the bar (downbeat) is usually the strongest [accent](https://en.wikipedia.org/wiki/Accent_\(music\) "Accent (music)") in the melody and the likeliest place for a chord change, the third is the next strongest: these are "on" beats. The second and fourth are weaker—the "off-beats"
+
+ Subdivisions (like eighth notes) that fall between the pulse beats are even weaker and these, if used frequently in a rhythm, can also make it "off-beat".[[9]](https://en.wikipedia.org/wiki/Beat_\(music\)#cite_note-beat-9)
+
+
+https://en.wikipedia.org/wiki/Beat_(music)  --> wikipedia example is quite nice
+
+Drumming is all beat play!!
 
 
 **One line of the salami file is one phrase.** [BWF11] §3 defines a phrase as _"any point where a group might choose to start playing during a rehearsal"_: a chunk of a few bars that belongs together musically
@@ -352,3 +367,20 @@ So after the colon you can write any of these:
 
 
 [[Capo]]
+
+
+
+## What's a score in music ? 
+![[Pasted image 20261103084211.png]]
+
+https://en.wikipedia.org/wiki/Sheet_music
+
+
+
+### Strumming 
+
+
+**What a pattern is:** a fixed sequence of down-strokes, up-strokes and gaps across one bar. Usually the bar is cut into 8 slots, two per beat:
+
+beat:     1   &   2   &   3   &   4   &
+strum:    D   -   D   U   -   U   D   U

@@ -97,6 +97,16 @@ def test_the_page_opens_at_the_capo_given(lab_file):
         play_along.song_data(lab_file, "Song", capo=12)
 
 
+def test_beats_and_tempo_are_embedded(lab_file, tmp_path):
+    beats = tmp_path / "beats.txt"
+    beats.write_text("# a tracker\n0.5\n1.1\n1.7\n2.4\n")
+    data = embedded(play_along.render(play_along.song_data(lab_file, "Song", beats_path=str(beats))))
+    assert data["beats"] == [0.5, 1.1, 1.7, 2.4]
+    # gaps 0.6, 0.6, 0.7: median 0.6 s, so 60 / 0.6 = 100 BPM
+    assert data["tempo"] == 100.0
+    assert play_along.song_data(lab_file, "Song")["beats"] is None
+
+
 def test_line_times(lab_file, tmp_path):
     lines = tmp_path / "lines.lab"
     lines.write_text("0.5\t2.0\tline 1\n2.0\t4.25\tline 2\n")

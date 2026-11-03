@@ -87,8 +87,14 @@ be pasted from a tab site as they are. **[ORIGINAL]** rules.
 4. **Lyrics**: the current line with chord names above it (placement below),
    and the next line dimmed.
 5. **Upcoming chords**: the next eight, each drawn as wide as it lasts.
-6. **Controls**: play/pause; a seek bar with the time; capo; speed; tap mode.
-7. **Before audio is loaded**: the whole chord list as text, one segment per
+6. **Controls**: play/pause; a seek bar with the time; capo; speed; the
+   music's volume; tap mode; with beats, a click on each beat.
+7. **Beat pulse**, when the page has beats (`--beats`, from
+   `beat-tracking/`): a dot beside *now* that lights on each beat and fades
+   before the next, with the tempo in BPM. The click, off by default, ticks on
+   every beat over the song: if the ticks land on the music's beat, the
+   tracker is right. Specified in `beat-tracking/README.md`.
+8. **Before audio is loaded**: the whole chord list as text, one segment per
    line (`0:07.0  C#m  for 2.5 s`).
 
 Keys: Space plays and pauses (in tap mode it taps), ← and → seek 5 s,
@@ -288,6 +294,13 @@ uv run python play-along/play_along.py \
     results/pipeline/hey_soul_sister.lab \
     results/play-along/hey_soul_sister.html --title "Hey, Soul Sister" \
     --lines data/Custom_Songs/hey_soul_sister/lines.lab --capo 4
+
+# with beats, for the pulse and the click
+uv run python play-along/play_along.py \
+    results/pipeline/hey_soul_sister.lab \
+    results/play-along/hey_soul_sister.html --title "Hey, Soul Sister" \
+    --lines data/Custom_Songs/hey_soul_sister/lines.lab --capo 4 \
+    --beats results/beat-tracking/librosa/hey_soul_sister.txt
 ```
 
 ## Checks
@@ -312,7 +325,10 @@ Automated, with expected values worked out by hand:
   their time falls on without overlapping, and a diagram has one dot per
   fretted string, with its finger when fingers are known, one bar per barre
   (B `4322`, fingers `3211`: one bar across the E and A strings) and one open
-  circle per open string.
+  circle per open string;
+- beats: the page embeds every beat time and the tempo, 60 over the median gap
+  (beats at 0.5, 1.1, 1.7, 2.4 s: 100 BPM), and the pulse is 1 on a beat,
+  fades to 0 half-way to the next, and is 0 before the first beat.
 
 By hand, with the two songs:
 
@@ -331,10 +347,13 @@ By hand, with the two songs:
    capo, and the finger numbers are readable on the dots. *Hey, Soul Sister*
    at capo 4 shows C `0003` (finger 3), G `0232` (fingers 1, 3, 2), Am `2000`
    (finger 2), F `2010` (fingers 2, 1).
+7. Beats: the pulse keeps time with the music, and with the click on, the
+   ticks land on the beat you hear; see the checks by ear in
+   `beat-tracking/README.md`.
 
 ## Not in this version
 
-- beats, bars and strum cues;
+- bars and strum cues: the pulse shows beats, not which beat starts a bar;
 - choosing the capo inside the page: `main.py` chooses it, and the page opens
   at it with `--capo`;
 - a time for each word, or lining up lyrics automatically;

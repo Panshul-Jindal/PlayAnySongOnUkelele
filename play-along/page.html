@@ -30,6 +30,9 @@ h1 { margin: 0; font-size: 20px; font-weight: 600; }
 main, #list { padding: 20px 24px 110px; }
 .chords { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; align-items: start; }
 .label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+#pulse { display: inline-block; width: 18px; height: 18px; margin-left: 10px; border-radius: 50%;
+         background: var(--accent); opacity: 0; vertical-align: middle; }
+#tempo { margin-left: 8px; text-transform: none; }
 #now { font-size: clamp(64px, 11vw, 150px); font-weight: 700; line-height: 1.05; white-space: nowrap; }
 #sounding { min-height: 1.4em; color: var(--muted); }
 #next { font-size: clamp(36px, 5.5vw, 80px); font-weight: 600; line-height: 1.05; white-space: nowrap; }
@@ -80,7 +83,7 @@ button:disabled { opacity: .5; }
 <main id="player" hidden>
   <section class="chords">
     <div>
-      <div class="label">now</div>
+      <div class="label">now<span id="pulse" hidden></span><span id="tempo"></span></div>
       <div id="now"></div>
       <div id="sounding"></div>
       <div id="nowshape" class="shape big"></div>
@@ -115,6 +118,8 @@ button:disabled { opacity: .5; }
   <label>speed <select id="speed">
     <option value="1">1×</option><option value="0.75">0.75×</option><option value="0.5">0.5×</option>
   </select></label>
+  <label id="clicklabel" hidden><input id="click" type="checkbox"> click on each beat</label>
+  <label>music <input id="volume" type="range" min="0" max="1" step="0.05" value="1"></label>
   <button id="tap" disabled>Tap lines</button>
   <button id="download" hidden>Download lines.lab</button>
   <span class="keys">Space play/pause · ← → 5 s</span>
@@ -176,6 +181,15 @@ function chordLine(text, s, e, segs, starts, capo) {
   return out;
 }
 
+function pulse(beats, t) {
+  // how brightly the beat pulse shows at time t: 1 on a beat, fading to 0
+  // halfway to the next one, and 0 before the first beat
+  const i = indexAt(beats, t);
+  if (i < 0) return 0;
+  const gap = i + 1 < beats.length ? beats[i + 1] - beats[i] : (i > 0 ? beats[i] - beats[i - 1] : 0);
+  return gap > 0 ? Math.max(0, 1 - 2 * (t - beats[i]) / gap) : 0;
+}
+
 function tapView(lyrics, tapped) {
   // what tap mode shows after `tapped` taps, laid out as when playing along:
   // the line being sung (the last one tapped) and the line the next tap starts
@@ -235,6 +249,7 @@ function linesLab(starts, end) {
 const DATA = JSON.parse(document.getElementById("song-data").textContent);
 const SEGS = DATA.segments;
 const STARTS = SEGS.map(s => s.start);
+const BEATS = DATA.beats || [];
 const STORE = "play-along:" + DATA.source + ":lines";
 const TAPPED = "tapped in this browser";
 const $ = id => document.getElementById(id);
@@ -243,8 +258,22 @@ audio.preservesPitch = true;  // slowing down must not change the key
 
 let capo = DATA.capo || 0, audioName = "", lyrics = null, lineStarts = null, lineSource = "";
 let tapping = false, taps = [], seeking = false;
+let clicks = null, lastBeat = -1;   // the click's audio context, once switched on
 const shown = {seg: -1, capo: -1, line: -2};
 const notes = {};
+
+function click() {
+  // a short tick, to hear whether the tracked beats land on the music's beat
+  // a square wave, louder and brighter than a sine at the same level
+  const tone = clicks.createOscillator(), level = clicks.createGain();
+  tone.type = "square";
+  tone.frequency.value = 1500;
+  level.gain.setValueAtTime(0.8, clicks.currentTime);
+  level.gain.exponentialRampToValueAtTime(0.001, clicks.currentTime + 0.05);
+  tone.connect(level).connect(clicks.destination);
+  tone.start();
+  tone.stop(clicks.currentTime + 0.05);
+}
 
 function say(key, kind, text) {
   notes[key] = {kind, text};
@@ -411,6 +440,13 @@ function render(force) {
   shown.capo = capo;
   $("time").textContent = clock(t) + " / " + clock(audio.duration || DATA.duration);
   if (!seeking) $("seek").value = t;
+  if (BEATS.length) {
+    $("pulse").style.opacity = pulse(BEATS, t);
+    const b = indexAt(BEATS, t);
+    // tick only when playback reaches the next beat, not when seeking past several
+    if (clicks && $("click").checked && !audio.paused && b === lastBeat + 1) click();
+    lastBeat = b;
+  }
 }
 
 audio.addEventListener("loadedmetadata", () => {
@@ -452,6 +488,20 @@ $("download").addEventListener("click", e => {
 });
 $("capo").addEventListener("change", e => { capo = Number(e.target.value); e.target.blur(); });
 $("speed").addEventListener("change", e => { audio.playbackRate = Number(e.target.value); e.target.blur(); });
+if (BEATS.length) {
+  $("pulse").hidden = false;
+  $("clicklabel").hidden = false;
+  $("tempo").textContent = DATA.tempo + " BPM";
+}
+// the song's volume, so the click can be heard over it
+$("volume").addEventListener("input", e => { audio.volume = Number(e.target.value); });
+$("volume").addEventListener("change", e => e.target.blur());
+$("click").addEventListener("change", e => {
+  // browsers allow sound only after a click, so the audio context is made here
+  if (e.target.checked && !clicks) clicks = new AudioContext();
+  if (clicks) clicks.resume();
+  e.target.blur();
+});
 $("seek").addEventListener("input", e => { seeking = true; audio.currentTime = Number(e.target.value); });
 $("seek").addEventListener("change", e => { seeking = false; e.target.blur(); });
 document.addEventListener("keydown", e => {

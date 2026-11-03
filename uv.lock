@@ -889,6 +889,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "autochord" },
+    { name = "librosa" },
     { name = "setuptools" },
     { name = "tf-keras" },
 ]
@@ -901,6 +902,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "autochord", specifier = ">=0.1.4" },
+    { name = "librosa", specifier = ">=1.0.0" },
     { name = "setuptools", specifier = "<81" },
     { name = "tf-keras", specifier = ">=2.21.0" },
 ]

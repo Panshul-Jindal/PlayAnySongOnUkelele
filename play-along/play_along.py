@@ -28,6 +28,7 @@ import harte
 import lab
 import names
 import ukulele
+from beats import read_beats
 from transpose import transpose
 
 TEMPLATE = os.path.join(HERE, "page.html")
@@ -61,10 +62,20 @@ def shape(label, table):
     return {"frets": frets, "fingers": None, "chart": False} if frets else None
 
 
-def song_data(lab_path, title, lines_path=None, capo=0, table=None):
+def tempo(times):
+    """Beats per minute from the median gap between consecutive beats; None for fewer than two."""
+    gaps = sorted(b - a for a, b in zip(times, times[1:]))
+    if not gaps:
+        return None
+    middle = len(gaps) // 2
+    median = gaps[middle] if len(gaps) % 2 else (gaps[middle - 1] + gaps[middle]) / 2
+    return round(60 / median, 1)
+
+
+def song_data(lab_path, title, lines_path=None, capo=0, table=None, beats_path=None):
     """What the page embeds: each chord with its name and shape at every capo, line times,
-    and the capo the page opens at. `table` is the chart (common/chart.py); by default
-    the downloaded one, or none if it is missing."""
+    beat times and tempo, and the capo the page opens at. `table` is the chart
+    (common/chart.py); by default the downloaded one, or none if it is missing."""
     if capo not in CAPOS:
         sys.exit(f"capo {capo}: must be 0 to 11")
     if table is None:
@@ -84,8 +95,10 @@ def song_data(lab_path, title, lines_path=None, capo=0, table=None):
             if s.label != f"line {n}":
                 sys.exit(f"{lines_path}: segment {n} is labelled {s.label!r}, not 'line {n}'")
             lines.append({"start": s.start, "end": s.end})
+    beats = read_beats(beats_path)[0] if beats_path else None
     return {"title": title, "source": os.path.basename(lab_path), "capo": capo,
-            "duration": segments[-1]["end"], "segments": segments, "lines": lines}
+            "duration": segments[-1]["end"], "segments": segments, "lines": lines,
+            "beats": beats, "tempo": tempo(beats) if beats else None}
 
 
 def render(data):
@@ -111,12 +124,13 @@ def main():
     parser.add_argument("--title", help="shown on the page (default: the .lab file's name)")
     parser.add_argument("--lines", help="tapped line times, e.g. data/Custom_Songs/hey_soul_sister/lines.lab")
     parser.add_argument("--capo", type=int, default=0, help="the capo the page opens at, e.g. main.py's choice")
+    parser.add_argument("--beats", help="beat times, e.g. results/beat-tracking/librosa/hey_soul_sister.txt")
     args = parser.parse_args()
 
     title = args.title or os.path.splitext(os.path.basename(args.lab))[0]
     if not os.path.exists(chart.PATH):
         print("no chord chart (./download_chordsdb.sh): every diagram uses the provisional rule", file=sys.stderr)
-    data = song_data(args.lab, title, args.lines, args.capo)
+    data = song_data(args.lab, title, args.lines, args.capo, beats_path=args.beats)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as fh:
         fh.write(render(data))

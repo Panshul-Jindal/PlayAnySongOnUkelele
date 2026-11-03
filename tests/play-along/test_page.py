@@ -143,5 +143,12 @@ def test_diagram_moves_up_the_neck_for_high_shapes():
     assert '<text class="pos" x="86" y="48">5</text>' in high
 
 
+def test_the_pulse_is_brightest_on_a_beat():
+    # beats at 1, 2, 3 s: 1 on a beat, half a quarter-gap later 0.5, dark from
+    # half-way to the next beat, dark before the first; after the last beat the
+    # gap before it is used
+    assert js("[0.5, 1, 1.25, 1.5, 1.9, 2, 3.25].map(t => pulse([1, 2, 3], t))") == [0, 1, 0.5, 0, 0, 1, 0.5]
+
+
 def test_lines_lab():
     assert js("linesLab([1, 2.5], 4)") == "1.000\t2.500\tline 1\n2.500\t4.000\tline 2\n"

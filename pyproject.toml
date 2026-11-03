@@ -4,6 +4,7 @@ version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
     "autochord>=0.1.4",
+    "librosa>=1.0.0",
     "setuptools<81",
     "tf-keras>=2.21.0",
 ]
@@ -16,5 +17,5 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # Our scripts are not packages, so tests import them from their folders.
-pythonpath = ["common", "difficulty", "play-along", "preprocessing", "transformations", "."]
+pythonpath = ["beat-tracking", "common", "difficulty", "play-along", "preprocessing", "transformations", "."]
 addopts = ["--import-mode=importlib"]

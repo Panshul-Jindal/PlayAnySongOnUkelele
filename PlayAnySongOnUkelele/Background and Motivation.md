@@ -43,3 +43,10 @@ https://midi.org/midi-1-0-core-specifications
 MIDI (Musical Instrument Digital Interface) is a standard that lets keyboards, synthesizers and computers send notes to each other. It numbers notes 0 to 127. ,each step up is one **semitone**, the gap between two neighbouring piano keys, black or white. Twelve steps make one octave.
 
 ![[Pasted image 20261101185749.png]]https://en.wikipedia.org/wiki/Scientific_pitch_notation
+
+
+
+
+### Librosa
+https://github.com/librosa/librosa
+`librosa` is a Python library for audio and music signal processing. It provides the foundational algorithms and tools required for building music information retrieval (MIR) systems.
