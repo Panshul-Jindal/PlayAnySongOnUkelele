@@ -14,6 +14,9 @@ chmod +x download_McGillBillBoardDataset.sh
 
 # the ukulele chord chart (chords-db), used by main.py
 ./download_chordsdb.sh
+
+# BTC's weights, for the btc chord estimator
+./download_btc.sh
 ```
 
 ## Run the tests
@@ -26,22 +29,20 @@ Tests live in `tests/`, mirroring the source folders. Tests that need the
 dataset skip when `data/` is missing.
 
 
-## Running Autochord
+## Chord estimation
+
+Three published estimators, one script: `autochord`, `btc` and `lv-chordia`.
 
 ```bash
-export TF_USE_LEGACY_KERAS=1                                                                    
-
-uv run python chord-estimation/estimate_chords.py data/Custom_Songs/let_it_go/Idina\ Menzel\ -\ Let\ It\ Go\ \(From\ FrozenSing-Along\).mp3
-
-# also write the chords as a .lab file
-uv run python chord-estimation/estimate_chords.py "data/Custom_Songs/hey_soul_sister/Train_-_Hey,_Soul_Sister_(Official_Video).wav" \
-    results/chord-estimation/autochord/hey_soul_sister.lab
+uv run python chord-estimation/estimate_chords.py \
+    "data/Custom_Songs/hey_soul_sister/Train_-_Hey,_Soul_Sister_(Official_Video).wav" \
+    results/chord-estimation/lv-chordia/hey_soul_sister.lab --estimator lv-chordia
 ```
 
-With `TF_USE_LEGACY_KERAS=1`, autochord needs the legacy Keras package
-`tf-keras`, which is a project dependency. Estimated chords for our songs are
-in `results/chord-estimation/autochord/`, one `.lab` per song, named after the
-song's folder in `data/Custom_Songs/`.
+Estimated chords are in `results/chord-estimation/<estimator>/`, one `.lab`
+per song, named after the song's folder in `data/Custom_Songs/`. On the one
+McGill song scored against its annotation so far, lv-chordia is the most
+accurate (`chord-evaluation/README.md`). See `chord-estimation/README.md`.
 
 ## Play along
 
@@ -72,7 +73,10 @@ sketch; it is the only code that imports from the step folders. It needs the
 chord chart: run `./download_chordsdb.sh` once.
 
 ```
-chords (.lab)                               from chord-estimation/
+a recording, or its chords (.lab)
+  → preprocessing/remove_centre.py          with --remove-centre
+  → chord-estimation/estimate_chords.py     for a recording, with --estimator
+  → transformations/merge_short.py          with --min-chord SECONDS
   → transformations/drop_bass.py            slash chords lose their bass
   → transformations/capo.py                 12 versions, capo 0 … 11
   → difficulty/difficulty.py                D for each version
@@ -80,8 +84,17 @@ chords (.lab)                               from chord-estimation/
 ```
 
 ```bash
+# from chords already estimated
 uv run python main.py results/chord-estimation/autochord/hey_soul_sister.lab
+
+# from the recording: estimates the chords first, into results/chord-estimation/lv-chordia/
+uv run python main.py "data/Custom_Songs/hey_soul_sister/Train_-_Hey,_Soul_Sister_(Official_Video).wav" \
+    --estimator lv-chordia
 ```
+
+With `--gold LAB` (and `--shift SECONDS` from `chord-evaluation/align.py`)
+the report also scores the chords against annotated ones
+(`chord-evaluation/README.md`).
 
 It writes to `results/pipeline/`:
 

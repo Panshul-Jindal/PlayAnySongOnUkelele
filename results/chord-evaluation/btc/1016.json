@@ -1,0 +1,13 @@
+{
+  "est": "results/chord-estimation/btc/1016.lab",
+  "gold": "data/McGillBillboard/McGill-Billboard/1016/full.lab",
+  "gold_shift_seconds": -0.1858,
+  "root": 0.7484400528151316,
+  "majmin": 0.7134226051586594,
+  "triads": 0.7134226051586594,
+  "sevenths": 0.4136142648223158,
+  "mirex": 0.7645814255232223,
+  "overseg": 0.3792721145963981,
+  "underseg": 0.9490805562615543,
+  "seg": 0.3792721145963981
+}

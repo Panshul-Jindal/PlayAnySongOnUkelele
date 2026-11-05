@@ -1,0 +1,13 @@
+{
+  "est": "results/chord-estimation/lv-chordia-centre-removed/1016.lab",
+  "gold": "data/McGillBillboard/McGill-Billboard/1016/full.lab",
+  "gold_shift_seconds": -0.1858,
+  "root": 0.8549527741286833,
+  "majmin": 0.8094618961517344,
+  "triads": 0.8094618961517344,
+  "sevenths": 0.2923055946033219,
+  "mirex": 0.8097679939236895,
+  "overseg": 0.8260635409947816,
+  "underseg": 0.9204632007569915,
+  "seg": 0.8260635409947816
+}

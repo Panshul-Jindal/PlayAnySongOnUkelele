@@ -1,0 +1,55 @@
+1016.lab: 234 segments, 206.2 s of chords
+
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  4.12     0.0%
+   1  8.65     0.0%
+   2  9.06     0.0%
+   3  3.27   100.0%   <- recommended
+   4 11.85     0.0%
+   5  6.48     0.0%
+   6  8.61     0.0%   above fret 5: not considered
+   7  8.15     0.0%   above fret 5: not considered
+   8  8.01     0.0%   above fret 5: not considered
+   9 10.14     0.0%   above fret 5: not considered
+  10  4.99     0.0%   above fret 5: not considered
+  11 11.58     0.0%   above fret 5: not considered
+
+capo 3: the shapes to play, by share of chord time
+  Am (sounds Cm)      40.8%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  A (sounds C)        19.4%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  G (sounds Bb)       11.0%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  D (sounds F)        10.1%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  Am7 (sounds Cm7)     4.3%   frets 0000  fingers 0000   span 0  fingers 0  barre 0   d 0
+  Bm (sounds Dm)       3.7%   frets 4222  fingers 3111   span 2  fingers 2  barre 1   d 9
+  C (sounds Eb)        3.3%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  Em (sounds Gm)       2.5%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  F#m (sounds Am)      1.5%   frets 2120  fingers 2130   span 1  fingers 3  barre 0   d 6
+  E (sounds G)         1.4%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  Bm7 (sounds Dm7)     0.8%   frets 2222  fingers 1111   span 0  fingers 1  barre 1   d 2
+  D7 (sounds F7)       0.7%   frets 2223  fingers 1112   span 1  fingers 2  barre 1   d 6
+  A7 (sounds C7)       0.3%   frets 0100  fingers 0100   span 0  fingers 1  barre 0   d 1
+  F#hdim7 (sounds Ahdim7)   0.2%   frets 2423  fingers 1312   span 2  fingers 3  barre 1   d 10
+  Em7 (sounds Gm7)     0.1%   frets 0202  fingers 0102   span 0  fingers 2  barre 0   d 2
+
+capo 0: the shapes to play, by share of chord time
+  Cm                  40.8%   frets 0333  fingers 0123   span 0  fingers 3  barre 0   d 3
+  C                   19.4%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  Bb                  11.0%   frets 3211  fingers 3211   span 2  fingers 3  barre 1   d 10
+  F                   10.1%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Cm7                  4.3%   frets 3333  fingers 1111   span 0  fingers 1  barre 1   d 2
+  Dm                   3.7%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  Eb                   3.3%   frets 0331  fingers 0341   span 2  fingers 3  barre 0   d 9
+  Gm                   2.5%   frets 0231  fingers 0231   span 2  fingers 3  barre 0   d 9
+  Am                   1.5%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  G                    1.4%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  Dm7                  0.8%   frets 2213  fingers 2213   span 2  fingers 3  barre 1   d 10
+  F7                   0.7%   frets 2313  fingers 2314   span 2  fingers 4  barre 0   d 10
+  C7                   0.3%   frets 0001  fingers 0001   span 0  fingers 1  barre 0   d 1
+  Ahdim7               0.2%   frets 2333  fingers 1234   span 1  fingers 4  barre 0   d 7
+  Gm7                  0.1%   frets 0211  fingers 0211   span 1  fingers 2  barre 1   d 6
+
+against data/McGillBillboard/McGill-Billboard/1016/full.lab, gold moved -0.186 s (mir_eval, %):
+                  root   majmin   triads sevenths    mirex  overseg underseg      seg
+as estimated      75.2     70.5     70.5     28.9     74.6     35.7     93.9     35.7

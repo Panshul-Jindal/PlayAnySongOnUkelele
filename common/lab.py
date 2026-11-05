@@ -31,6 +31,13 @@ def read_lab(path, keep_blank=False):
             yield Segment(start, end, parts[2].strip())
 
 
+def write_lab(path, segments):
+    """Write Segments as a .lab file, one ``start <TAB> end <TAB> label`` line each."""
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    with open(path, "w") as fh:
+        fh.writelines(f"{s.start}\t{s.end}\t{s.label}\n" for s in segments)
+
+
 def expand(patterns):
     """Expand glob patterns (or directories) into a sorted list of .lab paths."""
     paths = []

@@ -174,5 +174,51 @@ I set the pitch high, at 1500 Hz, so it stands apart from the music, which mostl
 
 
 
+****
+## Testing different pitch for different frame 
+using librosa 
+
+librosa has a way to ask directly, though. `librosa.feature.tempo(aggregate=None)` estimates the tempo **separately for each moment**; the docs say _"tempo is estimated independently for each frame"_. If those local tempos stay flat across the song, the tempo is constant; if they wander, it changes
+
+**Overall tempo: one number for the whole song.** librosa listens to the entire recording and picks the single tempo that fits it best. For _Happy Diwali_ that's **152 BPM**. This one number is what the beat tracker uses by default.
+
+****Local tempo: one estimate per moment.** I then asked librosa for a tempo at every moment instead, each based on the audio around that moment. That gives about **43 estimates per second**, roughly 12,000 numbers for the 4.6-minute song, and they're noisy: individual estimates jump arou
+
+**A 10-second median is a summary of each 10-second chunk.** To make those 12,000 numbers readable, I cut the song into **10-second chunks** (28 for _Happy Diwali_). For each chunk I took the **median**: sort the chunk's estimates and take the middle one. The median ignores occasional wild values, unlike the average. As a programmer: a noisy time series, bucketed into 10-second bins, with a median per bin.
+
+So **"10-second medians from 117.5 to 152.0 BPM"** means:
+
+- the slowest chunk's typical tempo was 117.5 BPM, and the fastest chunk's was 152.0;
+- **"11 of 28 windows more than 5% away"** means 11 chunks had a typical tempo more than 5% different from the overall 152. All 11 come after 2:50, which is why I said the song slows down there.
+
+| song                         | overall   | 10-second medians | windows more than 5% off                       |
+| ---------------------------- | --------- | ----------------- | ---------------------------------------------- |
+| _Hey, Soul Sister_           | 95.7 BPM  | 71.8–95.7         | 1 of 22, the very end (210 s)                  |
+| _Can't Help Falling in Love_ | 99.4 BPM  | 99.4–123.0        | 2 of 18, the end (160–180 s)                   |
+| _Let It Go_                  | 136.0 BPM | 112.3–143.6       | 4 of 22 (0, 30, 40, 80 s)                      |
+| _**Happy Diwali**_           | 152.0 BPM | **117.5–152.0**   | **11 of 28: everything from 170 s to the end** |
+
+**What that means for the table:** one step down from 152 is 143.6, which is already 5.5% away. So a chunk counted as "more than 5% off" can be a single tick of the stopwatch, not a real change. That's probably true of _Let It Go_'s 143.6. _Happy Diwali_'s **117.5** is 22 frames per beat instead of 17, far beyond a single step, so that slowdown after 2:50 is real.
+
+
+## Why 22,050 Hz matters
+
+**The sample rate is how many numbers per second describe the sound.** Audio is a long list of numbers. Your WAV files have 48,000 per second; I loaded them at 22,050 per second, librosa's usual rate, because it's faster.
+
+**librosa measures time in frames, not samples.** It doesn't judge rhythm sample by sample. It groups every **512 samples into one frame** and measures "how much is happening" once per frame. At 22,050 Hz, a frame is 512 / 22,050 = **23 ms**, so 43 frames per second.
+
+**So a tempo can only be a whole number of frames per beat.** That's the same thing we saw with the click track. Near 152 BPM:
+
+| one beat lasts | tempo         |
+| -------------- | ------------- |
+| 16 frames      | 161.5 BPM     |
+| **17 frames**  | **152.0 BPM** |
+| 18 frames      | 143.6 BPM     |
+librosa can say 152.0 or 143.6, **but nothing in between.** Near this tempo its answers come in steps of about 9 BPM. It's like a stopwatch that only ticks every 23 ms: anything between two ticks gets rounded to one of them.
+
+**A higher sample rate gives finer steps.** At your files' own 48,000 Hz a frame is only 11 ms, and near 152 BPM the steps shrink to about 4 BPM (148.0, 152.0, 156.3).
 ## TODO 
 * Trying out Beat this to estimate the down beats as well !!
+
+
+> Can you find instance of times where within a few frames the beats drop or increase drastically? And can you try to estimate the beats in the remaining areas and smoothen out at the boundaries? So kind of a piecewise constant function. Kind of. Kind of. Because we are doing the analysis frame by frame. Yeah. Is that possible? And they won't be many pieces because the beats has not changed too much. Right?

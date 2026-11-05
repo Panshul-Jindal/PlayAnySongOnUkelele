@@ -4,8 +4,8 @@ Changes to a song's chord sequence that may make it easier to play:
 `easy_transform` in the pipeline. Choosing between the versions they produce
 is not their job; `main.py` does that, with `difficulty/`.
 
-**Status: built** (`drop_bass.py`, `capo.py`). Run through `main.py`
-(`README.md`).
+**Status: built** (`drop_bass.py`, `capo.py`, `merge_short.py`). Run through
+`main.py` (`README.md`).
 
 ## What a transformation is
 
@@ -59,6 +59,46 @@ source), fret *n* sits at 2^(−*n*/12) of the open length from the bridge, so
 the frets above a capo at 5 are about 0.75 times as wide as at the nut, and
 above a capo at 9 about 0.59 times.
 
+**3. `merge_short.py`: no chord shorter than a threshold.** Off unless
+`main.py` gets `--min-chord SECONDS`. **[ORIGINAL]** algorithm.
+
+**How it works:**
+- Repeated identical chords are joined first.
+- Then, repeatedly, the shortest chord under the threshold (the earliest on a
+  tie) is merged into a neighbour:
+  - if both neighbours are the same chord, the three become one;
+  - otherwise the longer neighbour takes its time (the earlier on a tie).
+- It stops when no chord is that short, or one is left.
+
+**Properties:**
+- The song's start and end and every other boundary are kept.
+- Each step removes at least one segment, so it ends.
+- Running it again changes nothing.
+
+**Recorded:** each chord merged away, with its time and the chord it became.
+
+**Why:** an estimate can flicker. A chord a fraction of a second long is
+rarely playable, and often an error. But no threshold separates flicker from
+music:
+- A turnaround of one beat per chord lasts 0.4 s at 150 bpm. A threshold of
+  0.45 s merges it away, while 0.3 s keeps it (the tests show both).
+- A threshold in beats rather than seconds would follow the song's tempo.
+  Not built.
+
+**Measured on *Disco Inferno*** (McGill 1016, `chord-evaluation/README.md`),
+merging at 0.45 s (majmin is mir_eval's score in %, against the aligned gold
+chords):
+
+| estimator | segments | majmin | overseg |
+|---|---|---|---|
+| autochord | 115 → 107 | 70.0 → 70.8 | 47.7 → 48.0 |
+| BTC | 263 → 138 | 71.3 → 76.5 | 37.9 → 46.2 |
+| lv-chordia | 87 → 76 | 81.8 → 82.7 | 71.2 → 72.1 |
+
+Merging helps BTC most, because it flickers most. Whatever the 0.45 s
+threshold removed on this song was mostly error, not music. **[ORIGINAL]**
+measurement, one song.
+
 Planned, not built (from the project's list of candidate operations):
 extension removal, chord substitution, passing-chord removal, chord-change
 reduction. One finding already bears on extension removal: on the ukulele a
@@ -72,6 +112,7 @@ always an easier shape. **[ORIGINAL]** observation.
 |---|---|---|
 | `transformations/drop_bass.py` | a chord sequence without slash basses, and the record | yes |
 | `transformations/capo.py` | the 12 capo versions of a chord sequence, each with its record | yes |
+| `transformations/merge_short.py` | a chord sequence with no chord shorter than a threshold, and the record | yes |
 | `tests/transformations/` | checks against values worked out by hand | yes |
 
 ## Checks
@@ -80,3 +121,10 @@ always an easier shape. **[ORIGINAL]** observation.
   `N` unchanged; the record lists exactly the changed segments.
 - `capo`: the version for capo 4 of E, B, C#m, A plays the shapes C, G, Am, F;
   capo 0 is the song unchanged; every version keeps the segment times.
+- `merge_short`, each on its own hand-built input:
+  - two short chords at the start, with no chord before them, merge forward;
+  - a chord between two equal ones joins them;
+  - the longer neighbour takes a short chord's time;
+  - a 0.4 s turnaround survives a 0.3 s threshold and is merged by 0.45 s;
+  - a threshold of 0, or a single segment, changes nothing;
+  - repeated lines are joined.

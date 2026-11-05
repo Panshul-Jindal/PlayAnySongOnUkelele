@@ -7,3 +7,5 @@ data/Custom_Songs/**
 !data/Custom_Songs/*/
 !data/Custom_Songs/*/lines.lab
 data/chords-db
+data/McGill-audio
+data/models

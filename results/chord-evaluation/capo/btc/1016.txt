@@ -1,0 +1,59 @@
+1016.lab: 263 segments, 206.6 s of chords
+
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  3.98     4.0%
+   1  7.62     0.0%
+   2  8.07     0.0%
+   3  3.23    96.0%   <- recommended
+   4 11.37     0.0%
+   5  6.25     0.0%
+   6  9.06     0.0%   above fret 5: not considered
+   7  8.27     0.0%   above fret 5: not considered
+   8  7.12     0.0%   above fret 5: not considered
+   9  9.93     0.0%   above fret 5: not considered
+  10  5.57     0.0%   above fret 5: not considered
+  11 10.63     0.0%   above fret 5: not considered
+
+capo 3: the shapes to play, by share of chord time
+  Am (sounds Cm)      28.4%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  A (sounds C)        18.6%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  Am7 (sounds Cm7)    17.2%   frets 0000  fingers 0000   span 0  fingers 0  barre 0   d 0
+  G (sounds Bb)       10.5%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  D (sounds F)         6.9%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  Bm (sounds Dm)       4.5%   frets 4222  fingers 3111   span 2  fingers 2  barre 1   d 9
+  C (sounds Eb)        4.0%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  Em (sounds Gm)       2.8%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  F#m (sounds Am)      1.9%   frets 2120  fingers 2130   span 1  fingers 3  barre 0   d 6
+  E (sounds G)         1.6%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  D7 (sounds F7)       1.5%   frets 2223  fingers 1112   span 1  fingers 2  barre 1   d 6
+  A7 (sounds C7)       1.1%   frets 0100  fingers 0100   span 0  fingers 1  barre 0   d 1
+  F#m7 (sounds Am7)    0.4%   frets 2424  fingers 1324   span 2  fingers 4  barre 0   d 10
+  Bm7 (sounds Dm7)     0.2%   frets 2222  fingers 1111   span 0  fingers 1  barre 1   d 2
+  Bb7 (sounds C#7)     0.2%   frets 1211  fingers 1211   span 1  fingers 2  barre 1   d 6
+  Amin6 (sounds Cmin6)   0.1%   frets 2423  fingers 1312   span 2  fingers 3  barre 1   d 10
+  Em7 (sounds Gm7)     0.0%   frets 0202  fingers 0102   span 0  fingers 2  barre 0   d 2
+
+capo 0: the shapes to play, by share of chord time
+  Cm                  28.4%   frets 0333  fingers 0123   span 0  fingers 3  barre 0   d 3
+  C                   18.6%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  Cm7                 17.2%   frets 3333  fingers 1111   span 0  fingers 1  barre 1   d 2
+  Bb                  10.5%   frets 3211  fingers 3211   span 2  fingers 3  barre 1   d 10
+  F                    6.9%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Dm                   4.5%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  Eb                   4.0%   frets 0331  fingers 0341   span 2  fingers 3  barre 0   d 9
+  Gm                   2.8%   frets 0231  fingers 0231   span 2  fingers 3  barre 0   d 9
+  Am                   1.9%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  G                    1.6%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  F7                   1.5%   frets 2313  fingers 2314   span 2  fingers 4  barre 0   d 10
+  C7                   1.1%   frets 0001  fingers 0001   span 0  fingers 1  barre 0   d 1
+  Am7                  0.4%   frets 0000  fingers 0000   span 0  fingers 0  barre 0   d 0
+  Dm7                  0.2%   frets 2213  fingers 2213   span 2  fingers 3  barre 1   d 10
+  C#7                  0.2%   frets 1112  fingers 1112   span 1  fingers 2  barre 1   d 6
+  Cmin6                0.1%   frets 2333  fingers 1234   span 1  fingers 4  barre 0   d 7
+  Gm7                  0.0%   frets 0211  fingers 0211   span 1  fingers 2  barre 1   d 6
+
+against data/McGillBillboard/McGill-Billboard/1016/full.lab, gold moved -0.186 s (mir_eval, %):
+                  root   majmin   triads sevenths    mirex  overseg underseg      seg
+as estimated      74.8     71.3     71.3     41.4     76.5     37.9     94.9     37.9

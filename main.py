@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
-"""The pipeline: a song's chords -> the easiest way to play along on the ukulele.
+"""The pipeline: a song -> the easiest way to play along on the ukulele.
 
-    chords (.lab, from chord-estimation/)
-      -> transformations/drop_bass.py   slash chords lose their bass
-      -> transformations/capo.py        12 versions, capo 0 ... 11
-      -> difficulty/difficulty.py       D for each version
+    a recording, or its chords (.lab)
+      -> preprocessing/remove_centre.py       with --remove-centre: the centre of the mix removed
+      -> chord-estimation/estimate_chords.py  for a recording: chords from --estimator
+      -> transformations/merge_short.py       with --min-chord: no chord shorter than that
+      -> transformations/drop_bass.py         slash chords lose their bass
+      -> transformations/capo.py              12 versions, capo 0 ... 11
+      -> difficulty/difficulty.py             D for each version
       -> the version up to capo 5 with the smallest D; on a tie, the lower capo
 
-main.py is the only code that imports from the step folders (CLAUDE.md). It
-writes a report, and the chords as they sound without basses, to
-results/pipeline/. Specified in README.md; the starting sketch is in git
+With --gold, chord-evaluation/evaluate.py also scores the chords against
+annotated ones. main.py is the only code that imports from the step folders
+(CLAUDE.md). It writes a report, and the chords as they sound without basses,
+to results/pipeline/. Specified in README.md; the starting sketch is in git
 history (commit 221aa7f).
 
 Usage:
     python3 main.py results/chord-estimation/autochord/hey_soul_sister.lab
+    python3 main.py data/Custom_Songs/happy_diwali/Happy_Diwali.wav --estimator lv-chordia
 """
 
 import argparse
@@ -22,24 +27,61 @@ import sys
 from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-for folder in ("common", "difficulty", "transformations"):
+for folder in ("common", "chord-estimation", "chord-evaluation", "difficulty", "preprocessing", "transformations"):
     sys.path.insert(0, os.path.join(HERE, folder))
 
 import chart
 import difficulty
+import estimate_chords
+import evaluate
 import harte
 import lab
 import names
 from capo import PRACTICAL, capo_versions
 from drop_bass import drop_bass
+from merge_short import merge_short
+from remove_centre import write as write_centre_removed
 
 OUT = os.path.join(HERE, "results", "pipeline")
+#: where estimated chords go, one folder per estimator
+CHORDS = os.path.join(HERE, "results", "chord-estimation")
+#: where centre-removed recordings go, one folder per song
+CENTRE_REMOVED = os.path.join(HERE, "data", "preprocessed", "centre-removed")
 
 
-def easy_transform(segments):
-    """The transformations: drop the bass, then the 12 capo versions."""
+def chords_from(path, estimator=None, centre_removed=False):
+    """(segments, song, the .lab they are in) for a .lab file, or for a recording.
+
+    A recording's chords are estimated and written to
+    results/chord-estimation/<estimator>[-centre-removed]/<song>.lab, the song
+    named after the recording's folder (data/Custom_Songs/<song>/).
+    """
+    if path.lower().endswith(".lab"):
+        return list(lab.read_lab(path)), os.path.splitext(os.path.basename(path))[0], path
+    if estimator is None:
+        raise SystemExit("a recording needs --estimator: " + ", ".join(sorted(estimate_chords.ESTIMATORS)))
+    song = os.path.basename(os.path.dirname(os.path.abspath(path)))
+    folder = estimator
+    if centre_removed:
+        prepared = os.path.join(CENTRE_REMOVED, song, song + ".wav")
+        write_centre_removed(path, prepared)
+        path, folder = prepared, folder + "-centre-removed"
+    segments = estimate_chords.estimate(path, estimator)
+    out = os.path.join(CHORDS, folder, song + ".lab")
+    lab.write_lab(out, segments)
+    return segments, song, out
+
+
+def easy_transform(segments, min_chord=0.0):
+    """The transformations: short chords merged (if min_chord > 0), the bass dropped, 12 capo versions.
+
+    Returns (segments after merging, merges, segments without basses, basses dropped, versions).
+    """
+    merged = []
+    if min_chord > 0:
+        segments, merged = merge_short(segments, min_chord)
     plain, dropped = drop_bass(segments)
-    return plain, dropped, capo_versions(plain)
+    return segments, merged, plain, dropped, capo_versions(plain)
 
 
 def diff_estimator(versions, table, weights=difficulty.DEFAULT):
@@ -73,7 +115,7 @@ def shapes_table(plain, version, table, total):
     return lines
 
 
-def report(path, segments, plain, dropped, versions, table):
+def report(path, segments, plain, dropped, versions, table, merged=(), min_chord=0.0):
     """The report's lines, and the recommended capo."""
     total = sum(s.end - s.start for s in plain if s.label not in (harte.NO_CHORD, harte.UNKNOWN))
     scores = diff_estimator(versions, table)
@@ -83,6 +125,9 @@ def report(path, segments, plain, dropped, versions, table):
         wins[best(diff_estimator(versions, table, weights))] += 1
 
     out = [f"{os.path.basename(path)}: {len(segments)} segments, {total:.1f} s of chords", ""]
+    if min_chord > 0:
+        short = sum(end - start for start, end, _, _ in merged)
+        out.append(f"short chords merged: {len(merged)} under {min_chord:g} s, {100 * short / total:.1f}% of chord time")
     lost = sum(segments[i].end - segments[i].start for i, _, _ in dropped)
     out.append(f"bass dropped: {len(dropped)} segments, {100 * lost / total:.1f}% of chord time"
                + (f" ({', '.join(sorted({before for _, before, _ in dropped}))})" if dropped else ""))
@@ -106,24 +151,37 @@ def report(path, segments, plain, dropped, versions, table):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("lab", help="a song's chords, e.g. results/chord-estimation/autochord/hey_soul_sister.lab")
+    parser.add_argument("song", help="a song's chords (.lab), e.g. results/chord-estimation/autochord/hey_soul_sister.lab, "
+                                     "or its recording, e.g. data/Custom_Songs/hey_soul_sister/<file>.wav")
+    parser.add_argument("--estimator", choices=sorted(estimate_chords.ESTIMATORS),
+                        help="for a recording: the chord estimator (chord-estimation/README.md)")
+    parser.add_argument("--remove-centre", action="store_true",
+                        help="for a recording: estimate from it with the centre of the mix removed (preprocessing/README.md)")
+    parser.add_argument("--min-chord", type=float, default=0.0,
+                        help="merge chords shorter than this many seconds (transformations/README.md; default 0, off)")
+    parser.add_argument("--gold", help="annotated chords (.lab) to score the chords against (chord-evaluation/README.md)")
+    parser.add_argument("--shift", type=float, default=0.0, help="seconds added to the gold times (from chord-evaluation/align.py)")
     parser.add_argument("--out", default=OUT, help="output folder (default results/pipeline)")
     args = parser.parse_args(argv)
 
-    segments = list(lab.read_lab(args.lab))
-    plain, dropped, versions = easy_transform(segments)
-    lines, choice = report(args.lab, segments, plain, dropped, versions, chart.load())
+    segments, song, source = chords_from(args.song, args.estimator, args.remove_centre)
+    segments, merged, plain, dropped, versions = easy_transform(segments, args.min_chord)
+    lines, choice = report(source, segments, plain, dropped, versions, chart.load(), merged, args.min_chord)
+    if args.gold:
+        rows = [("as estimated", source)] + ([("merged", segments)] if args.min_chord > 0 else [])
+        lines += ["", f"against {args.gold}, gold moved {args.shift:+.3f} s (mir_eval, %):",
+                  " " * 13 + "".join(f"{k:>9}" for k in evaluate.METRICS)]
+        for name, chords in rows:
+            scores = evaluate.score(chords, args.gold, args.shift)
+            lines.append(f"{name:<13}" + "".join(f"{100 * scores[k]:9.1f}" for k in evaluate.METRICS))
 
-    song = os.path.splitext(os.path.basename(args.lab))[0]
     os.makedirs(args.out, exist_ok=True)
     with open(os.path.join(args.out, song + ".txt"), "w") as fh:
         fh.write("\n".join(lines) + "\n")
-    with open(os.path.join(args.out, song + ".lab"), "w") as fh:
-        fh.writelines(f"{s.start}\t{s.end}\t{s.label}\n" for s in plain)
+    lab.write_lab(os.path.join(args.out, song + ".lab"), plain)
     print("\n".join(lines))
     print(f"\nwrote {args.out}/{song}.txt and {song}.lab; open the page at capo {choice} with --capo {choice}")
     return choice
-
 
 if __name__ == "__main__":
     main()

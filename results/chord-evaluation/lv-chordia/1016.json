@@ -1,0 +1,13 @@
+{
+  "est": "results/chord-estimation/lv-chordia/1016.lab",
+  "gold": "data/McGillBillboard/McGill-Billboard/1016/full.lab",
+  "gold_shift_seconds": -0.1858,
+  "root": 0.8543160477174588,
+  "majmin": 0.8179878060941665,
+  "triads": 0.8179878060941665,
+  "sevenths": 0.7825841662995089,
+  "mirex": 0.8453213789394711,
+  "overseg": 0.7115248677341639,
+  "underseg": 0.9442089237317307,
+  "seg": 0.7115248677341639
+}

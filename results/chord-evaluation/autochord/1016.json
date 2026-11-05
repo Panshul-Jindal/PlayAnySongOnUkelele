@@ -1,0 +1,13 @@
+{
+  "est": "results/chord-estimation/autochord/1016.lab",
+  "gold": "data/McGillBillboard/McGill-Billboard/1016/full.lab",
+  "gold_shift_seconds": -0.1858,
+  "root": 0.7386451424776712,
+  "majmin": 0.6995151443786856,
+  "triads": 0.6995151443786856,
+  "sevenths": 0.2565791204129549,
+  "mirex": 0.7020810458933733,
+  "overseg": 0.4766819795531918,
+  "underseg": 0.8958149896688334,
+  "seg": 0.4766819795531918
+}

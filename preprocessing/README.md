@@ -1,7 +1,13 @@
 # preprocessing
 
-Turns the raw McGill Billboard 2.0 release into the data our analyses and
-models use. The raw files are never modified. The steps below run in order,
+Turns inputs into the prepared copies our analyses and models use, in
+`data/preprocessed/`:
+
+- the McGill Billboard release, below;
+- recordings with the centre of the mix removed
+  ([Recordings: removing the centre](#recordings-removing-the-centre)).
+
+For the McGill Billboard 2.0 release, the raw files are never modified. The steps below run in order,
 and their result is written to `data/preprocessed/McGill-Billboard/`, laid out
 like the raw release (one folder per id). Rebuilding it reruns every step from
 the raw release; pointing a script at the raw folder instead skips them all.
@@ -270,3 +276,63 @@ numbers are per chart slot; on the preprocessed folder they are per song:
 ```sh
 python3 dataAnalysis/chord_vocab_stats.py 'data/preprocessed/McGill-Billboard/*/full.lab'
 ```
+
+## Recordings: removing the centre
+
+`remove_centre.py` writes a recording with what is mixed to the centre
+removed, for chord estimation. **[ORIGINAL]** method. It is named for what it
+does: it removes more than the voice.
+
+### What it does
+
+A sound mixed to the centre is equal in both channels, so left minus right
+cancels it. Lead vocals are usually there, and often snare, bass and mono
+keyboards with them. Below a crossover the full mix is kept, so the bass
+survives:
+
+```
+out = lowpass(220 Hz)((L + R) / 2) + highpass(220 Hz)((L − R) / 2)
+```
+
+- **Filters:** both are 4th-order Butterworth, run forward only.
+- **Output:** written at 22 050 Hz, scaled to a peak of 0.9.
+- **Refused input:** mono recordings, and stereo ones whose two channels are
+  the same (left − right below 10⁻³ of the mix, in RMS). For those only the
+  bass would be left.
+
+### Not vocal removal
+
+The method keeps a low voice below the crossover and removes every centred
+instrument. On *Disco Inferno* (McGill 1016) it removed part of the harmony:
+- The gold chords are `C:min7` for 55% of the song.
+- lv-chordia hears `C:min7` for 51% of the song from the recording, but from
+  the centre-removed recording it hears `C:min` instead (49%). The B♭ that
+  makes it a seventh was in the centre.
+
+**Effect on the chords** (mir_eval majmin and sevenths in %, against the
+aligned gold chords; `chord-evaluation/README.md`), **[ORIGINAL]**
+measurement, one song:
+
+| estimator | majmin, recording → centre removed | sevenths |
+|---|---|---|
+| autochord | 70.0 → 73.1 | 25.7 → 29.2 |
+| BTC | 71.3 → 70.5 | 41.4 → 28.9 |
+| lv-chordia | 81.8 → 80.9 | 78.3 → 29.2 |
+
+It helps the weakest estimator a little and costs the best one its sevenths.
+Separating the voice itself, with a model trained to do that, is not built.
+
+### Running
+
+```sh
+uv run python preprocessing/remove_centre.py "data/McGill-audio/1016/trammps-_disco-inferno_(mp3.pm).mp3" \
+    data/preprocessed/centre-removed/1016/1016.wav
+```
+
+`main.py --remove-centre` does the same before estimating chords from a
+recording. The tests are in `tests/preprocessing/test_remove_centre.py`. On
+signals built by hand, they check that:
+- a centred tone goes;
+- a one-sided tone stays;
+- a centred bass stays;
+- identical channels and mono are refused.

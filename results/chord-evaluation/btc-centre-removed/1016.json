@@ -1,0 +1,13 @@
+{
+  "est": "results/chord-estimation/btc-centre-removed/1016.lab",
+  "gold": "data/McGillBillboard/McGill-Billboard/1016/full.lab",
+  "gold_shift_seconds": -0.1858,
+  "root": 0.7523312608420436,
+  "majmin": 0.7045321656892141,
+  "triads": 0.7045321656892141,
+  "sevenths": 0.28881621654542555,
+  "mirex": 0.7458929507972035,
+  "overseg": 0.3568198472778341,
+  "underseg": 0.9390353076142581,
+  "seg": 0.3568198472778341
+}
