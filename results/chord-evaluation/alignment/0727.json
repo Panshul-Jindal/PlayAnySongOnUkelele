@@ -1,0 +1,41 @@
+{
+  "audio": "The_Beatles_-_Eight_Days_A_Week.wav",
+  "mcgill_folder": "data/McGillBillboard/McGill-Billboard/0727",
+  "gold_shift_seconds": -0.0464,
+  "similarity": 0.763,
+  "similarity_elsewhere_median": 0.467,
+  "similarity_elsewhere_best": 0.703,
+  "time_map": {
+    "scale": 0.994574,
+    "shift": 0.2902,
+    "windows_within_0.1s_of_the_line": 5,
+    "windows_used": 5
+  },
+  "local": [
+    {
+      "gold_time": 14.98,
+      "offset": 0.186,
+      "similarity": 0.916
+    },
+    {
+      "gold_time": 44.93,
+      "offset": 0.046,
+      "similarity": 0.929
+    },
+    {
+      "gold_time": 74.88,
+      "offset": -0.093,
+      "similarity": 0.941
+    },
+    {
+      "gold_time": 104.84,
+      "offset": -0.279,
+      "similarity": 0.926
+    },
+    {
+      "gold_time": 134.79,
+      "offset": -0.464,
+      "similarity": 0.928
+    }
+  ]
+}

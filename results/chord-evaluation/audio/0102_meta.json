@@ -1,0 +1,197 @@
+{
+  "song": "0102",
+  "gold_scale": 0.997416,
+  "gold_shift": -0.2864,
+  "estimates": {
+    "autochord": {
+      "consonance_best": 0.33652749258498715,
+      "consonance_margin": -0.04201246375837301,
+      "root_first": 0.9413643623089207,
+      "root_segment": 0.9783253479352043,
+      "agreement": 0.832283100049484,
+      "repetition": 0.8724072194404743,
+      "on_beat_kappa": -0.008060801320000496,
+      "beat_latency": 0.018170068027217212,
+      "flicker": 0.0,
+      "mir_eval_majmin": 0.855813087091223
+    },
+    "autochord-min-chord-0.45": {
+      "consonance_best": 0.335837887067395,
+      "consonance_margin": -0.04234325578157964,
+      "root_first": 0.9250910746812385,
+      "root_segment": 0.9783697632058287,
+      "agreement": 0.8325002878420322,
+      "repetition": 0.8724072194404743,
+      "on_beat_kappa": -0.022461669910286197,
+      "beat_latency": 0.017865079365080305,
+      "flicker": 0.0,
+      "mir_eval_majmin": 0.8558130870912231
+    },
+    "btc": {
+      "consonance_best": 0.7809154307042531,
+      "consonance_margin": 0.02446250184335382,
+      "root_first": 0.9003759230652463,
+      "root_segment": 0.9231143574037198,
+      "agreement": 0.8365280430242605,
+      "repetition": 0.9028593479852655,
+      "on_beat_kappa": 0.08240619367025599,
+      "beat_latency": -0.04699999999998283,
+      "flicker": 0.2222222222222222,
+      "mir_eval_majmin": 0.8750408320428948
+    },
+    "btc-min-chord-0.45": {
+      "consonance_best": 0.7868005107207325,
+      "consonance_margin": 0.024257148370643713,
+      "root_first": 0.8797428785277155,
+      "root_segment": 0.9209175362127415,
+      "agreement": 0.8331502920423055,
+      "repetition": 0.9017296748574862,
+      "on_beat_kappa": 0.05327623156454974,
+      "beat_latency": -0.04899999999997817,
+      "flicker": 0.023529411764705882,
+      "mir_eval_majmin": 0.8707414613541565
+    },
+    "lv-chordia": {
+      "consonance_best": 0.6851966690290574,
+      "consonance_margin": 0.011058151912573148,
+      "root_first": 0.9701009922041106,
+      "root_segment": 0.9870659107016301,
+      "agreement": 0.8659163210211429,
+      "repetition": 0.9071149107545342,
+      "on_beat_kappa": 0.12288827336127406,
+      "beat_latency": -0.023999999999997357,
+      "flicker": 0.0,
+      "mir_eval_majmin": 0.8834766687310843
+    },
+    "lv-chordia-min-chord-0.45": {
+      "consonance_best": 0.6855588001061853,
+      "consonance_margin": 0.011034071264015165,
+      "root_first": 0.9650030970710558,
+      "root_segment": 0.9870807893106806,
+      "agreement": 0.8664936494673237,
+      "repetition": 0.9071149107545342,
+      "on_beat_kappa": 0.12288827336127406,
+      "beat_latency": -0.023999999999997357,
+      "flicker": 0.0,
+      "mir_eval_majmin": 0.8822117319727503
+    },
+    "gold": {
+      "consonance_best": 0.6314756237374697,
+      "consonance_margin": -0.0014776641418218206,
+      "root_first": 0.8902677922677853,
+      "root_segment": 0.840895883966494,
+      "agreement": null,
+      "repetition": 0.9661194383298101,
+      "on_beat_kappa": -0.075404668999492,
+      "beat_latency": -0.006873837583242448,
+      "flicker": 0.047619047619047616
+    }
+  },
+  "checks": {
+    "consonance_best": {
+      "gold": 0.6314756237374697,
+      "gold_best": false,
+      "spearman_vs_mir_eval": 0.3714285714285715
+    },
+    "consonance_margin": {
+      "gold": -0.0014776641418218206,
+      "gold_best": false,
+      "spearman_vs_mir_eval": 0.48571428571428577
+    },
+    "root_first": {
+      "gold": 0.8902677922677853,
+      "gold_best": false,
+      "spearman_vs_mir_eval": 0.48571428571428577
+    },
+    "root_segment": {
+      "gold": 0.840895883966494,
+      "gold_best": false,
+      "spearman_vs_mir_eval": 0.48571428571428577
+    },
+    "agreement": {
+      "gold": null,
+      "gold_best": null,
+      "spearman_vs_mir_eval": 0.942857142857143
+    },
+    "repetition": {
+      "gold": 0.9661194383298101,
+      "gold_best": true,
+      "spearman_vs_mir_eval": 0.9710083124552246
+    },
+    "on_beat_kappa": {
+      "gold": -0.075404668999492,
+      "gold_best": false,
+      "spearman_vs_mir_eval": 0.9276336570439174
+    },
+    "flicker": {
+      "gold": 0.047619047619047616,
+      "gold_best": false,
+      "spearman_vs_mir_eval": -0.033806170189140665
+    }
+  },
+  "auc": {
+    "consonance margin": {
+      "auc": 0.5514487732393597,
+      "low": 0.46894708381218975,
+      "high": 0.6247420029155475,
+      "segments": 427,
+      "right": 341
+    },
+    "consonance rank": {
+      "auc": 0.5561118541714862,
+      "low": 0.4772720619662396,
+      "high": 0.6324343962028629,
+      "segments": 427,
+      "right": 341
+    },
+    "root, first beat": {
+      "auc": 0.645794782238347,
+      "low": 0.5838868547368745,
+      "high": 0.7103206616325043,
+      "segments": 442,
+      "right": 367
+    },
+    "root, whole chord": {
+      "auc": 0.6078889532557132,
+      "low": 0.55931587591002,
+      "high": 0.6618090365247312,
+      "segments": 442,
+      "right": 367
+    },
+    "agreement": {
+      "auc": 0.7640504306023519,
+      "low": 0.690649956401672,
+      "high": 0.8280723452661916,
+      "segments": 425,
+      "right": 341
+    },
+    "agreement, root": {
+      "auc": 0.7847890283326169,
+      "low": 0.7143466744540214,
+      "high": 0.8480217724725406,
+      "segments": 442,
+      "right": 367
+    },
+    "repetition": {
+      "auc": 0.6349237867482428,
+      "low": 0.5189385148935997,
+      "high": 0.7327098741600695,
+      "segments": 237,
+      "right": 199
+    },
+    "on a beat": {
+      "auc": 0.5196783950417695,
+      "low": 0.44218610582808665,
+      "high": 0.5942680644402512,
+      "segments": 428,
+      "right": 353
+    },
+    "length in beats": {
+      "auc": 0.6397272761537599,
+      "low": 0.5479559986844655,
+      "high": 0.7417682266237974,
+      "segments": 446,
+      "right": 353
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "audio": "Marvin_Gaye_and_Kim_Weston_It_Takes_Two.wav",
+  "mcgill_folder": "data/McGillBillboard/McGill-Billboard/0280",
+  "gold_shift_seconds": -0.3251,
+  "similarity": 0.947,
+  "similarity_elsewhere_median": 0.581,
+  "similarity_elsewhere_best": 0.713,
+  "time_map": {
+    "scale": 0.99845,
+    "shift": -0.209,
+    "windows_within_0.1s_of_the_line": 4,
+    "windows_used": 5
+  },
+  "local": [
+    {
+      "gold_time": 14.98,
+      "offset": 2.972,
+      "similarity": 0.775
+    },
+    {
+      "gold_time": 44.93,
+      "offset": -0.279,
+      "similarity": 0.986
+    },
+    {
+      "gold_time": 74.88,
+      "offset": -0.325,
+      "similarity": 0.992
+    },
+    {
+      "gold_time": 104.84,
+      "offset": -0.372,
+      "similarity": 0.989
+    },
+    {
+      "gold_time": 134.79,
+      "offset": -0.372,
+      "similarity": 0.994
+    },
+    {
+      "gold_time": 164.75,
+      "offset": -1.022,
+      "similarity": 0.604
+    }
+  ]
+}

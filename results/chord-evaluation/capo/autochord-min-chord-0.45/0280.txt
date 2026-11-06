@@ -1,0 +1,28 @@
+0280.lab: 23 segments, 175.8 s of chords
+
+short chords merged: 0 under 0.45 s, 0.0% of chord time
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  9.25     0.0%
+   1  5.64     8.1%
+   2 12.37     0.0%
+   3  5.01    47.5%   <- recommended
+   4 10.25     0.0%
+   5  5.11    44.4%
+   6 10.89     0.0%   above fret 5: not considered
+   7  9.62     0.0%   above fret 5: not considered
+   8  3.62     0.0%   above fret 5: not considered
+   9 11.88     0.0%   above fret 5: not considered
+  10  2.12     0.0%   above fret 5: not considered
+  11 10.25     0.0%   above fret 5: not considered
+
+capo 3: the shapes to play, by share of chord time
+  G (sounds Bb)       75.1%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  D (sounds F)        12.6%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  C (sounds Eb)       12.3%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+
+capo 0: the shapes to play, by share of chord time
+  Bb                  75.1%   frets 3211  fingers 3211   span 2  fingers 3  barre 1   d 10
+  F                   12.6%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Eb                  12.3%   frets 0331  fingers 0341   span 2  fingers 3  barre 0   d 9

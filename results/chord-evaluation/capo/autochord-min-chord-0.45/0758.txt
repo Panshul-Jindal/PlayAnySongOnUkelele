@@ -1,0 +1,36 @@
+0758.lab: 78 segments, 183.3 s of chords
+
+short chords merged: 0 under 0.45 s, 0.0% of chord time
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  6.96     0.0%
+   1 11.13     0.0%
+   2  3.69    89.9%   <- recommended
+   3 10.81     0.0%
+   4  5.32    10.1%
+   5  9.18     0.0%
+   6 10.23     0.0%   above fret 5: not considered
+   7  4.85     0.0%   above fret 5: not considered
+   8 11.52     0.0%   above fret 5: not considered
+   9  4.03     0.0%   above fret 5: not considered
+  10 10.56     0.0%   above fret 5: not considered
+  11  7.77     0.0%   above fret 5: not considered
+
+capo 2: the shapes to play, by share of chord time
+  G (sounds A)        35.1%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  D (sounds E)        28.9%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  C (sounds D)        25.3%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  A (sounds B)         3.5%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  Am (sounds Bm)       3.3%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  F (sounds G)         2.4%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Bm (sounds C#m)      1.5%   frets 4222  fingers 3111   span 2  fingers 2  barre 1   d 9
+
+capo 0: the shapes to play, by share of chord time
+  A                   35.1%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  E                   28.9%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  D                   25.3%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  B                    3.5%   frets 4322  fingers 3211   span 2  fingers 3  barre 1   d 10
+  Bm                   3.3%   frets 4222  fingers 3111   span 2  fingers 2  barre 1   d 9
+  G                    2.4%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  C#m                  1.5%   frets 1444  fingers 1234   span 3  fingers 4  barre 0   d 13

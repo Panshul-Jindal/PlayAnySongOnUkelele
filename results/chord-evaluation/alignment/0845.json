@@ -1,0 +1,51 @@
+{
+  "audio": "George_Harrison_-_Got_My_Mind_Set_On_You_(Version_II).wav",
+  "mcgill_folder": "data/McGillBillboard/McGill-Billboard/0845",
+  "gold_shift_seconds": 0.1858,
+  "similarity": 0.93,
+  "similarity_elsewhere_median": 0.501,
+  "similarity_elsewhere_best": 0.695,
+  "time_map": {
+    "scale": 1.000517,
+    "shift": 0.1316,
+    "windows_within_0.1s_of_the_line": 7,
+    "windows_used": 7
+  },
+  "local": [
+    {
+      "gold_time": 14.98,
+      "offset": 0.139,
+      "similarity": 0.979
+    },
+    {
+      "gold_time": 44.93,
+      "offset": 0.186,
+      "similarity": 0.976
+    },
+    {
+      "gold_time": 74.88,
+      "offset": 0.139,
+      "similarity": 0.987
+    },
+    {
+      "gold_time": 104.84,
+      "offset": 0.139,
+      "similarity": 0.979
+    },
+    {
+      "gold_time": 134.79,
+      "offset": 0.186,
+      "similarity": 0.99
+    },
+    {
+      "gold_time": 164.75,
+      "offset": 0.232,
+      "similarity": 0.986
+    },
+    {
+      "gold_time": 194.7,
+      "offset": 0.232,
+      "similarity": 0.98
+    }
+  ]
+}

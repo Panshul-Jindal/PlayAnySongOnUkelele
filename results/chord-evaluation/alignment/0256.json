@@ -1,0 +1,41 @@
+{
+  "audio": "Brownsville_Station-Smokin_in_the_Boys_room.wav",
+  "mcgill_folder": "data/McGillBillboard/McGill-Billboard/0256",
+  "gold_shift_seconds": -0.5573,
+  "similarity": 0.777,
+  "similarity_elsewhere_median": 0.502,
+  "similarity_elsewhere_best": 0.572,
+  "time_map": {
+    "scale": 0.996641,
+    "shift": -0.2167,
+    "windows_within_0.1s_of_the_line": 4,
+    "windows_used": 4
+  },
+  "local": [
+    {
+      "gold_time": 14.98,
+      "offset": 0.0,
+      "similarity": 0.728
+    },
+    {
+      "gold_time": 44.93,
+      "offset": -0.372,
+      "similarity": 0.961
+    },
+    {
+      "gold_time": 74.88,
+      "offset": -0.464,
+      "similarity": 0.965
+    },
+    {
+      "gold_time": 104.84,
+      "offset": -0.557,
+      "similarity": 0.961
+    },
+    {
+      "gold_time": 134.79,
+      "offset": -0.697,
+      "similarity": 0.964
+    }
+  ]
+}

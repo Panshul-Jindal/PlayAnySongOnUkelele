@@ -1,0 +1,16 @@
+# The McGill Billboard songs with recordings, used to check the audio-based signals against gold.
+# Random draw: numpy.random.default_rng(20261106).choice(sorted ids of data/preprocessed/McGill-Billboard
+# without 1016, 10, replace=False); recordings were found for 5 of the 10 (0403, 0465, 0734, 0963,
+# 0982 were not). Four more were chosen by artist. 1016 is a byte-identical copy of 0546, which was
+# in the draw's pool and not drawn. Alignment: chord-evaluation/align.py.
+id,title,artist,chart_date,length_s,chosen,similarity,similarity_elsewhere_best,scale,shift
+0102,For The Good Times,Ray Price,1970-09-26,230.5,random draw,0.891,0.683,0.997416,-0.2864
+0256,Smokin' In The Boys Room,Brownsville station,1973-11-03,178.9,random draw,0.777,0.572,0.996641,-0.2167
+0280,It Takes Two,Marvin Gaye & Kim Weston,1967-01-07,180.1,random draw,0.947,0.713,0.99845,-0.209
+0473,Come Together,The Beatles,1969-10-25,260.0,chosen: The Beatles / George Harrison,0.934,0.668,1.0,1.2074
+0517,Years Ago,George Harrison,1981-05-30,227.4,chosen: The Beatles / George Harrison,0.638,0.59,0.987597,0.1858
+0727,Eight Days A Week,The Beatles,1965-03-27,164.4,chosen: The Beatles / George Harrison,0.763,0.703,0.994574,0.2902
+0758,Come Monday,Jimmy Buffett,1974-08-10,188.8,random draw,0.968,0.623,1.000517,-0.2012
+0845,I Got My Mind Set On You,George Harrison,1988-01-23,234.7,chosen: The Beatles / George Harrison,0.93,0.695,1.000517,0.1316
+1016,Disco Inferno,The Trammps,1977-04-16,217.4,first test song (identical to 0546),0.98,0.691,1.0,-0.1858
+1121,A Hazy Shade Of Winter,Simon And Garfunel,1966-11-26,137.5,random draw,0.984,0.63,1.0,0.0464

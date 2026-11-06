@@ -1,0 +1,50 @@
+0517.lab: 153 segments, 217.3 s of chords
+
+short chords merged: 50 under 0.45 s, 4.3% of chord time
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  5.75     4.0%
+   1 10.56     0.0%
+   2  4.18    96.0%   <- recommended
+   3 10.31     0.0%
+   4  6.97     0.0%
+   5  6.68     0.0%
+   6 10.04     0.0%   above fret 5: not considered
+   7  3.86     0.0%   above fret 5: not considered
+   8 10.16     0.0%   above fret 5: not considered
+   9  6.02     0.0%   above fret 5: not considered
+  10  8.76     0.0%   above fret 5: not considered
+  11  8.97     0.0%   above fret 5: not considered
+
+capo 2: the shapes to play, by share of chord time
+  C (sounds D)        36.9%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  Dm (sounds Em)      25.6%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  G (sounds A)         7.9%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  Fm (sounds Gm)       6.5%   frets 1013  fingers 1024   span 2  fingers 3  barre 0   d 9
+  Dm7 (sounds Em7)     6.3%   frets 2213  fingers 2213   span 2  fingers 3  barre 1   d 10
+  A7 (sounds B7)       4.7%   frets 0100  fingers 0100   span 0  fingers 1  barre 0   d 1
+  Em7 (sounds F#m7)    4.3%   frets 0202  fingers 0102   span 0  fingers 2  barre 0   d 2
+  Cm (sounds Dm)       2.9%   frets 0333  fingers 0123   span 0  fingers 3  barre 0   d 3
+  Fmin6 (sounds Gmin6)   1.8%   frets 1213  fingers 1213   span 2  fingers 3  barre 1   d 10
+  F (sounds G)         1.0%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Ddim (sounds Edim)   0.6%   frets 7545  fingers 4213   span 3  fingers 4  barre 0   d 13
+  Cm7 (sounds Dm7)     0.6%   frets 3333  fingers 1111   span 0  fingers 1  barre 1   d 2
+  A (sounds B)         0.4%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  Abdim7 (sounds Bbdim7)   0.4%   frets 1212  fingers 1324   span 1  fingers 4  barre 0   d 7
+
+capo 0: the shapes to play, by share of chord time
+  D                   36.9%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  Em                  25.6%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  A                    7.9%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  Gm                   6.5%   frets 0231  fingers 0231   span 2  fingers 3  barre 0   d 9
+  Em7                  6.3%   frets 0202  fingers 0102   span 0  fingers 2  barre 0   d 2
+  B7                   4.7%   frets 2322  fingers 1211   span 1  fingers 2  barre 1   d 6
+  F#m7                 4.3%   frets 2424  fingers 1324   span 2  fingers 4  barre 0   d 10
+  Dm                   2.9%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  Gmin6                1.8%   frets 0201  fingers 0201   span 1  fingers 2  barre 0   d 5
+  G                    1.0%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  Edim                 0.6%   frets 3431  fingers 2431   span 3  fingers 4  barre 0   d 13
+  Dm7                  0.6%   frets 2213  fingers 2213   span 2  fingers 3  barre 1   d 10
+  B                    0.4%   frets 4322  fingers 3211   span 2  fingers 3  barre 1   d 10
+  Bbdim7               0.4%   frets 0101  fingers 0102   span 0  fingers 2  barre 0   d 2

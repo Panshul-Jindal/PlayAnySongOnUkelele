@@ -1,0 +1,12 @@
+{
+  "beats": "results/beat-tracking/librosa-varying/1016.txt",
+  "salami": "data/McGillBillboard/McGill-Billboard/1016/salami_chords.txt",
+  "shift": -0.1858,
+  "f_measure": 0.7041619797525309,
+  "cmlt": 0.8666666666666667,
+  "amlt": 0.8666666666666667,
+  "phrase_starts": 17,
+  "phrase_starts_on_a_beat": 0.5294117647058824,
+  "on_a_beat_by_chance": 0.29463461277062464,
+  "tempo_ratio": 1.0010082517173726
+}

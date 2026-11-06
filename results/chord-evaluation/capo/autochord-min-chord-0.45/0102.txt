@@ -1,0 +1,38 @@
+0102.lab: 75 segments, 204.0 s of chords
+
+short chords merged: 1 under 0.45 s, 0.2% of chord time
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  9.79     0.0%
+   1  4.89     4.0%
+   2 11.72     0.0%
+   3  3.91    96.0%   <- recommended
+   4 10.61     0.0%
+   5  7.30     0.0%
+   6  7.66     0.0%   above fret 5: not considered
+   7 10.98     0.0%   above fret 5: not considered
+   8  3.80     0.0%   above fret 5: not considered
+   9 11.02     0.0%   above fret 5: not considered
+  10  4.84     0.0%   above fret 5: not considered
+  11  9.64     0.0%   above fret 5: not considered
+
+capo 3: the shapes to play, by share of chord time
+  C (sounds Eb)       40.8%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  G (sounds Bb)       32.5%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  Dm (sounds Fm)      13.2%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  F (sounds Ab)       11.5%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Fm (sounds Abm)      0.9%   frets 1013  fingers 1024   span 2  fingers 3  barre 0   d 9
+  B (sounds D)         0.4%   frets 4322  fingers 3211   span 2  fingers 3  barre 1   d 10
+  Em (sounds Gm)       0.4%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  Gm (sounds Bbm)      0.2%   frets 0231  fingers 0231   span 2  fingers 3  barre 0   d 9
+
+capo 0: the shapes to play, by share of chord time
+  Eb                  40.8%   frets 0331  fingers 0341   span 2  fingers 3  barre 0   d 9
+  Bb                  32.5%   frets 3211  fingers 3211   span 2  fingers 3  barre 1   d 10
+  Fm                  13.2%   frets 1013  fingers 1024   span 2  fingers 3  barre 0   d 9
+  Ab                  11.5%   frets 1343  fingers 1243   span 3  fingers 4  barre 0   d 13
+  Abm                  0.9%   frets 1342  fingers 1342   span 3  fingers 4  barre 0   d 13
+  D                    0.4%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  Gm                   0.4%   frets 0231  fingers 0231   span 2  fingers 3  barre 0   d 9
+  Bbm                  0.2%   frets 3111  fingers 3111   span 2  fingers 2  barre 1   d 9

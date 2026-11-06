@@ -1,0 +1,36 @@
+{
+  "audio": "Simon_&_Garfunkel_-_A_Hazy_Shade_of_Winter_(Audio).wav",
+  "mcgill_folder": "data/McGillBillboard/McGill-Billboard/1121",
+  "gold_shift_seconds": 0.0464,
+  "similarity": 0.984,
+  "similarity_elsewhere_median": 0.48,
+  "similarity_elsewhere_best": 0.63,
+  "time_map": {
+    "scale": 1.0,
+    "shift": 0.0464,
+    "windows_within_0.1s_of_the_line": 4,
+    "windows_used": 4
+  },
+  "local": [
+    {
+      "gold_time": 14.98,
+      "offset": 0.046,
+      "similarity": 0.982
+    },
+    {
+      "gold_time": 44.93,
+      "offset": 0.046,
+      "similarity": 0.989
+    },
+    {
+      "gold_time": 74.88,
+      "offset": 0.046,
+      "similarity": 0.99
+    },
+    {
+      "gold_time": 104.84,
+      "offset": 0.046,
+      "similarity": 0.988
+    }
+  ]
+}

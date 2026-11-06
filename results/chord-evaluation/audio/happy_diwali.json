@@ -1,0 +1,42 @@
+{
+  "song": "happy_diwali",
+  "beats_with_a_repeat": 0.5711864406779661,
+  "estimates": {
+    "autochord": {
+      "consonance_best": 0.4143997098295248,
+      "consonance_margin": -0.03579803477750103,
+      "root_first": 0.6954361428045635,
+      "root_segment": 0.790025763709974,
+      "agreement": 0.6465934280272609,
+      "repetition": 0.5900342445620226,
+      "on_beat_kappa": 0.15564720027600668,
+      "beat_latency": -0.06548072562358698,
+      "flicker": 0.016,
+      "doubtful_chords": 49
+    },
+    "btc": {
+      "consonance_best": 0.5689011759269773,
+      "consonance_margin": -0.005861547418362638,
+      "root_first": 0.7431972241454269,
+      "root_segment": 0.8416375639860311,
+      "agreement": 0.639156418738624,
+      "repetition": 0.6881647143577373,
+      "on_beat_kappa": 0.33059187964807074,
+      "beat_latency": -0.026000000000003354,
+      "flicker": 0.15294117647058825,
+      "doubtful_chords": 78
+    },
+    "lv-chordia": {
+      "consonance_best": 0.4753994870783188,
+      "consonance_margin": -0.027790807532619154,
+      "root_first": 0.8202095991518169,
+      "root_segment": 0.8658687907777289,
+      "agreement": 0.6400490556118879,
+      "repetition": 0.6571263468300661,
+      "on_beat_kappa": 0.6271244083513864,
+      "beat_latency": -0.021999999999998465,
+      "flicker": 0.0,
+      "doubtful_chords": 44
+    }
+  }
+}

@@ -1,0 +1,42 @@
+1121.lab: 75 segments, 135.1 s of chords
+
+short chords merged: 21 under 0.45 s, 3.4% of chord time
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  4.82     7.1%
+   1 10.07     0.0%
+   2  8.28     0.0%
+   3  6.76     0.0%
+   4 10.54     0.0%
+   5  4.56    92.9%   <- recommended
+   6 10.95     0.0%   above fret 5: not considered
+   7  7.03     0.0%   above fret 5: not considered
+   8  7.82     0.0%   above fret 5: not considered
+   9  8.89     0.0%   above fret 5: not considered
+  10  4.94     0.0%   above fret 5: not considered
+  11 10.56     0.0%   above fret 5: not considered
+
+capo 5: the shapes to play, by share of chord time
+  G (sounds C)        32.8%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  Am (sounds Dm)      24.0%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  F (sounds Bb)       19.0%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  C (sounds F)         7.4%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  E (sounds A)         6.3%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  E7 (sounds A7)       5.0%   frets 1202  fingers 1203   span 1  fingers 3  barre 0   d 6
+  Dm (sounds Gm)       1.7%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  Cmaj7 (sounds Fmaj7)   1.6%   frets 0002  fingers 0002   span 0  fingers 1  barre 0   d 1
+  Em (sounds Am)       1.5%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  D (sounds G)         0.6%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+
+capo 0: the shapes to play, by share of chord time
+  C                   32.8%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  Dm                  24.0%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  Bb                  19.0%   frets 3211  fingers 3211   span 2  fingers 3  barre 1   d 10
+  F                    7.4%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  A                    6.3%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  A7                   5.0%   frets 0100  fingers 0100   span 0  fingers 1  barre 0   d 1
+  Gm                   1.7%   frets 0231  fingers 0231   span 2  fingers 3  barre 0   d 9
+  Fmaj7                1.6%   frets 2413  fingers 2413   span 3  fingers 4  barre 0   d 13
+  Am                   1.5%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  G                    0.6%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
