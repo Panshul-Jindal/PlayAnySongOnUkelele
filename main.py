@@ -161,6 +161,7 @@ def main(argv=None):
                         help="merge chords shorter than this many seconds (transformations/README.md; default 0, off)")
     parser.add_argument("--gold", help="annotated chords (.lab) to score the chords against (chord-evaluation/README.md)")
     parser.add_argument("--shift", type=float, default=0.0, help="seconds added to the gold times (from chord-evaluation/align.py)")
+    parser.add_argument("--scale", type=float, default=1.0, help="factor the gold times are multiplied by first (align.py)")
     parser.add_argument("--out", default=OUT, help="output folder (default results/pipeline)")
     args = parser.parse_args(argv)
 
@@ -169,10 +170,10 @@ def main(argv=None):
     lines, choice = report(source, segments, plain, dropped, versions, chart.load(), merged, args.min_chord)
     if args.gold:
         rows = [("as estimated", source)] + ([("merged", segments)] if args.min_chord > 0 else [])
-        lines += ["", f"against {args.gold}, gold moved {args.shift:+.3f} s (mir_eval, %):",
+        lines += ["", f"against {args.gold}, gold times x {args.scale:.5f} {args.shift:+.3f} s (mir_eval, %):",
                   " " * 13 + "".join(f"{k:>9}" for k in evaluate.METRICS)]
         for name, chords in rows:
-            scores = evaluate.score(chords, args.gold, args.shift)
+            scores = evaluate.score(chords, args.gold, args.shift, args.scale)
             lines.append(f"{name:<13}" + "".join(f"{100 * scores[k]:9.1f}" for k in evaluate.METRICS))
 
     os.makedirs(args.out, exist_ok=True)

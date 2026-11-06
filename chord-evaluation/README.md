@@ -15,6 +15,10 @@ song with its recording.
 - **[MBP]** The McGill Billboard Project, official dataset page (see
   `dataAnalysis/README.md`): the gold chords (`full.lab`), and the chroma of the
   annotators' own audio (`bothchroma.csv`).
+- **[HB15]** Humphrey & Bello, "Four Timely Insights on Automatic Chord
+  Estimation", ISMIR 2015
+  ([PDF](https://archives.ismir.net/ismir2015/paper/000294.pdf)): chord
+  annotation is partly subjective.
 - **[AC]** Bayron, autochord 0.1.4, package description (installed
   `METADATA`, line 65): *"the model can recognize 25 chord classes: the 12
   major triads, 12 minor triads, and no-chord ('N')"*.
@@ -33,6 +37,53 @@ same frames for a downloaded recording. Sliding one over the other, the shift
 with the highest mean cosine similarity is the offset, and how far that peak
 stands above every other shift says whether it is the same recording.
 **[ORIGINAL]** method.
+
+### A time map, not just an offset
+
+A copy can also run at a slightly different speed, as old transfers often do.
+Then no single offset fits the whole song, and its peak is weak and flat.
+
+**[ORIGINAL]** method, so `align.py` also does this:
+1. **Local offsets.** It aligns the song 30 s at a time, searching within
+   ±5 s of the whole song's offset. Without that limit, a window of a song
+   that repeats itself can match another repeat.
+2. **A line through them.** It fits recording time = *scale* × gold time +
+   *shift* through those local offsets.
+   - **Slope:** Theil–Sen's, the median slope over all pairs of windows
+     (Sen 1968; Theil 1950, as cited by `scipy.stats.theilslopes`).
+   - **Shift:** the median of each window's offset − slope × time.
+   - **Robustness:** neither can be moved by one badly aligned window. The
+     first 30 s often is one, possibly because the copies start
+     differently.
+   - **Left out:** windows aligned below a similarity of 0.75 (silence,
+     fades).
+3. **Everywhere else uses that map.** `evaluate.py`, `meta_evaluate.py` and
+   `main.py --gold` read it (`--alignment`, or `--scale` and `--shift`).
+
+**The ten McGill songs with recordings**
+(`results/chord-evaluation/mcgill_sample.csv`; `alignment/<id>.json`). The
+whole-song peak is shown against the best other offset. **[ORIGINAL]**
+measurement:
+
+| id | song | whole-song peak (best elsewhere) | scale | shift | windows on the line |
+|---|---|---|---|---|---|
+| 0102 | For The Good Times | 0.891 (0.683) | 0.9974 | −0.286 s | 6 of 7 |
+| 0256 | Smokin' In The Boys Room | 0.777 (0.572) | 0.9966 | −0.217 s | 4 of 4 |
+| 0280 | It Takes Two | 0.947 (0.713) | 0.9985 | −0.209 s | 4 of 5 |
+| 0473 | Come Together | 0.934 (0.668) | 1.0000 | +1.207 s | 8 of 8 |
+| 0517 | All Those Years Ago | **0.638 (0.590)** | **0.9876** | +0.186 s | 7 of 7 |
+| 0727 | Eight Days A Week | **0.763 (0.703)** | **0.9946** | +0.290 s | 5 of 5 |
+| 0758 | Come Monday | 0.968 (0.623) | 1.0005 | −0.201 s | 5 of 6 |
+| 0845 | I Got My Mind Set On You | 0.930 (0.695) | 1.0005 | +0.132 s | 7 of 7 |
+| 1016 | Disco Inferno | 0.980 (0.691) | 1.0000 | −0.186 s | 6 of 6 |
+| 1121 | A Hazy Shade Of Winter | 0.984 (0.630) | 1.0000 | +0.046 s | 4 of 4 |
+
+"Windows on the line" counts those within 0.1 s of it.
+- **0517 and 0727 are the right recordings, running about 1.2% and 0.5%
+  fast.** Their whole-song peaks are barely above other offsets, but every
+  30 s window aligns at a similarity of about 0.9. Their offset drifts by
+  2.2 s and 0.65 s over the song, so no single offset could fit.
+- **Other copies drift slightly too:** 0102 and 0256 by about 0.3%.
 
 ## Scoring
 
@@ -151,18 +202,184 @@ gold, the scores say how far two estimators agree, with the same rules as
 above. Agreement is not accuracy: two estimators can agree on the same wrong
 chord.
 
-## Open question: scoring without gold chords
+## Judging chords without gold
 
-For a song with no annotation, such as *Happy Diwali*, nothing here says
-which estimate is right. An audio-only score would have to rank estimators
-the way gold chords do. That can be tested on McGill songs whose recordings
-align, as this one does, but has not been. An energy-share score cannot do
-it: it rates a chord label higher for every note added (*C major* audio
-scores `C:maj7` above `C:maj`, see `reviews/`). **[ORIGINAL]**.
+For a song with no annotation, such as *Happy Diwali*, mir_eval cannot say
+which estimate is right. `audio_signals.py` computes five signals from the
+recording for every chord segment:
+- consonance;
+- root saliency;
+- agreement between estimators;
+- repetition;
+- beats.
 
-The plan for five audio-based signals, each tested against gold before it is
-trusted, is in `chord-evaluation/audio_based_impl_plan.md`. The signals are
-consonance, root saliency, estimator agreement, repetition and beats.
+`meta_evaluate.py` checks each signal against gold first. The plan, with the
+reasoning for every signal, is in `audio_based_impl_plan.md`. **Status:**
+phases 0, 1, 2 and 4 are built and run. Phase 3 waits for more McGill
+recordings.
+
+### Choices made while building
+
+**[ORIGINAL]** unless cited:
+
+- **Chroma frames are stamped at their centre.**
+  - The NNLS plugin's preferred block is 16 384 samples with a step of 2048
+    (`get_preferred_block_size`, `get_preferred_step_size`).
+  - On a synthesized change from C major to G major at 2.0 s, the first
+    half-mixed frame is frame 39 (1.811 s from its start).
+  - So frame *i* is placed at *i* · 2048/44 100 + 8192/44 100 s.
+- **Beats come from the varying-tempo tracker.** On this song it matches
+  people's beats far better (`beat-tracking/README.md`).
+- **Repeats need a chroma cosine of at least 0.90 over 16 beats.** This was
+  set against *Disco Inferno*'s section letters. *Disco Inferno* is very
+  repetitive (its verse is one chord for 16 bars), so this is an easy song to
+  set it on:
+
+  | threshold | beats with a repeat | repeat pairs within one section letter |
+  |---|---|---|
+  | 0.85 | 98.0% | 88.7% |
+  | **0.90** | **90.8%** | **97.5%** |
+  | 0.95 | 57.8% | 100.0% |
+
+- **The on-beat signal first removes the estimate's steady lag**, reported
+  as its latency.
+  - lv-chordia's chord changes sit a median 0.147 s after the beat.
+  - With that removed, its chance-corrected on-beat score rises from −0.15
+    to +0.44.
+  - A steady delay is a timing error the player can be shown, not a sign
+    of wrong chords.
+
+### Do the signals agree with gold? *Disco Inferno*, nine estimates
+
+The nine estimates are the three estimators on:
+- the recording;
+- the centre-removed recording;
+- the recording, with chords under 0.45 s merged.
+
+A segment is right if mir_eval marks at least half its time right (majmin;
+root for the root signals). Pooled over all nine, about 1,085 chord segments.
+
+**Per segment** (AUC, duration-weighted; 95% bootstrap interval):
+
+| signal | AUC | interval | passes AUC ≥ 0.70 |
+|---|---|---|---|
+| agreement (both other estimators name the same chord) | 0.88 | 0.85–0.90 | yes |
+| agreement at the root | 0.89 | 0.86–0.91 | yes |
+| repetition (repeated music gets the same chord) | 0.87 | 0.84–0.90 | yes |
+| length in beats | 0.84 | 0.79–0.88 | yes |
+| root saliency, first beat | 0.63 | 0.59–0.67 | no |
+| root saliency, whole chord | 0.62 | 0.58–0.65 | no |
+| consonance margin | 0.62 | 0.56–0.67 | no |
+| consonance rank | 0.60 | 0.55–0.65 | no |
+| on a beat | 0.50 | 0.45–0.54 | no |
+
+**Per song:**
+- **Gold scores best:** does the signal score the gold chords at least as
+  well as every estimate?
+- **Spearman:** does the signal rank the nine estimates as mir_eval's majmin
+  score does?
+
+| song-level value | gold | gold scores best | Spearman with mir_eval |
+|---|---|---|---|
+| repetition | 0.954 | yes | **+0.92** |
+| on-beat κ, lag removed | 0.986 | yes | **+0.75** |
+| agreement | – | – | +0.65 |
+| consonance margin | −0.026 | no | +0.55 |
+| consonance, share of chord time best | 0.420 | no | +0.42 |
+| root saliency, first beat | 0.907 | no | +0.22 |
+| flicker (share of chords under a beat) | 0.038 | no | +0.17 |
+
+**[ORIGINAL]** measurements, one song.
+
+**Not established: these are one song's results.** The pass bar in the plan
+(§4.3) is pooled over several McGill songs. The nine estimates also share one
+recording, so their segments are not independent, and the intervals are
+narrower than they should be.
+
+**What the numbers say:**
+- **Three signals separate right chords from wrong ones:** agreement,
+  repetition and length in beats. These three flag chords for a player.
+- **Repetition and the on-beat score rank estimators well.**
+  - Both rank the gold chords first.
+  - On-beat κ works only per song, not per chord.
+- **Consonance scores the notes, not the chord people name.** Gold's own
+  label fits best only 42% of the time. Where it loses, the winner is mostly
+  a four-note relative:
+
+  | gold | fits better | share of gold's chord time |
+  |---|---|---|
+  | C:maj | C:maj6 | 10.7% |
+  | F:maj | F:maj7 | 8.9% |
+  | C:min7 | Bb:maj7 | 6.3% |
+  | C:min7 | G:min7 | 4.5% |
+  | Bb:maj | Bb:maj7 | 3.6% |
+
+  - The recording carries colour notes the annotators did not write into the
+    chord: an A over C, an E over F.
+  - That is the subjectivity [HB15] warns of, not a fault of the cosine: the
+    same formula picks the right chord when only its notes sound
+    (`audio_based_impl_plan.md` §5.1).
+- **Root saliency is weak.**
+  - On the first beat, the bass is on the gold chords' root for 91% of
+    their time.
+  - It is on the estimates' roots for 74–94% of theirs: lv-chordia's 94%
+    is above gold's.
+- **Estimators have their own timing.** Scanning the gold shift for each
+  estimator gives its best majmin score at:
+
+  | estimator | best gold shift |
+  |---|---|
+  | autochord | −0.42 s |
+  | BTC | −0.36 s |
+  | lv-chordia | −0.26 s |
+  | the recording's offset (`align.py`) | −0.19 s |
+
+  - autochord stamps each NNLS frame at its start, but the frame describes
+    audio 0.186 s later. So its chords come about that much early.
+
+### *Happy Diwali*
+
+All five signals, for the three estimators on the recording. Beats are from
+the varying-tempo tracker; 57% of beats have a repeat.
+
+| estimator | agreement | repetition | on-beat κ | lag | root, first beat | flicker | chords flagged |
+|---|---|---|---|---|---|---|---|
+| autochord | 0.647 | 0.590 | 0.156 | −0.065 s | 0.695 | 1.6% | 49 of 125 |
+| BTC | 0.639 | **0.688** | 0.331 | −0.026 s | 0.743 | 15.3% | 78 of 170 |
+| lv-chordia | 0.640 | 0.657 | **0.627** | −0.022 s | **0.820** | **0.0%** | **44 of 123** |
+
+**How chords are flagged:** a chord is flagged when a signal that passed
+against gold says so:
+- the other estimators disagree with it (agreement under 0.5);
+- its repeat has another chord (repetition under 0.5);
+- it is shorter than a beat.
+
+The 0.5 cut-offs are **[ORIGINAL]** choices. `audio_signals.py` prints each
+flagged chord with its reasons. Where consonance would pick another chord, it
+adds that as a hint.
+
+**[ORIGINAL]** reading, from signals checked on one song:
+
+- **lv-chordia looks best.**
+  - It has the fewest flagged chords and the most rhythmic changes.
+  - Its bass most often sits on the root.
+  - It has no flicker.
+  - It was also the most accurate estimator on *Disco Inferno*.
+  - Repetition alone prefers BTC, narrowly (0.688 against 0.657).
+- **Part of autochord's Eb minor is doubtful.** It names Eb minor five times,
+  23.7 s in all.
+  - **Flagged:** four of those chords, 21.5 s, because the estimators
+    disagree.
+  - **Most doubtful:** at 12.5–20.7 s and 36–39 s, both other estimators
+    hear Eb major, and so does consonance's hint.
+  - **Probably real:**
+    - In the intro (1.0–7.3 s), BTC also says Eb minor, and the notes heard
+      fit Eb minor best. lv-chordia hears no chord there.
+    - At 2:17 (136.7–138.9 s), the others mostly agree on Eb minor.
+  - **Why it matters:** a minor chord in place of a major one changes the
+    mood of the music.
+- **Agreement is lower than on *Disco Inferno*** (0.64 against 0.67–0.71).
+  The estimators find this song harder.
 
 ## Running
 
@@ -182,6 +399,19 @@ uv run python chord-evaluation/evaluate.py results/chord-estimation/lv-chordia/1
 uv run python main.py "data/McGill-audio/1016/trammps-_disco-inferno_(mp3.pm).mp3" --estimator lv-chordia \
     --gold data/McGillBillboard/McGill-Billboard/1016/full.lab --shift -0.1858 \
     --out results/chord-evaluation/capo/lv-chordia
+
+# judge chords without gold: the five signals, and the flagged chords
+uv run python chord-evaluation/audio_signals.py data/Custom_Songs/happy_diwali/Happy_Diwali.wav \
+    results/beat-tracking/librosa-varying/happy_diwali.txt \
+    --estimate autochord=results/chord-estimation/autochord/happy_diwali.lab \
+    --estimate btc=results/chord-estimation/btc/happy_diwali.lab \
+    --estimate lv-chordia=results/chord-estimation/lv-chordia/happy_diwali.lab
+
+# check the signals against gold on a McGill song (add --tune-repeats for the threshold table)
+uv run python chord-evaluation/meta_evaluate.py "data/McGill-audio/1016/trammps-_disco-inferno_(mp3.pm).mp3" \
+    results/beat-tracking/librosa-varying/1016.txt data/McGillBillboard/McGill-Billboard/1016/full.lab \
+    data/McGillBillboard/McGill-Billboard/1016/salami_chords.txt --shift -0.1858 \
+    --estimate autochord=results/chord-estimation/autochord/1016.lab --estimate btc=... --estimate lv-chordia=...
 ```
 
 Add `--remove-centre` or `--min-chord 0.45` to `main.py` for the other rows.
@@ -199,6 +429,12 @@ merging.
 | `results/chord-evaluation/alignment/<id>.json` | `align.py`'s result | yes |
 | `results/chord-evaluation/<estimator>[-centre-removed]/<id>.json` | `evaluate.py`'s scores | yes |
 | `results/chord-evaluation/capo/<chords>/<id>.txt` | `main.py`'s report on gold or estimated chords, with the scores | yes |
+| `chord-evaluation/audio_signals.py` | the five signals for every chord of an estimate, and the flagged chords | yes |
+| `chord-evaluation/meta_evaluate.py` | the signals checked against gold: AUC, gold-scores-best, ranking | yes |
+| `chord-evaluation/audio_based_impl_plan.md` | the plan behind both | yes |
+| `results/chord-evaluation/audio/<estimate>/<song>.csv` | one row per chord, a column per signal (with `right_*` on McGill songs) | yes |
+| `results/chord-evaluation/audio/<song>.json`, `<id>_meta.json` | song-level values; for McGill songs, the checks | yes |
+| `tests/chord-evaluation/test_audio_signals.py`, `test_meta_evaluate.py` | each signal and check on inputs built by hand | yes |
 
 *Rockit* (`data/McGill-audio/1934/`) cannot be scored this way:
 - **Why:** id 1934 is missing from the 2.0 release (finding 9 in

@@ -22,3 +22,20 @@ def write_beats(path, times, comment=None):
         if comment:
             fh.write(f"# {comment}\n")
         fh.writelines(f"{t:.3f}\n" for t in times)
+
+
+def near(times, beats, window):
+    """For each time, whether a beat lies within `window` seconds of it."""
+    import numpy as np
+    beats = np.asarray(beats, float)
+    return np.array([np.min(np.abs(beats - t)) <= window for t in times], dtype=bool)
+
+
+def share_near(beats, start, end, window, step=0.001):
+    """Share of the time from start to end lying within `window` seconds of a beat."""
+    import numpy as np
+    beats = np.asarray(beats, float)
+    grid = np.arange(start, end, step)
+    idx = np.clip(np.searchsorted(beats, grid), 1, len(beats) - 1)
+    nearest = np.minimum(np.abs(grid - beats[idx - 1]), np.abs(grid - beats[idx]))
+    return float(np.mean(nearest <= window))

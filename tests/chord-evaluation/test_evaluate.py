@@ -37,3 +37,10 @@ def test_the_shift_moves_the_gold_times(songs):
     # C/C right for 1 s; G/C and G/Am wrong for 2 s: a third of the time
     gold, est = songs
     assert evaluate.score(est, gold, shift=-1.0)["majmin"] == pytest.approx(1 / 3)
+
+
+def test_the_scale_maps_gold_times_onto_a_faster_recording(tmp_path):
+    # gold C 0-2, G 2-4 on a recording at twice the speed: C 0-1, G 1-2
+    gold = write(tmp_path / "g.lab", [(0, 2, "C:maj"), (2, 4, "G:maj")])
+    est = write(tmp_path / "e.lab", [(0, 1, "C:maj"), (1, 2, "G:maj")])
+    assert evaluate.score(est, gold, shift=0.0, scale=0.5)["majmin"] == 1.0

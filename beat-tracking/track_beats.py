@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Find the beats of a song with librosa's beat tracker, one tempo for the whole song.
+"""Find the beats of a song with librosa's beat tracker.
 
-librosa's beat_track estimates a single tempo and picks beats that keep to it
-(Ellis 2007, as librosa cites it). This writes the beat times to a beat file
-(common/beats.py) and prints how far apart consecutive beats are, so drift or a
-missed beat shows. Specified in beat-tracking/README.md.
+By default librosa's beat_track estimates a single tempo and picks beats that
+keep to it (Ellis 2007, as librosa cites it). With --varying-tempo it is given
+a tempo for every onset frame instead, from librosa.feature.tempo with
+aggregate=None (8 s windows), so the beats can follow a song that speeds up or
+slows down. This writes the beat times to a beat file (common/beats.py) and
+prints how far apart consecutive beats are, so drift or a missed beat shows.
+Specified in beat-tracking/README.md.
 
 Usage:
-    python3 beat-tracking/track_beats.py AUDIO OUT.txt
+    python3 beat-tracking/track_beats.py AUDIO OUT.txt [--varying-tempo]
 """
 
 import argparse
@@ -33,20 +36,37 @@ def track(y, sr):
     return float(np.atleast_1d(tempo)[0]), [float(t) for t in times]
 
 
+def track_varying(y, sr):
+    """(tempo per onset frame in BPM, beat times in seconds): the tempo may change."""
+    onsets = librosa.onset.onset_strength(y=y, sr=sr)
+    curve = librosa.feature.tempo(onset_envelope=onsets, sr=sr, start_bpm=START_BPM, aggregate=None)
+    _, times = librosa.beat.beat_track(onset_envelope=onsets, sr=sr, bpm=curve, tightness=TIGHTNESS, units="time")
+    return curve, [float(t) for t in times]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("audio", help="the song's audio, from its folder in data/Custom_Songs/")
     parser.add_argument("out", help="the beat file, e.g. results/beat-tracking/librosa/hey_soul_sister.txt")
+    parser.add_argument("--varying-tempo", action="store_true", help="let the tempo change through the song")
     args = parser.parse_args()
 
     y, sr = librosa.load(args.audio, sr=None, mono=True)
-    tempo, times = track(y, sr)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
-    write_beats(args.out, times, f"librosa {librosa.__version__} beat_track, start_bpm {START_BPM:g}, "
-                                 f"tightness {TIGHTNESS:g}; tempo {tempo:.1f} BPM")
+    if args.varying_tempo:
+        curve, times = track_varying(y, sr)
+        tempo = f"tempo {curve.min():.1f} to {curve.max():.1f} BPM, median {np.median(curve):.1f}"
+        write_beats(args.out, times, f"librosa {librosa.__version__} beat_track with a varying tempo "
+                                     f"(feature.tempo, aggregate=None), start_bpm {START_BPM:g}, "
+                                     f"tightness {TIGHTNESS:g}; {tempo}")
+    else:
+        bpm, times = track(y, sr)
+        tempo = f"tempo {bpm:.1f} BPM"
+        write_beats(args.out, times, f"librosa {librosa.__version__} beat_track, start_bpm {START_BPM:g}, "
+                                     f"tightness {TIGHTNESS:g}; {tempo}")
     gaps = np.diff(times)
-    print(f"{len(times)} beats, tempo {tempo:.1f} BPM; gap between beats "
+    print(f"{len(times)} beats, {tempo}; gap between beats "
           f"{gaps.min():.3f} to {gaps.max():.3f} s, median {np.median(gaps):.3f} s")
     print(f"wrote {args.out}")
 

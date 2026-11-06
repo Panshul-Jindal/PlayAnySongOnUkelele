@@ -51,6 +51,11 @@ Billboard song (`chord-evaluation/README.md`).
 - **autochord:** needs Keras 2 behaviour through the `tf-keras` package, so
   `TF_USE_LEGACY_KERAS=1` is set before TensorFlow is imported. autochord
   downloads its own model to `~/.autochord/` the first time.
+  - **Its chords come early.** It times them by the start of each NNLS
+    chroma frame, but a frame describes audio centred 8192/44 100 ≈ 0.186 s
+    later. On *Disco Inferno* its best timing against gold is 0.16 s earlier
+    than lv-chordia's. **[ORIGINAL]** measurement (`chord-evaluation/README.md`).
+  - **Not corrected here.**
 - **BTC (`btc.py`):** inference as in the official repository.
   - **Features** as `audio_file_to_features`: a log constant-Q transform at
     22 050 Hz, computed 10 s at a time.

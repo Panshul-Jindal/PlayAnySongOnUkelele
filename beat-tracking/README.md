@@ -138,14 +138,77 @@ The gaps spread wider than on the click track, so some beats are likely
 missed, added or drifting. For two slower songs, ~100 and ~137 BPM may be
 twice the pulse a player would strum on. The checks by ear decide both.
 
+## Checked against people's beats: *Disco Inferno*
+
+`check_beats.py` scores tracked beats against McGill Billboard's annotation of
+*Disco Inferno* (1016):
+- **The reference:** `salami_chords.txt` gives each phrase's start, placed by
+  hand, and its bars (4/4). The reference beats are spread evenly within each
+  phrase (`common/salami.py`), 460 beats at 129.2 BPM.
+- **Alignment:** the reference is moved by the recording's offset,
+  −0.1858 s (`chord-evaluation/README.md`).
+- **Its own error:** the beats inside a phrase are interpolated, not tapped.
+
+The measures are mir_eval's (Raffel et al., ISMIR 2014; `mir_eval.beat`,
+installed 0.8.2):
+- **F-measure:** a beat counts within 70 ms (`f_measure_threshold` default
+  0.07).
+- **CMLt:** *"Correct metric level, total accuracy"*.
+- **AMLt:** *"Any metric level"*. The reference may also be read
+  *"180 degrees out of phase"*, at *"2x the original tempo"*, or at half tempo
+  on odd or even beats (`_get_reference_beat_variations`).
+
+The table also gives the share of hand-placed phrase starts that land on a
+tracked beat, against the share expected by chance.
+
+| tracker | F-measure | CMLt | AMLt | phrase starts on a beat | by chance | tempo ratio |
+|---|---|---|---|---|---|---|
+| one tempo (`track_beats.py`) | 0.342 | 0.376 | 0.508 | 23.5% | 29.5% | 1.001 |
+| varying tempo (`--varying-tempo`) | **0.704** | **0.867** | **0.867** | **52.9%** | 29.5% | 1.001 |
+
+**[ORIGINAL]** measurement, one song:
+- **One tempo finds the right tempo but the wrong phase.** Fewer phrase
+  starts land on its beats than chance would give. Its gaps between beats
+  spread from 0.430 to 0.592 s, while the varying tempo's spread from 0.441 to
+  0.499 s.
+- **A tempo per onset frame doubles the F-measure.**
+  - **How it works:** `librosa.feature.tempo` with `aggregate=None`, 8 s
+    windows (`ac_size` default 8.0 s), passed to `beat_track` as `bpm`, which
+    librosa documents as *"one estimate provided for each frame"*.
+  - **Where it's used:** the beat signals of `chord-evaluation/` use it.
+  - **Not yet tested:** whether the play-along pages should also switch to it.
+
+**On *Happy Diwali*** (no reference), the varying tempo follows a slowdown:
+
+| time | one tempo | varying tempo |
+|---|---|---|
+| up to 2:40, every 20 s | 148–152 BPM | 148–152 BPM |
+| 2:40 | 152 BPM | 144 BPM |
+| 3:00 onwards | 152–156 BPM | 117 BPM |
+
+The single tempo holds 152 and so drifts against the song from there.
+
+```sh
+uv run python beat-tracking/track_beats.py "data/McGill-audio/1016/trammps-_disco-inferno_(mp3.pm).mp3" \
+    results/beat-tracking/librosa-varying/1016.txt --varying-tempo
+uv run python beat-tracking/check_beats.py results/beat-tracking/librosa-varying/1016.txt \
+    data/McGillBillboard/McGill-Billboard/1016/salami_chords.txt --shift -0.1858 \
+    --out results/beat-tracking/check/librosa-varying/1016.json
+```
+
 ## Files
 
 | file | what it is | in git |
 |---|---|---|
-| `beat-tracking/track_beats.py` | audio → beat times and tempo | yes |
+| `beat-tracking/track_beats.py` | audio → beat times and tempo; `--varying-tempo` lets the tempo change | yes |
+| `beat-tracking/check_beats.py` | tracked beats against a McGill song's annotation | yes |
+| `common/salami.py` | reads McGill's `salami_chords.txt`: phrases, sections, bars, a beat grid | yes |
 | `common/beats.py` | reads and writes beat files; the play-along page reads them too | yes |
-| `results/beat-tracking/librosa/<song>.txt` | the beat times | yes |
+| `results/beat-tracking/librosa/<song>.txt` | the beat times, one tempo | yes |
+| `results/beat-tracking/librosa-varying/<song>.txt` | the beat times, varying tempo | yes |
+| `results/beat-tracking/check/<tracker>/<id>.json` | `check_beats.py`'s measures | yes |
 | `tests/beat-tracking/test_track_beats.py`, `tests/common/test_beats.py` | the click-track check; the file format | yes |
+| `tests/beat-tracking/test_check_beats.py`, `tests/common/test_salami.py` | the measures on beats built by hand; the salami reader | yes |
 | `play-along/` | `--beats`, the pulse, the tempo and the click | yes |
 
 ## Not in this version

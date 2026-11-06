@@ -1,7 +1,14 @@
 # Judging estimated chords from the audio alone: implementation plan
 
-**Status: planned.** Nothing here is built yet. Results will go into
-`chord-evaluation/README.md` as each phase finishes.
+**Status: phases 0, 1, 2 and 4 built and run; phase 3 waits for more McGill
+recordings.**
+- **Code:** `audio_signals.py`, `meta_evaluate.py`.
+- **Results:** `chord-evaluation/README.md`.
+- **Choices made while building:** also in that README. Frames are stamped
+  at their centre, beats come from the varying-tempo tracker, the repeat
+  threshold is 0.90, and the on-beat signal removes each estimate's lag.
+- **Agreement output:** agreement is reported as `agree_all_*` (both others
+  agree) and `agree_one_*` (at least one does), at `majmin` and `root`.
 
 ## 1. The question
 
