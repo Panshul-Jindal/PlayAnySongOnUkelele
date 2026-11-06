@@ -377,7 +377,8 @@ function renderShape(box, seg) {
   if (!seg || seg.label === "N" || seg.label === "X") box.innerHTML = "";
   else if (!shape) box.innerHTML = '<p class="noshape">no 4-string shape</p>';
   else box.innerHTML = diagram(shape.frets, shape.fingers) +
-    (shape.chart ? "" : '<p class="noshape">provisional shape</p>');
+    (shape.chosen && !shape.chart ? '<p class="noshape">not the chart\'s shape: easier to reach from the last chord</p>'
+     : shape.chart ? "" : '<p class="noshape">provisional shape</p>');
 }
 
 function renderUpcoming(i) {

@@ -77,10 +77,14 @@ a recording, or its chords (.lab)
   → preprocessing/remove_centre.py          with --remove-centre
   → chord-estimation/estimate_chords.py     for a recording, with --estimator
   → transformations/merge_short.py          with --min-chord SECONDS
+  → transformations/substitute.py           with --substitute FROM=TO
   → transformations/drop_bass.py            slash chords lose their bass
   → transformations/capo.py                 12 versions, capo 0 … 11
   → difficulty/difficulty.py                D for each version
   → of capos 0 … 5, the smallest D          on a tie, the lower capo
+  → difficulty/voicings.py                  with --voicings: a shape for every chord,
+                                            counting the finger moves between them
+  → play-along/chord_sheet.py               with --sheet: the lyrics with the chords above them
 ```
 
 ```bash
@@ -136,6 +140,35 @@ On autochord's chords, **[ORIGINAL]** (`results/pipeline/`):
   finger positioning in [VV23]'s rubric. Capping the capo at fret 5
   (`transformations/README.md`) stands in for that.
 
+### *Can't Help Falling in Love*, simplified
 
+The pipeline's choices for this song:
+- lv-chordia's chords, the most accurate estimator on the McGill songs
+  (`chord-evaluation/README.md`);
+- chords under one beat merged;
+- the bridge's B played as B7;
+- shapes chosen for the whole song;
+- varying-tempo beats.
 
+Two pages, `results/play-along/cant_help_falling_in_love_simplified.html` and
+`…_easiest.html`. How each version was chosen, and what it changes, is in
+`difficulty/README.md` ("Shapes in a row").
 
+```bash
+L=results/chord-estimation/lv-chordia/cant_help_falling_in_love.lab
+uv run python main.py $L --min-chord 0.6 --substitute C#:maj=C#:7 --substitute E:min7=E:min \
+    --voicings --out results/pipeline/simplified
+uv run python play-along/play_along.py results/pipeline/simplified/cant_help_falling_in_love.lab \
+    results/play-along/cant_help_falling_in_love_simplified.html --title "Can't Help Falling in Love (simplified)" \
+    --capo 2 --beats results/beat-tracking/librosa-varying/cant_help_falling_in_love.txt \
+    --lines data/Custom_Songs/cant_help_falling_in_love/lines.lab \
+    --shapes results/pipeline/simplified/cant_help_falling_in_love.shapes.json
+```
+
+For the easiest version, add `--substitute F#:min=F#:min7` and write to
+`results/pipeline/easiest`.
+
+To also write a printable chord sheet, add
+`--sheet data/Custom_Songs/cant_help_falling_in_love/chord_sheet_simplified.txt`,
+`--lyrics` and `--lines` (`play-along/README.md`, "The chord sheet"). It goes
+in the song's folder because it holds the lyrics.

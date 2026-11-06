@@ -11,7 +11,8 @@ page, which only displays them. The audio and the lyrics are never read here
 or embedded. The page is specified in play-along/README.md.
 
 Usage:
-    python3 play-along/play_along.py LAB OUT.html [--title TITLE] [--lines LINES.lab]
+    python3 play-along/play_along.py LAB OUT.html [--title TITLE] [--lines LINES.lab] [--capo C]
+        [--beats BEATS.txt] [--shapes SONG.shapes.json]
 """
 
 import argparse
@@ -72,10 +73,14 @@ def tempo(times):
     return round(60 / median, 1)
 
 
-def song_data(lab_path, title, lines_path=None, capo=0, table=None, beats_path=None):
+def song_data(lab_path, title, lines_path=None, capo=0, table=None, beats_path=None, shapes_path=None):
     """What the page embeds: each chord with its name and shape at every capo, line times,
     beat times and tempo, and the capo the page opens at. `table` is the chart
-    (common/chart.py); by default the downloaded one, or none if it is missing."""
+    (common/chart.py); by default the downloaded one, or none if it is missing.
+
+    `shapes_path` is main.py --voicings's plan: a shape for every chord at one capo,
+    chosen with the moves between chords counted. At that capo it replaces the
+    chart's first positions; at the other capos the chart's stay."""
     if capo not in CAPOS:
         sys.exit(f"capo {capo}: must be 0 to 11")
     if table is None:
@@ -88,6 +93,18 @@ def song_data(lab_path, title, lines_path=None, capo=0, table=None, beats_path=N
                          "shapes": [shape(l, table) for l in played]})
     if not segments:
         sys.exit(f"{lab_path}: no chords")
+    if shapes_path:
+        with open(shapes_path) as fh:
+            plan = json.load(fh)
+        if len(plan["shapes"]) != len(segments):
+            sys.exit(f"{shapes_path}: {len(plan['shapes'])} shapes for {len(segments)} chords")
+        for seg, x in zip(segments, plan["shapes"]):
+            if x is None:
+                continue
+            if abs(x["start"] - seg["start"]) > 1e-6:
+                sys.exit(f"{shapes_path}: a shape for {x['start']} s, but the chord starts at {seg['start']} s")
+            seg["shapes"][plan["capo"]] = {"frets": x["frets"], "fingers": x["fingers"], "chart": x["chart"],
+                                           "chosen": True}
     lines = None
     if lines_path:
         lines = []
@@ -125,12 +142,13 @@ def main():
     parser.add_argument("--lines", help="tapped line times, e.g. data/Custom_Songs/hey_soul_sister/lines.lab")
     parser.add_argument("--capo", type=int, default=0, help="the capo the page opens at, e.g. main.py's choice")
     parser.add_argument("--beats", help="beat times, e.g. results/beat-tracking/librosa/hey_soul_sister.txt")
+    parser.add_argument("--shapes", help="main.py --voicings's plan, e.g. results/pipeline/hey_soul_sister.shapes.json")
     args = parser.parse_args()
 
     title = args.title or os.path.splitext(os.path.basename(args.lab))[0]
     if not os.path.exists(chart.PATH):
         print("no chord chart (./download_chordsdb.sh): every diagram uses the provisional rule", file=sys.stderr)
-    data = song_data(args.lab, title, args.lines, args.capo, beats_path=args.beats)
+    data = song_data(args.lab, title, args.lines, args.capo, beats_path=args.beats, shapes_path=args.shapes)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as fh:
         fh.write(render(data))

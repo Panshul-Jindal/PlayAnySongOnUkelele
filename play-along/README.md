@@ -188,6 +188,14 @@ hand:
 The two rules mostly agree on the first shape, but not always: Em is `0432`
 in the chart and `0402` by the provisional rule.
 
+**Shapes chosen for the whole song.** With `--shapes`, the page uses
+`main.py --voicings`'s plan at the plan's capo: a shape for every chord, chosen
+with the finger moves between chords counted (`difficulty/README.md`, "Shapes
+in a row"). At the other capos the chart's first positions stay. Where a
+chosen shape isn't the chart's, the diagram says *"not the chart's shape:
+easier to reach from the last chord"*. In *Can't Help Falling in Love* that
+is B7 `4320` after Em `0432`.
+
 Below the diagrams the page says what the finger numbers mean, and, with a
 capo set, that frets count from the capo.
 
@@ -256,6 +264,34 @@ For the current line, sung from *s* until the next line starts at *e*:
 
 This assumes a line is sung at an even speed, so placement is approximate.
 Exact placement needs a time for each word. **[ORIGINAL]**
+
+## The chord sheet
+
+`chord_sheet.py` puts the page on paper. It writes a text file with:
+- the shapes to play;
+- the intro's chords;
+- each lyric line with its chords above it.
+
+`main.py --sheet OUT --lyrics LYRICS.txt --lines LINES.lab` writes one at the
+recommended capo, with the shapes `--voicings` chose. **[ORIGINAL]** layout.
+
+- **Placement:** the chords go where the page puts them ("Chords above the
+  words"). `lyric_lines` and `chord_line` are Python ports of the page's
+  `lyricLines` and `chordLine`, and a test runs both on the same inputs.
+- **Line ends:** a line ends where the next one starts, and the last one
+  where the song ends, as on the page.
+- **Copyright:** the sheet holds the song's lyrics, which are copyrighted
+  (they stay out of git). `chord_sheet.py` refuses to write anywhere git
+  would track, using `git check-ignore`. The song's folder in
+  `data/Custom_Songs/` is ignored.
+
+```bash
+D=data/Custom_Songs/cant_help_falling_in_love
+uv run python main.py results/chord-estimation/lv-chordia/cant_help_falling_in_love.lab --min-chord 0.6 \
+    --substitute C#:maj=C#:7 --substitute E:min7=E:min --voicings --out results/pipeline/simplified \
+    --sheet $D/chord_sheet_simplified.txt --lyrics $D/lyrics.txt --lines $D/lines.lab \
+    --title "Can't Help Falling in Love (simplified)"
+```
 
 ## Files
 

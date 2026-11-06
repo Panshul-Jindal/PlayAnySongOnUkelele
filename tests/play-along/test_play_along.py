@@ -130,3 +130,29 @@ def test_a_title_cannot_break_the_page(lab_file):
 @pytest.mark.parametrize("seconds, expected", [(7, "0:07.0"), (65.34, "1:05.3"), (59.96, "1:00.0")])
 def test_clock(seconds, expected):
     assert play_along.clock(seconds) == expected
+
+
+def test_a_shape_plan_replaces_the_shapes_at_its_capo(tmp_path):
+    # Two chords; the plan, made at capo 2, plays the second as B7 4320. At capo 2
+    # that shape replaces the chart's and is marked as chosen; capo 0 is untouched.
+    import json
+    song = tmp_path / "song.lab"
+    song.write_text("0.0\t2.0\tF#:min\n2.0\t4.0\tC#:7\n")
+    plan = tmp_path / "song.shapes.json"
+    plan.write_text(json.dumps({"capo": 2, "w_move": 2, "shapes": [
+        None, {"start": 2.0, "label": "B:7", "frets": [4, 3, 2, 0], "fingers": [3, 2, 1, 0], "chart": False}]}))
+    data = play_along.song_data(str(song), "t", capo=2, table={}, shapes_path=str(plan))
+    assert data["segments"][1]["shapes"][2] == {"frets": [4, 3, 2, 0], "fingers": [3, 2, 1, 0],
+                                                "chart": False, "chosen": True}
+    assert data["segments"][1]["shapes"][0] != data["segments"][1]["shapes"][2]
+
+
+def test_a_plan_for_other_chords_is_refused(tmp_path):
+    import json
+    import pytest
+    song = tmp_path / "song.lab"
+    song.write_text("0.0\t2.0\tF#:min\n")
+    plan = tmp_path / "song.shapes.json"
+    plan.write_text(json.dumps({"capo": 2, "w_move": 2, "shapes": [None, None]}))
+    with pytest.raises(SystemExit):
+        play_along.song_data(str(song), "t", capo=2, table={}, shapes_path=str(plan))

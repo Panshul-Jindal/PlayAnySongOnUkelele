@@ -4,7 +4,7 @@ Changes to a song's chord sequence that may make it easier to play:
 `easy_transform` in the pipeline. Choosing between the versions they produce
 is not their job; `main.py` does that, with `difficulty/`.
 
-**Status: built** (`drop_bass.py`, `capo.py`, `merge_short.py`). Run through
+**Status: built** (`drop_bass.py`, `capo.py`, `merge_short.py`, `substitute.py`). Run through
 `main.py` (`README.md`).
 
 ## What a transformation is
@@ -99,6 +99,16 @@ Merging helps BTC most, because it flickers most. Whatever the 0.45 s
 threshold removed on this song was mostly error, not music. **[ORIGINAL]**
 measurement, one song.
 
+**4. `substitute.py`: chosen chords replaced by others.**
+- **What it does:** `main.py --substitute FROM=TO` replaces every occurrence
+  of a chord, written as it sounds, e.g. `C#:maj=C#:7`.
+- **Recorded:** each replacement, with what it does to the notes: how many
+  of the original's notes it keeps, how many it adds, and how many it drops.
+  A substitution trades sound for ease; the record says how much sound.
+- **Which substitutions to make** is not decided here. The ones used for
+  *Can't Help Falling in Love*, and why, are in `difficulty/README.md`.
+  **[ORIGINAL]**.
+
 Planned, not built (from the project's list of candidate operations):
 extension removal, chord substitution, passing-chord removal, chord-change
 reduction. One finding already bears on extension removal: on the ukulele a
@@ -113,6 +123,7 @@ always an easier shape. **[ORIGINAL]** observation.
 | `transformations/drop_bass.py` | a chord sequence without slash basses, and the record | yes |
 | `transformations/capo.py` | the 12 capo versions of a chord sequence, each with its record | yes |
 | `transformations/merge_short.py` | a chord sequence with no chord shorter than a threshold, and the record | yes |
+| `transformations/substitute.py` | a chord sequence with chosen chords replaced, and what each replacement does to the notes | yes |
 | `tests/transformations/` | checks against values worked out by hand | yes |
 
 ## Checks
@@ -128,3 +139,5 @@ always an easier shape. **[ORIGINAL]** observation.
   - a 0.4 s turnaround survives a 0.3 s threshold and is merged by 0.45 s;
   - a threshold of 0, or a single segment, changes nothing;
   - repeated lines are joined.
+- `substitute`: C# → C#7 keeps 3 notes and adds 1; Dm7 → Dm keeps 3 and
+  drops 1; a pair without `=` is refused.

@@ -141,6 +141,118 @@ for every combination of w_span ∈ {0, 1, 2, 3, 4}, w_fingers ∈ {0, 0.5, 1, 2
 and w_barre ∈ {0, 0.5, 1, 2, 4}, except all zero: 99 settings. `main.py` uses
 it to show whether its choice depends on the guess.
 
+## Shapes in a row
+
+The scores above judge each shape on its own, and the chart gives one shape
+per chord. But a song is played chord after chord, and a shape that is harder
+to hold can be far easier to reach from the chord before.
+
+**The example that started this.** In *Can't Help Falling in Love* at capo 2,
+the bridge alternates Em and B7.
+- **The chart's shapes:** Em `0432` (fingers `0321`) and B7 `2322` (`1211`).
+- **The other B7 within frets 0–4 is `4320`** (fingers `3210`). It is exactly
+  B7's notes (B D# F# A), and it is Em's three fingers moved over by one
+  string, toward the G string.
+- **So the change becomes one slide of the hand,** where reaching `2322`
+  means forming a barre.
+- **chords-db doesn't list `4320`.** It lists `2322` and three shapes higher
+  up, so picking the chart's first shape could never find it.
+
+**[ORIGINAL]** observation, found by listing every shape that plays B7.
+
+`voicings.py` looks at every shape that plays a chord exactly, and picks the
+shapes for a whole song together. **[ORIGINAL]** method:
+
+- **Candidates.** Every shape that sounds exactly the chord's notes, under
+  these limits:
+  - **First position (frets 0–4).** One finger per fret covers frets 1–4, so
+    the hand never moves along the neck. Moves along the neck aren't counted
+    below, and without this limit the method picked F `5550` and Dm7 `5555`.
+    With a capo at 2 those are frets 7, where the frets get cramped
+    (`transformations/README.md`).
+  - **At most 3 frets wide, and four fingers.**
+  - **Fingers.** A shape the chart lists keeps the chart's fingers. Others
+    get a rule: one finger per fretted string, numbered from the lowest fret
+    up, and an index barre when all four strings are fretted and the lowest
+    fret holds two or more. The rule gives the chart's own fingers for Em, G,
+    C, F, Dm, G7 and B7 (tested).
+- **Shape cost.** d from above, plus 3 for each open string a finger must arch
+  over to let it ring (Em `0402`).
+  - Without that term the method picked Em `0402` over the usual `0432`.
+  - The arch factor comes from uke-chords-print
+    ([baijum/uke-chords-print](https://github.com/baijum/uke-chords-print),
+    MIT, `_score_voicing`, "sandwiched open"). Its weight, one fret of span,
+    is ours.
+- **Moves.** From one shape to the next:
+  - a finger that stays, or is lifted, costs nothing;
+  - a finger put down that wasn't pressing costs 1;
+  - fingers that move all by the same number of strings and frets count as
+    one move: the hand shifts as a whole;
+  - every other way of moving, or forming or leaving a barre, costs 1.
+
+  So Em `0432` → B7 `4320` is 1 move, and back is 1. Em → B7 `2322` is 2, and
+  back is 3.
+- **The path.** The shapes with the smallest total of shape cost + *w* × moves
+  over the song, found by dynamic programming. *w* defaults to 2: a finger
+  move counts as much as two points of d.
+  - **No data sets *w*.** Like the weights above, it's a guess.
+  - **When `4320` wins:** in a long Em–B7 alternation, `4320` costs 3 more
+    points of d per B7 and saves 3 moves per Em–B7–Em. So it wins whenever a
+    move counts for more than one point.
+
+### *Can't Help Falling in Love*, simplified
+
+`main.py --voicings` on lv-chordia's chords. Chords under one beat (0.6 s)
+are merged; capo 2 is recommended (`results/pipeline/simplified/`).
+**[ORIGINAL]**:
+
+| | chart's first shapes | chosen shapes |
+|---|---|---|
+| total shape cost | 415 | 433 |
+| finger moves | 147 | **129 (−12%)** |
+| Em → B7 in the bridges | 2 moves, and 3 back | **1 move, and 1 back** |
+
+The only shape that changes is B7 `4320`, at all 6 bridge B7s.
+
+**Two versions** (`transformations/substitute.py`). Each is compared with
+lv-chordia's chords:
+
+| version | chords changed | capo 2 D | exactly lv-chordia's notes |
+|---|---|---|---|
+| **simplified** | B → B7 in the bridge (3 times: BTC hears B7 at 2 of them, and lv-chordia at the other 3 bridge spots); Dm7 → Dm once (the same spot in the first bridge is Dm) | 4.02 | **95.9%** of chord time, one note more or less for the rest |
+| **easiest** | also every Em → Em7 (adds D) | 3.20 | 84.2%, one note more or less for the rest |
+
+In the easiest version the path keeps the chart's B7 `2322`: from Em7 `0202`
+it's 2 moves, against 3 for `4320`.
+
+**First check by a player.** One beginner played the bridge both ways
+(2026-11-06):
+- **Em ↔ B7 `4320`** (simplified page) felt easier. B7 was *"just one above
+  shifted version of Em"*.
+- **Em7 ↔ B7 `2322`** (easiest page) was harder. Holding the whole second fret
+  down with one finger for the barre was the difficult part.
+
+This judgement is recorded in `data/player-feedback/comparisons.csv`, and
+`check_feedback.py` checks the scores against it:
+
+- **The default weights disagree, with and without moves.**
+  - Without moves: 18 for Em ↔ B7 `4320`, against 11 for Em7 ↔ B7 `2322`.
+  - With 2 per move: 22 against 19.
+  - The cause: they make Em `0432`'s two-fret stretch expensive (span × 3) and
+    the barre cheap (1).
+- **The path's choice is a narrower question.** Given Em, it picks `4320` over
+  `2322`, which fits the player's reason. But it never compared these two
+  versions of the bridge.
+- **192 of the 396 settings agree with the player.** That is, 99 weight
+  settings × moves counted 0, 1, 2 or 4 times. By the cost formulas, these are
+  exactly the settings where 3 × span + 2 × fingers < barre + 3 + 2 × moves.
+  In words: stretch counts less, and barres and moves count more, than the
+  defaults assume.
+- **One comparison is an anecdote, not a fit.** It is the first human data
+  point on ukulele difficulty in this project. **[ORIGINAL]**.
+
+**Pages:** `results/play-along/cant_help_falling_in_love_{simplified,easiest}.html`.
+
 ## Files
 
 | file | what it is | in git |
@@ -149,6 +261,9 @@ it to show whether its choice depends on the guess.
 | `data/chords-db/` | the chart | no |
 | `common/chart.py` | Harte label → chart entry → shapes with absolute frets, fingers, barres | yes |
 | `difficulty/difficulty.py` | the shape measures, d(shape) and D | yes |
+| `difficulty/voicings.py` | every shape that plays a chord, finger moves, the shapes for a whole song | yes |
+| `difficulty/check_feedback.py` | the scores against players' comparisons (`data/player-feedback/`) | yes |
+| `data/player-feedback/` | players' judgements of what felt easier: ours, so in git | yes |
 | `tests/common/test_chart.py`, `tests/difficulty/` | the checks below | yes |
 
 ## Checks
@@ -167,3 +282,11 @@ Automated, skipped when `data/chords-db/` is missing:
   no barre; D `2220` (fingers 1230) → span 0, 3 fingers, no barre; B `4322`
   (fingers 3211) → span 2, 3 fingers, a barre;
 - D on a two-chord song built by hand.
+- `voicings.py`, each on its own hand-worked input:
+  - the finger rule reproduces chords-db's fingers for 7 chords;
+  - B7's two first-position shapes;
+  - moves: Em → B7 `4320` is 1, Em → `2322` is 2, back is 3, staying is 0;
+  - arches;
+  - the path takes `4320` in Em B7 Em B7 Em at *w* = 2 and `2322` at
+    *w* = 0;
+  - with no Em after the last B7, that B7 is `2322`.
