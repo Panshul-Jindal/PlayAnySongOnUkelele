@@ -161,16 +161,20 @@ function lyricLines(text) {
   });
 }
 
-function chordLine(text, s, e, segs, starts, capo) {
+function chordLine(text, s, e, segs, starts, capo, beat) {
   // chord names over a lyric line sung from s until e: first the chord sounding
   // at s, then each change above the point of the line it falls on in time,
-  // moved to the start of a word; names never overlap
+  // moved to the start of a word; names never overlap. The chord sounding at s
+  // is left out when it started before s and the next one comes within `beat`
+  // seconds: it is the last line's chord still ringing, and the line starts
+  // with its first change
   let out = "";
   const put = (pos, name) => {
     pos = Math.max(pos, out.length ? out.length + 1 : 0);
     out += " ".repeat(pos - out.length) + name;
   };
   let i = Math.max(0, indexAt(starts, s));
+  if (beat > 0 && starts[i] < s && i + 1 < segs.length && starts[i + 1] < e && starts[i + 1] - s < beat) i++;
   put(0, segs[i].names[capo]);
   for (i++; i < segs.length && starts[i] < e; i++) {
     let pos = e > s ? Math.round((starts[i] - s) / (e - s) * text.length) : 0;
@@ -249,6 +253,9 @@ function linesLab(starts, end) {
 const DATA = JSON.parse(document.getElementById("song-data").textContent);
 const SEGS = DATA.segments;
 const STARTS = SEGS.map(s => s.start);
+// one beat, for leaving out a chord still ringing from the line before: from the
+// tempo of the beat file, or half a second without one (play_along.tempo, chord_sheet)
+const BEAT = DATA.tempo ? 60 / DATA.tempo : 0.5;
 const BEATS = DATA.beats || [];
 const STORE = "play-along:" + DATA.source + ":lines";
 const TAPPED = "tapped in this browser";
@@ -415,7 +422,7 @@ function renderLyrics(t, changed) {
     return;
   }
   const end = j + 1 < lineStarts.length ? lineStarts[j + 1] : (audio.duration || DATA.duration);
-  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo);
+  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo, BEAT);
   line.textContent = lyrics[j];
   next.textContent = lyrics[j + 1] || "";
 }

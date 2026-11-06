@@ -255,7 +255,15 @@ Without line times the page still works; it shows no lyrics.
 
 For the current line, sung from *s* until the next line starts at *e*:
 
-- the chord already sounding at *s* goes first, at the start of the line;
+- the chord already sounding at *s* goes first, at the start of the line,
+  unless it started before *s* and the next chord comes within one beat. Then
+  it is the last line's chord still ringing, and the line starts with its
+  first change instead.
+  - One beat is 60 / the beat file's tempo, or half a second without beats.
+  - Lines are tapped as the singing starts, often just before the chord
+    changes. On *Can't Help Falling in Love* that put the previous line's
+    chord in front of every line: 26 of the 106 chord names on the sheet.
+    **[ORIGINAL]** rule;
 - each chord that starts between *s* and *e* goes above the character that
   far through the line in time, moved back to the start of its word, or on to
   the next word if it falls on a space: a change at *s* + 0.5 (*e* − *s*) goes

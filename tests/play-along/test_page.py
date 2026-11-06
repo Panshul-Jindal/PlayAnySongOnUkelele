@@ -82,6 +82,23 @@ def test_names_never_overlap():
     assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 10.1, 10.2], 0)") == "Am F G"
 
 
+def test_a_chord_still_ringing_from_the_last_line_is_left_out():
+    # Am started at 9 s, before the line (10 s); F comes at 10.3 s, within a beat
+    # of 0.6 s: Am is the last line's chord still ringing, so the line starts with F
+    assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 10.3], 0, 0.6)") == "F"
+
+
+def test_a_chord_ringing_longer_than_a_beat_stays():
+    # the next change comes at 12 s, two seconds into the line: Am stays first
+    assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 12], 0, 0.6)") == "Am" + " " * 8 + "F"
+
+
+def test_a_chord_starting_with_the_line_is_never_left_out():
+    # Am starts at 10 s, as the line does: a change, not a chord still ringing. F at
+    # 10.3 s: character round(1.8) = 2, inside "walk", so 0, pushed past "Am" to 3
+    assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 10, 10.3], 0, 0.6)") == "Am F"
+
+
 def test_chord_line_uses_the_capo_column():
     assert js(f"chordLine({LINE}, 10, 14, {SEGS}, [0, 9, 12], 1)") == "Gm" + " " * 8 + "E"
 

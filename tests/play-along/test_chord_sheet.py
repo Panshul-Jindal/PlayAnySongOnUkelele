@@ -12,12 +12,14 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 
 LYRICS = "[Verse 1]\nWise men say\n\nC Em Am\nBridge:\nOnly fools rush in\n"
 
-# (text, s, e, names, starts): a line sung from s to e, chords starting at starts
+# (text, s, e, names, starts, beat): a line sung from s to e, chords starting at starts
 CASES = [
-    ("Wise men say", 10.0, 16.0, ["C", "Em", "Am"], [8.0, 12.0, 14.0]),
-    ("Only fools rush in", 0.0, 4.0, ["F", "C", "G"], [0.0, 1.0, 3.9]),
-    ("a b", 0.0, 1.0, ["C", "G", "Am", "F"], [0.0, 0.2, 0.4, 0.6]),
-    ("Take my hand", 5.0, 5.0, ["C"], [0.0]),
+    ("Wise men say", 10.0, 16.0, ["C", "Em", "Am"], [8.0, 12.0, 14.0], 0.6),
+    ("Only fools rush in", 0.0, 4.0, ["F", "C", "G"], [0.0, 1.0, 3.9], 0.6),
+    ("a b", 0.0, 1.0, ["C", "G", "Am", "F"], [0.0, 0.2, 0.4, 0.6], 0.0),
+    ("Take my hand", 5.0, 5.0, ["C"], [0.0], 0.6),
+    ('"Only fools rush in" (Ooh-ooh-ooh)', 14.534, 21.785, ["Am", "F", "C", "G", "G7"],
+     [11.3, 14.9, 16.7, 18.5, 20.0], 0.6),
 ]
 
 
@@ -53,11 +55,25 @@ def page_js():
 def test_the_port_places_chords_as_the_page_does():
     import json
     js = page_js()
-    for text, s, e, names_, starts in CASES:
+    for text, s, e, names_, starts, beat in CASES:
         segs = json.dumps([{"names": [n]} for n in names_])
-        page = js(f"chordLine({json.dumps(text)}, {s}, {e}, {segs}, {json.dumps(starts)}, 0)")
-        assert chord_sheet.chord_line(text, s, e, names_, starts) == page
+        page = js(f"chordLine({json.dumps(text)}, {s}, {e}, {segs}, {json.dumps(starts)}, 0, {beat})")
+        assert chord_sheet.chord_line(text, s, e, names_, starts, beat) == page
     assert chord_sheet.lyric_lines(LYRICS) == js(f"lyricLines({json.dumps(LYRICS)})")
+
+
+def test_line_2_starts_with_its_first_change():
+    # The line is sung 14.534-21.785 s, 34 characters. Am rings from 11.3 s, and F
+    # comes 0.366 s into the line, within a beat (0.6 s): Am is left out, F goes
+    # first. C at 16.7 s: character round(10.16) = 10, inside "fools", so 6. G at
+    # 18.5 s: 19, the quote after "in", so 17. G7 at 20.0 s: 26, inside "(Ooh", so 21.
+    assert chord_sheet.chord_line(*CASES[4]) == "F     C          G   G7"
+
+
+def test_a_beat_comes_from_the_tempo_or_is_half_a_second():
+    # beats 0.6 s apart: tempo 100 BPM, one beat 0.6 s; without beats, 0.5 s
+    assert chord_sheet.beat_length([0.0, 0.6, 1.2, 1.8]) == pytest.approx(0.6)
+    assert chord_sheet.beat_length(None) == 0.5
 
 
 def test_the_sheet_lists_shapes_an_intro_and_each_line():
