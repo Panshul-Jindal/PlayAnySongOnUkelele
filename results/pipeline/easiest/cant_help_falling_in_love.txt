@@ -1,0 +1,47 @@
+cant_help_falling_in_love.lab: 84 segments, 179.4 s of chords
+
+short chords merged: 1 under 0.6 s, 0.1% of chord time
+substituted: F#:min -> F#:min7, 12 times, 11.7% of chord time (keeps 3 notes, adds 1, drops 0)
+substituted: C#:maj -> C#:7, 3 times, 3.1% of chord time (keeps 3 notes, adds 1, drops 0)
+substituted: E:min7 -> E:min, 1 times, 1.0% of chord time (keeps 3 notes, adds 0, drops 1)
+bass dropped: 9 segments, 9.1% of chord time (A:maj/5, D:maj/3, D:maj/5)
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0  5.35     0.0%
+   1 10.11     0.0%
+   2  3.20    96.0%   <- recommended
+   3 10.50     0.0%
+   4  8.41     0.0%
+   5  6.34     4.0%
+   6  9.14     0.0%   above fret 5: not considered
+   7  5.11     0.0%   above fret 5: not considered
+   8  8.75     0.0%   above fret 5: not considered
+   9  4.47     0.0%   above fret 5: not considered
+  10  9.38     0.0%   above fret 5: not considered
+  11  7.69     0.0%   above fret 5: not considered
+
+capo 2: the shapes to play, by share of chord time
+  C (sounds D)        29.1%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  G7 (sounds A7)      13.3%   frets 0212  fingers 0213   span 1  fingers 3  barre 0   d 6
+  Am (sounds Bm)      13.1%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  F (sounds G)        11.8%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Em7 (sounds F#m7)   11.7%   frets 0202  fingers 0102   span 0  fingers 2  barre 0   d 2
+  G (sounds A)         9.1%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  B7 (sounds C#7)      6.0%   frets 2322  fingers 1211   span 1  fingers 2  barre 1   d 6
+  Dm (sounds Em)       3.8%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  A7 (sounds B7)       2.0%   frets 0100  fingers 0100   span 0  fingers 1  barre 0   d 1
+
+capo 0: the shapes to play, by share of chord time
+  D                   29.1%   frets 2220  fingers 1230   span 0  fingers 3  barre 0   d 3
+  A7                  13.3%   frets 0100  fingers 0100   span 0  fingers 1  barre 0   d 1
+  Bm                  13.1%   frets 4222  fingers 3111   span 2  fingers 2  barre 1   d 9
+  G                   11.8%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  F#m7                11.7%   frets 2424  fingers 1324   span 2  fingers 4  barre 0   d 10
+  A                    9.1%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  C#7                  6.0%   frets 1112  fingers 1112   span 1  fingers 2  barre 1   d 6
+  Em                   3.8%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  B7                   2.0%   frets 2322  fingers 1211   span 1  fingers 2  barre 1   d 6
+
+shapes in a row (difficulty/voicings.py, a finger move counts 2 points of d):
+  chart's first shapes: d 367 in all, 135 finger moves
+  chosen shapes:        d 367 in all, 135 finger moves

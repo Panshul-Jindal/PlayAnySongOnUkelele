@@ -1,0 +1,42 @@
+{
+  "song": "cant_help_falling_in_love",
+  "beats_with_a_repeat": 0.9057971014492754,
+  "estimates": {
+    "autochord": {
+      "consonance_best": 0.6213063763608092,
+      "consonance_margin": -0.0028080975123547245,
+      "root_first": 0.6616282153274992,
+      "root_segment": 0.7083001856271546,
+      "agreement": 0.8940888093174025,
+      "repetition": 0.8041407840637294,
+      "on_beat_kappa": 0.09562109025915996,
+      "beat_latency": 0.016224489795916952,
+      "flicker": 0.025,
+      "doubtful_chords": 15
+    },
+    "btc": {
+      "consonance_best": 0.7668365947969538,
+      "consonance_margin": 0.02432652596068429,
+      "root_first": 0.6903793578707157,
+      "root_segment": 0.7050260963871757,
+      "agreement": 0.8942561624408437,
+      "repetition": 0.9049872830298897,
+      "on_beat_kappa": 0.21016435481990908,
+      "beat_latency": -0.027499999999996305,
+      "flicker": 0.15151515151515152,
+      "doubtful_chords": 28
+    },
+    "lv-chordia": {
+      "consonance_best": 0.783387258730336,
+      "consonance_margin": 0.02400252648832494,
+      "root_first": 0.7986932522248507,
+      "root_segment": 0.7984116255491722,
+      "agreement": 0.8908387212128972,
+      "repetition": 0.9203052450241035,
+      "on_beat_kappa": 0.39052725647899905,
+      "beat_latency": -0.01099999999999568,
+      "flicker": 0.0,
+      "doubtful_chords": 14
+    }
+  }
+}
