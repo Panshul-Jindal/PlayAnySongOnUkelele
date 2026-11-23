@@ -83,12 +83,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Happy Diwali Song.md",
+                "file": "Music Theory.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Happy Diwali Song"
+              "title": "Music Theory"
             }
           },
           {
@@ -190,7 +190,7 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -212,7 +212,7 @@
                 "sortOrder": "alphabetical",
                 "autoReveal": false,
                 "showSearch": true,
-                "searchQuery": ""
+                "searchQuery": "mus"
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -224,7 +224,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "difficulty",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -248,8 +248,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -355,16 +354,19 @@
       "bases:Create new base": false
     }
   },
-  "active": "53f9364575119cea",
+  "active": "e6a995d56d9e15e3",
   "lastOpenFiles": [
+    "Sprints.md",
+    "Music Theory.md",
+    "Background and Motivation.md",
+    "Algorithms for extracting chords from a song.md",
+    "Different Feature Representation of a song.md",
+    "Spring 5.md",
     "Sprint 2.md",
     "Happy Diwali Song.md",
-    "Sprints.md",
     "Sprint 3.md",
-    "Spring 5.md",
     "Sprint 4.md",
     "Sprint 1.md",
-    "Music Theory.md",
     "metadata/Pasted image 20261103084211.png",
     "Scientific Paper.md",
     "kong-liu-2026-an-extraction-method-of-pop-music-singing-beats-based-on-audio-features.pdf",
@@ -380,7 +382,6 @@
     "Hypothesis (Unknown).md",
     "To Understand! Claude.md.md",
     "Pasted image 20261101191719.png",
-    "Background and Motivation.md",
     "Pasted image 20261101185749.png",
     "Different Music Representation format.md",
     "Can Playability be measured.md",
@@ -389,8 +390,6 @@
     "Untitled 1.md",
     "Problem Statement.md",
     "Evaluation.md",
-    "Datasets.md",
-    "Data Analysis.md",
     "metadata",
     "Clippings"
   ]

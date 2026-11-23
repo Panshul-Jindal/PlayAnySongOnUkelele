@@ -9,8 +9,9 @@ lyricLines and chordLine and tested against them:
     one until the song ends);
   - the chord already sounding when a line starts goes first, unless the next
     chord comes within a beat: then it is the last line's chord still ringing,
-    and the line starts with its first change (one beat: 60 / the beat file's
-    tempo, as play_along.tempo; half a second without beats);
+    and the line starts with its first change (one beat: the median gap between
+    the beats within 5 s of the line's start, common/beats.py beat_at, so it
+    follows tempo changes; half a second without beats);
   - each chord that starts during the line goes above the point of the line it
     falls on in time, moved to the start of a word; names never overlap.
 
@@ -42,8 +43,8 @@ import chart
 import harte
 import lab
 import names
-from beats import read_beats
-from play_along import shape, tempo
+from beats import beat_at, read_beats
+from play_along import shape
 from transpose import transpose
 
 #: page.html's CHORD_TOKEN: a word that is a chord name, so a line of them is not sung
@@ -103,15 +104,9 @@ def chord_line(text, s, e, labels, starts, beat=0.0):
     return out
 
 
-def beat_length(beats):
-    """One beat in seconds, as the page works it out: 60 / play_along.tempo, or 0.5 without beats."""
-    bpm = tempo(beats) if beats else None
-    return 60 / bpm if bpm else 0.5
-
-
-def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, beat=0.5):
+def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, beats=None):
     """The sheet's text. segments: the chords as they sound; plan: main.py --voicings's
-    shape for each segment (or None); line_starts: each lyric line's start; beat: one beat in s."""
+    shape for each segment (or None); line_starts: each lyric line's start; beats: beat times."""
     if table is None:
         table = chart.load() if os.path.exists(chart.PATH) else {}
     played = [transpose(s.label, -capo) for s in segments]
@@ -127,7 +122,7 @@ def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, bea
         x = plan[k] if plan and plan[k] else shape(p, table)
         if not x or (shown[k], tuple(x["frets"])) in [(n, f) for n, f, _ in seen]:
             continue
-        note = "   not the chart's shape: easier to reach from the chord before" if plan and plan[k] and not x["chart"] \
+        note = "   not the chart's first shape: chosen as easier here" if plan and plan[k] and not x["chart"] \
             else ("   no chart shape" if not x["chart"] else "")
         fingers = f"fingers {''.join(map(str, x['fingers']))}" if x.get("fingers") else ""
         seen.append((shown[k], tuple(x["frets"]), f"  {shown[k]:<7}{''.join(map(str, x['frets']))}   {fingers}{note}"))
@@ -142,6 +137,7 @@ def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, bea
     end = segments[-1].end
     for j, text in enumerate(lyrics[:len(line_starts)]):
         e = line_starts[j + 1] if j + 1 < len(line_starts) else end
+        beat = beat_at(beats, line_starts[j]) if beats else 0.5
         out += [chord_line(text, line_starts[j], e, shown, starts, beat), text, ""]
     return "\n".join(out).rstrip("\n") + "\n"
 
@@ -175,7 +171,7 @@ def main(argv=None):
     parser.add_argument("--capo", type=int, default=0, help="the capo to name chords at (default 0)")
     parser.add_argument("--shapes", help="main.py --voicings's plan; its capo is used")
     parser.add_argument("--title", help="the sheet's first line (default: the .lab file's name)")
-    parser.add_argument("--beats", help="the song's beat file, for the length of a beat (default 0.5 s)")
+    parser.add_argument("--beats", help="the song's beat file, for the length of a beat at each line (default 0.5 s)")
     args = parser.parse_args(argv)
 
     check_ignored(args.out)
@@ -184,9 +180,9 @@ def main(argv=None):
     with open(args.lyrics, encoding="utf-8") as fh:
         lyrics = lyric_lines(fh.read())
     line_starts = [s.start for s in lab.read_lab(args.lines)]
-    beat = beat_length(read_beats(args.beats)[0] if args.beats else None)
+    beats = read_beats(args.beats)[0] if args.beats else None
     text = sheet(segments, capo, lyrics, line_starts,
-                 args.title or os.path.splitext(os.path.basename(args.lab))[0], plan, beat=beat)
+                 args.title or os.path.splitext(os.path.basename(args.lab))[0], plan, beats=beats)
     with open(args.out, "w", encoding="utf-8") as fh:
         fh.write(text)
     print(f"wrote {args.out}")

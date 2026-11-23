@@ -70,10 +70,15 @@ def test_line_2_starts_with_its_first_change():
     assert chord_sheet.chord_line(*CASES[4]) == "F     C          G   G7"
 
 
-def test_a_beat_comes_from_the_tempo_or_is_half_a_second():
-    # beats 0.6 s apart: tempo 100 BPM, one beat 0.6 s; without beats, 0.5 s
-    assert chord_sheet.beat_length([0.0, 0.6, 1.2, 1.8]) == pytest.approx(0.6)
-    assert chord_sheet.beat_length(None) == 0.5
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js")
+def test_the_page_finds_the_same_beat_as_common_beats():
+    import json
+    from beats import beat_at
+    js = page_js()
+    # 0.4 s apart until 10 s, then 0.5 s apart: a song that slows down
+    beats = [round(0.4 * k, 6) for k in range(26)] + [round(10 + 0.5 * k, 6) for k in range(1, 21)]
+    for t in (2.0, 9.0, 11.0, 18.0, 100.0):
+        assert js(f"beatAt({json.dumps(beats)}, {t})") == pytest.approx(beat_at(beats, t))
 
 
 def test_the_sheet_lists_shapes_an_intro_and_each_line():

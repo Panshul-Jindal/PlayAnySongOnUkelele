@@ -34,7 +34,7 @@ import align
 import harte
 import lab
 import names
-from beats import near, read_beats, share_near
+from beats import beat_at, near, read_beats, share_near
 from transpose import transpose
 
 OUT = os.path.join(HERE, "..", "results", "chord-evaluation", "audio")
@@ -101,9 +101,8 @@ RIVAL_SETS = [harte.pitch_classes(r, include_bass=False) for r in RIVALS]
 
 
 def beat_length(f, t):
-    """The median gap between beats within 5 s of time t; 0.5 s without beats."""
-    b = f.beats[np.abs(f.beats - t) <= 5]
-    return float(np.median(np.diff(b))) if len(b) > 2 else 0.5
+    """One beat around time t (common/beats.py beat_at)."""
+    return beat_at(f.beats, t)
 
 
 # ---------------------------------------------------------------------------
@@ -296,10 +295,10 @@ def latency(segments, f):
 
 def beat_signals(seg, f, lag=0.0):
     """Whether the segment starts within TAU of a beat once the estimate's lag is removed, and its length in beats."""
-    out = {"beats": (seg.end - seg.start) / beat_length(f, seg.start)}
+    out = {"beats": float((seg.end - seg.start) / beat_length(f, seg.start))}
     if len(f.beats) and f.beats[0] - TAU <= seg.start <= f.beats[-1] + TAU:
         out["on_beat"] = bool(near([seg.start - lag], f.beats, TAU)[0])
-    out["flicker"] = out["beats"] < 1
+    out["flicker"] = bool(out["beats"] < 1)
     return out
 
 
@@ -400,10 +399,11 @@ def evaluate_all(estimates, f):
 def doubtful(rows):
     """Chord segments a player should check first, with the reasons.
 
-    Only signals that separated right from wrong chords against gold flag a
-    chord (AUC >= 0.70 on Disco Inferno, chord-evaluation/README.md): the
-    estimators disagree, its repeat has another chord, or it is shorter than a
-    beat. Consonance did not pass; its best-fitting chord is shown as a hint only.
+    Only signals that separated right from wrong chords against gold, pooled
+    over the ten McGill songs (AUC >= 0.70, interval above 0.5;
+    chord-evaluation/README.md), flag a chord: the other estimators disagree,
+    or its repeat has another chord. Consonance did not pass; its
+    best-fitting chord is shown as a hint only.
     """
     out = []
     for r in rows:
@@ -414,8 +414,6 @@ def doubtful(rows):
             reasons.append("estimators disagree")
         if r.get("repeat_consistent", 1) < 0.5:
             reasons.append("its repeat has another chord")
-        if r.get("flicker"):
-            reasons.append("shorter than a beat")
         if reasons:
             if r.get("margin", 0) < 0:
                 reasons.append(f"(hint: the notes heard fit {names.name(r['best_rival'])})")

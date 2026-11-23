@@ -91,7 +91,8 @@ be pasted from a tab site as they are. **[ORIGINAL]** rules.
    music's volume; tap mode; with beats, a click on each beat.
 7. **Beat pulse**, when the page has beats (`--beats`, from
    `beat-tracking/`): a dot beside *now* that lights on each beat and fades
-   before the next, with the tempo in BPM. The click, off by default, ticks on
+   before the next, with the tempo in BPM around the current moment (from
+   the same local beat), so it changes when the song does. The click, off by default, ticks on
    every beat over the song: if the ticks land on the music's beat, the
    tracker is right. Specified in `beat-tracking/README.md`.
 8. **Before audio is loaded**: the whole chord list as text, one segment per
@@ -192,9 +193,11 @@ in the chart and `0402` by the provisional rule.
 `main.py --voicings`'s plan at the plan's capo: a shape for every chord, chosen
 with the finger moves between chords counted (`difficulty/README.md`, "Shapes
 in a row"). At the other capos the chart's first positions stay. Where a
-chosen shape isn't the chart's, the diagram says *"not the chart's shape:
-easier to reach from the last chord"*. In *Can't Help Falling in Love* that
-is B7 `4320` after Em `0432`.
+chosen shape isn't the chart's first, the diagram says *"not the chart's
+first shape: chosen as easier here"*. It may be easier to reach from the
+chord before (B7 `4320` after Em `0432` in *Can't Help Falling in Love*), or
+easier to hold (Abmaj7 `0343` against the chart's barre `1333` in *Happy
+Diwali*).
 
 Below the diagrams the page says what the finger numbers mean, and, with a
 capo set, that frets count from the capo.
@@ -259,7 +262,10 @@ For the current line, sung from *s* until the next line starts at *e*:
   unless it started before *s* and the next chord comes within one beat. Then
   it is the last line's chord still ringing, and the line starts with its
   first change instead.
-  - One beat is 60 / the beat file's tempo, or half a second without beats.
+  - One beat is the median gap between the beats within 5 s of the line's
+    start (`common/beats.py` `beat_at`, and its copy `beatAt` in the page), so
+    it follows a song that slows down, as *Happy Diwali* does from about
+    150 to 117 BPM near 2:50. Half a second without beats.
   - Lines are tapped as the singing starts, often just before the chord
     changes. On *Can't Help Falling in Love* that put the previous line's
     chord in front of every line: 26 of the 106 chord names on the sheet.

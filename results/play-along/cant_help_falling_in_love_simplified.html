@@ -185,6 +185,17 @@ function chordLine(text, s, e, segs, starts, capo, beat) {
   return out;
 }
 
+function beatAt(beats, t) {
+  // one beat in seconds around time t: the median gap between the beats within
+  // 5 s of t, so it follows a song that speeds up or slows down; 0.5 s with
+  // fewer than three beats there (common/beats.py beat_at)
+  const near = beats.filter(b => Math.abs(b - t) <= 5);
+  if (near.length < 3) return 0.5;
+  const gaps = near.slice(1).map((b, k) => b - near[k]).sort((a, b) => a - b);
+  const m = gaps.length >> 1;
+  return gaps.length % 2 ? gaps[m] : (gaps[m - 1] + gaps[m]) / 2;
+}
+
 function pulse(beats, t) {
   // how brightly the beat pulse shows at time t: 1 on a beat, fading to 0
   // halfway to the next one, and 0 before the first beat
@@ -253,9 +264,6 @@ function linesLab(starts, end) {
 const DATA = JSON.parse(document.getElementById("song-data").textContent);
 const SEGS = DATA.segments;
 const STARTS = SEGS.map(s => s.start);
-// one beat, for leaving out a chord still ringing from the line before: from the
-// tempo of the beat file, or half a second without one (play_along.tempo, chord_sheet)
-const BEAT = DATA.tempo ? 60 / DATA.tempo : 0.5;
 const BEATS = DATA.beats || [];
 const STORE = "play-along:" + DATA.source + ":lines";
 const TAPPED = "tapped in this browser";
@@ -384,7 +392,7 @@ function renderShape(box, seg) {
   if (!seg || seg.label === "N" || seg.label === "X") box.innerHTML = "";
   else if (!shape) box.innerHTML = '<p class="noshape">no 4-string shape</p>';
   else box.innerHTML = diagram(shape.frets, shape.fingers) +
-    (shape.chosen && !shape.chart ? '<p class="noshape">not the chart\'s shape: easier to reach from the last chord</p>'
+    (shape.chosen && !shape.chart ? '<p class="noshape">not the chart\'s first shape: chosen as easier here</p>'
      : shape.chart ? "" : '<p class="noshape">provisional shape</p>');
 }
 
@@ -422,7 +430,7 @@ function renderLyrics(t, changed) {
     return;
   }
   const end = j + 1 < lineStarts.length ? lineStarts[j + 1] : (audio.duration || DATA.duration);
-  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo, BEAT);
+  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo, beatAt(BEATS, lineStarts[j]));
   line.textContent = lyrics[j];
   next.textContent = lyrics[j + 1] || "";
 }
@@ -450,6 +458,10 @@ function render(force) {
   if (!seeking) $("seek").value = t;
   if (BEATS.length) {
     $("pulse").style.opacity = pulse(BEATS, t);
+    // the tempo around now: it changes when the song speeds up or slows down
+    const bpm = Math.round(60 / beatAt(BEATS, t));
+    if (bpm !== shown.bpm) $("tempo").textContent = bpm + " BPM";
+    shown.bpm = bpm;
     const b = indexAt(BEATS, t);
     // tick only when playback reaches the next beat, not when seeking past several
     if (clicks && $("click").checked && !audio.paused && b === lastBeat + 1) click();

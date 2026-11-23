@@ -221,7 +221,7 @@ def main(argv=None):
     parser.add_argument("--lyrics", help="with --sheet: the song's lyrics.txt")
     parser.add_argument("--lines", help="with --sheet: the song's tapped lines.lab")
     parser.add_argument("--title", help="with --sheet: its first line (default: the song's name)")
-    parser.add_argument("--beats", help="with --sheet: the song's beat file, for the length of a beat (default 0.5 s)")
+    parser.add_argument("--beats", help="with --sheet: the song's beat file, for the length of a beat at each line (default 0.5 s)")
     parser.add_argument("--gold", help="annotated chords (.lab) to score the chords against (chord-evaluation/README.md)")
     parser.add_argument("--shift", type=float, default=0.0, help="seconds added to the gold times (from chord-evaluation/align.py)")
     parser.add_argument("--scale", type=float, default=1.0, help="factor the gold times are multiplied by first (align.py)")
@@ -266,9 +266,9 @@ def main(argv=None):
         plan = None if path is None else [
             None if x is None else {"frets": list(x.frets), "fingers": list(x.fingers), "chart": x.chart} for x in path]
         from beats import read_beats
-        beat = chord_sheet.beat_length(read_beats(args.beats)[0] if args.beats else None)
+        beats = read_beats(args.beats)[0] if args.beats else None
         text = chord_sheet.sheet(plain, choice, lyrics, [s.start for s in lab.read_lab(args.lines)],
-                                 args.title or song, plan, table, beat)
+                                 args.title or song, plan, table, beats)
         with open(args.sheet, "w", encoding="utf-8") as fh:
             fh.write(text)
     print("\n".join(lines))

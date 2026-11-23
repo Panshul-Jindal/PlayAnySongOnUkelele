@@ -27,3 +27,14 @@ def test_share_near_is_the_share_of_time_near_a_beat():
     import pytest
     from beats import share_near
     assert share_near(np.arange(0.0, 20.0, 0.5), 1.0, 19.0, 0.07) == pytest.approx(0.28, abs=0.005)
+
+
+def test_one_beat_follows_the_tempo_where_it_is_asked():
+    # 0.4 s apart until 10 s, then 0.5 s apart. Around 2 s every gap within 5 s
+    # is 0.4; around 18 s every gap is 0.5; far from any beat, 0.5 s
+    from beats import beat_at
+    beats = [0.4 * k for k in range(26)] + [10 + 0.5 * k for k in range(1, 21)]
+    assert abs(beat_at(beats, 2.0) - 0.4) < 1e-9
+    assert abs(beat_at(beats, 18.0) - 0.5) < 1e-9
+    assert beat_at(beats, 100.0) == 0.5
+    assert beat_at([1.0, 2.0], 1.5) == 0.5

@@ -172,3 +172,21 @@ To also write a printable chord sheet, add
 `--sheet data/Custom_Songs/cant_help_falling_in_love/chord_sheet_simplified.txt`,
 `--lyrics` and `--lines` (`play-along/README.md`, "The chord sheet"). It goes
 in the song's folder because it holds the lyrics.
+
+### *Happy Diwali*, simplified
+
+The same steps at capo 3. The beats are from the varying-tempo tracker,
+because the song slows from about 150 to 117 BPM near 2:50. The changes, and
+why, are in `difficulty/README.md`.
+
+```bash
+D=data/Custom_Songs/happy_diwali; B=results/beat-tracking/librosa-varying/happy_diwali.txt
+uv run python main.py results/chord-estimation/lv-chordia/happy_diwali.lab \
+    --substitute F:min7=F:min --substitute B:maj=B:maj7 --substitute C#:maj=C#:maj6 \
+    --voicings --out results/pipeline/simplified \
+    --sheet $D/chord_sheet_simplified.txt --lyrics $D/lyrics.txt --lines $D/lines.lab --beats $B \
+    --title "Happy Diwali (simplified)"
+uv run python play-along/play_along.py results/pipeline/simplified/happy_diwali.lab \
+    results/play-along/happy_diwali_simplified.html --title "Happy Diwali (simplified)" --capo 3 \
+    --beats $B --lines $D/lines.lab --shapes results/pipeline/simplified/happy_diwali.shapes.json
+```

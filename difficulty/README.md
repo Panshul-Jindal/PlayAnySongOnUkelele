@@ -253,6 +253,35 @@ This judgement is recorded in `data/player-feedback/comparisons.csv`, and
 
 **Pages:** `results/play-along/cant_help_falling_in_love_{simplified,easiest}.html`.
 
+### *Happy Diwali*, simplified
+
+lv-chordia's chords at capo 3 (`results/pipeline/simplified/`). **[ORIGINAL]**:
+- **Capo 3 against capo 1.** Capo 3 wins 70% of the 99 weight settings,
+  capo 1 the rest. Among the 24 settings that agree with the first player
+  comparison (`data/player-feedback/`), capo 3 wins 19.
+- **Most of the song is easy:** C, G, F, Em and Am shapes, about 88% of it.
+- **The hard shapes come in the middle section,** which changes key (1:56–2:26:
+  C#, F#, Ebm, B).
+- **No hidden shapes:** unlike B7 in *Can't Help Falling in Love*, each hard
+  chord has only its chart shape, or a harder one, in first position.
+- **So the easier versions change notes.** Each keeps every note of the
+  original but one:
+
+| chord (sounds) | played at capo 3 | instead of | change |
+|---|---|---|---|
+| C# → C#6, 4 times | Bbmaj6 `0211` | Bb `3211` | the same shape with the ring finger lifted: the open G string adds the 6th |
+| B → Bmaj7, once | Abmaj7 `0343` | Ab `1343` (4 fingers) | adds the major 7th. The shape search also picks `0343` over the chart's barre `1333`. |
+| Fm7 → Fm, twice | Dm `2210` | Dm7 `2213` (barre) | drops the 7th, as Dm7 → Dm in *Can't Help Falling in Love* |
+
+- **F# stays Eb `0331`.** Its easier-scored relatives, Eb6 `3333` and Eb7
+  `3334`, are full barres, which the player found hard.
+- **The result:** capo 3's D goes from 4.59 to 4.39, and it now wins 81% of
+  the weight settings. The version keeps lv-chordia's notes for 94.7% of
+  chord time, with the rest one note different.
+- **The easiest version** also turns Gm into Gm7 (Em7 `0202`, 11.5% of the
+  time; lv-chordia hears Gm7 itself in places). D is 3.58, and the version
+  keeps 83.2% of the notes.
+
 ## Files
 
 | file | what it is | in git |

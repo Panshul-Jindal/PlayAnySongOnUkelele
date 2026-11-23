@@ -349,10 +349,14 @@ the varying-tempo tracker; 57% of beats have a repeat.
 | lv-chordia | 0.640 | 0.657 | **0.627** | −0.022 s | **0.820** | **0.0%** | **44 of 123** |
 
 **How chords are flagged:** a chord is flagged when a signal that passed
-against gold says so:
+against gold, pooled over the ten McGill songs, says so:
 - the other estimators disagree with it (agreement under 0.5);
-- its repeat has another chord (repetition under 0.5);
-- it is shorter than a beat.
+- its repeat has another chord (repetition under 0.5).
+
+"Shorter than a beat" passed on *Disco Inferno* alone, but not pooled (AUC
+0.62), so it no longer flags a chord. With it gone, BTC's flagged chords on
+*Happy Diwali* fall from 78 to 62. autochord's (49) and lv-chordia's (44)
+stay the same.
 
 The 0.5 cut-offs are **[ORIGINAL]** choices. `audio_signals.py` prints each
 flagged chord with its reasons. Where consonance would pick another chord, it
