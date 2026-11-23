@@ -7,3 +7,4 @@ Create a suitable metric to measure how good these methods perform
 Possible direcitons
 *  from measuring with reference one 
 *  comparing with actual sound file (No idea right now how!)
+*  
