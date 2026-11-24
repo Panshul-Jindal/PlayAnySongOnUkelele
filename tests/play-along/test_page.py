@@ -196,10 +196,35 @@ def test_decode_takes_the_easier_option_when_the_music_fits_both():
     # one 4 s step; both options fit the music alike, so at w = 1 the easier G (d 1) wins;
     # D 1, notes kept 0.75 (3 of G7's 4 notes), likelihood ratio exp(0) = 1
     r = js(f"decodeSong({DEC}, 0, 1, new Set())")
-    assert r == {"path": [1], "D": 1, "ratio": 1, "notes": 0.75}
+    assert r == {"path": [1], "D": 1, "ratio": 1, "notes": 0.75, "hardChanges": 0}
     assert js(f"decodeSong({DEC}, 0, Infinity, new Set()).path") == [0]
 
 
 def test_a_shape_marked_hard_costs_more():
     # G marked too hard: G costs 1 + 10 against G7's 9, so G7 stays
     assert js(f'decodeSong({DEC}, 0, 1, new Set(["G"])).path') == [0]
+
+
+# Two steps, C (0-4 s) then G (4-8 s), where G may become Em. d: C 1, G 1, Em 1.5; every option
+# fits the music alike (fit 0); no shapes, so no finger moves; a change costs 2.
+DEC2 = """{steps: [{start: 0, end: 4, label: "C:maj", options: [{label: "C:maj", fit: 0, kept: 1}]},
+                  {start: 4, end: 8, label: "G:maj", options: [{label: "G:maj", fit: 0, kept: 1},
+                                                             {label: "E:min", fit: 0, kept: 0.67}]}],
+          chords: {"C:maj": {names: ["C"], shapes: [null], d: [1]}, "G:maj": {names: ["G"], shapes: [null], d: [1]},
+                   "E:min": {names: ["Em"], shapes: [null], d: [1.5]}},
+          w_fit: [1], change: 2, move: 1, no_shape: 20, levels: {"simplified": [0.5, 0.5]}}"""
+
+
+def test_a_change_marked_hard_is_avoided_where_the_song_allows():
+    # unmarked: C then G costs 4 + 2 + 4 = 10, C then Em 4 + 2 + 6 = 12: G
+    assert js(f"decodeSong({DEC2}, 0, 1, new Set()).path") == [0, 0]
+    # "C → G" marked hard: that change costs 10 more, 20 against Em's 12: Em, and no marked change is left
+    r = js(f'decodeSong({DEC2}, 0, 1, new Set(), new Set(["C → G"]))')
+    assert r["path"] == [0, 1] and r["hardChanges"] == 0
+    # the shape G itself is not marked: only the change into it from C is avoided
+    assert js(f'decodeSong({DEC2}, 0, 1, new Set(), new Set(["Em → G"])).path') == [0, 0]
+
+
+def test_a_kept_hard_change_is_counted():
+    # keeping the tab (w infinite) must play C then G: one marked change made
+    assert js(f'decodeSong({DEC2}, 0, Infinity, new Set(), new Set(["C → G"])).hardChanges') == 1

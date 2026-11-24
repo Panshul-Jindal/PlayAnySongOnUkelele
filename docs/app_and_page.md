@@ -13,7 +13,8 @@ One page per song, from a tab link and a recording:
 | **now / next** | the chord to play and the next, as shapes for the chosen capo, with diagrams |
 | **lyrics** | the line being sung, each chord over the word sung nearest its start (from Whisper's word times) |
 | **level** | *as the tab*, *simplified*, *easiest* ([`simplification.md`](simplification.md)); each with its own chords, capo and shapes; opens at *simplified* |
-| **Too hard for me** (or **H**) | marks the shape being played; the page decodes the song again with that shape costing 10 points more, keeping the level's fidelity floors: it may swap the chord, hold a neighbour, or move the capo. The marks are kept in the browser, per player, across songs |
+| **This chord is hard** (**H**) | marks the shape being played; the page decodes the song again with that shape costing 10 points more per second, keeping the level's fidelity floors: it may swap the chord, hold a neighbour, or move the capo |
+| **This change is hard** (**J**) | marks the switch from the previous chord into this one (e.g. C → G): that change costs 10 more each time, so the page holds a chord longer, substitutes, or moves the capo, while the chord itself stays wherever it is reached easily. Each such change still made adds 0.3 to the difficulty the level is chosen by. Both kinds of mark are kept in the browser, per player, across songs |
 | **Export feedback** | the swaps made for the marked shapes, as rows for `data/player-feedback/comparisons.csv` |
 | **strumming** | the tab's pattern as ↓ ↑ arrows, the current step lit by the tracked beats; a bar starts on the beat most chord changes fall on **[ORIGINAL]** |
 | click, speed, capo menu, tap mode | as before (`play-along/README.md`) |

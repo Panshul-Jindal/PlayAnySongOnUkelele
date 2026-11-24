@@ -1,10 +1,10 @@
 {
  "tab words": 264,
- "heard words": 270,
- "tab words matched": 232,
+ "heard words": 253,
+ "tab words matched": 230,
  "chords": {
-  "word": 41,
-  "word, interpolated": 16,
+  "word": 42,
+  "word, interpolated": 15,
   "line end": 8
  },
  "capo": 2,
@@ -26,7 +26,7 @@
   "as the tab": {
    "capo": 4,
    "w_fit": null,
-   "D": 3.07,
+   "D": 2.99,
    "changes": 61,
    "notes": 1.0,
    "chroma": 1.0,
@@ -34,7 +34,7 @@
   },
   "triads only": {
    "capo": 4,
-   "D": 3.07,
+   "D": 2.99,
    "changes": 61,
    "notes": 1.0,
    "chroma": 1.0,
@@ -43,20 +43,20 @@
   "simplified": {
    "capo": 4,
    "w_fit": 1,
-   "D": 2.79,
-   "changes": 45,
-   "notes": 0.97,
-   "chroma": 0.972,
-   "lv-chordia": 0.928
+   "D": 2.75,
+   "changes": 42,
+   "notes": 0.974,
+   "chroma": 0.973,
+   "lv-chordia": 0.915
   },
   "easiest": {
    "capo": 4,
    "w_fit": 0.5,
-   "D": 2.72,
-   "changes": 41,
-   "notes": 0.948,
-   "chroma": 0.91,
-   "lv-chordia": 0.752
+   "D": 2.69,
+   "changes": 39,
+   "notes": 0.959,
+   "chroma": 0.936,
+   "lv-chordia": 0.783
   }
  }
 }

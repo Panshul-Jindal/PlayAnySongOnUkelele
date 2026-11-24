@@ -26,6 +26,11 @@ The current state, in one page: [`project_state.md`](project_state.md).
   pipeline as five coloured steps naming each technique; the three headline
   numbers; example tabs; a result card with a big button to the page and the
   levels as tiles.
+- **"This change is hard" (J)** in the page, beside "This chord is hard" (H): a
+  player can mark a switch between two shapes as too hard, not only a shape, so
+  an easy chord reached too fast from another is avoided only there.
+- **Uploads in the app's own folder** (`data/preprocessed/gradio-tmp/`): on the
+  shared server another user's Gradio owned `/tmp/gradio`.
 - **Optional background music** (`data/app/background.mp3`, git-ignored): soft,
   looped, an on/off button, faded out when a visitor starts adding a song.
 
