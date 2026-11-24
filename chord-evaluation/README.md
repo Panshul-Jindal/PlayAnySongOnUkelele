@@ -6,6 +6,11 @@ people, and whether those errors change what the pipeline decides.
 **Status: built** (`align.py`, `evaluate.py`), run on one McGill Billboard
 song with its recording.
 
+**New, 2026-11-24: `misalignment.py`, the judge for songs without gold**
+(`docs/design.md`, B1). See *Harmonic misalignment* below. It is checked on
+heads built by hand; it has not yet been run on our songs or checked against
+players.
+
 ## Sources
 
 - **[ME]** Raffel, McFee, Humphrey, Salamon, Nieto, Liang & Ellis, "mir_eval: A
@@ -32,8 +37,10 @@ chords counts the offset as an error at every chord change.
 
 `align.py` checks both. McGill ships the annotators' audio as NNLS-Chroma
 "bothchroma" frames, one every 2048/44 100 s (the time column of
-`bothchroma.csv`). The same plugin, which autochord already installs, gives the
-same frames for a downloaded recording. Sliding one over the other, the shift
+`bothchroma.csv`). The same plugin gives the same frames for a downloaded
+recording. It used to come with autochord, which is now retired
+(`chord-estimation/README.md`); see *NNLS-Chroma without autochord* below.
+Sliding one over the other, the shift
 with the highest mean cosine similarity is the offset, and how far that peak
 stands above every other shift says whether it is the same recording.
 **[ORIGINAL]** method.
@@ -84,6 +91,39 @@ measurement:
   30 s window aligns at a similarity of about 0.9. Their offset drifts by
   2.2 s and 0.65 s over the song, so no single offset could fit.
 - **Other copies drift slightly too:** 0102 and 0256 by about 0.3%.
+
+
+### NNLS-Chroma without autochord
+
+**What needs it.** Only computing new NNLS chroma from audio:
+`align.py` (`audio_chroma`), and through it `audio_signals.py`,
+`meta_evaluate.py` and `pool.py` when they are run on a recording.
+
+**What doesn't need it:**
+- the alignments already saved in `results/chord-evaluation/alignment/`
+  (10 McGill songs);
+- `evaluate.py --alignment`;
+- `main.py --gold`;
+- the CSVs already saved in `results/chord-evaluation/audio/`.
+
+**What it needs:**
+- the `vamp` Python host, `uv pip install vamp`, which compiles. It is not
+  in `pyproject.toml`, so that `uv sync` works on Windows.
+- the NNLS-Chroma plugin itself (Mauch & Dixon), from its project page
+  [code.soundsoftware.ac.uk/projects/nnls-chroma](https://code.soundsoftware.ac.uk/projects/nnls-chroma)
+  or the Vamp Plugin Pack, placed in a VAMP plugin folder.
+
+**Where it works:** Linux, macOS or WSL. Not Windows: `vamp` has no
+Windows build, which is what broke the install.
+
+**Unverified:** these install steps have not been run by us since autochord
+was retired. Without them, `align.py` stops with a message saying so, and
+the NNLS test in `tests/chord-evaluation/test_audio_signals.py` skips.
+
+**Frames may differ.** The plugin version may differ from the one autochord
+shipped. Check a new install against a saved alignment, e.g. *Disco Inferno*
+(`results/chord-evaluation/alignment/1016.json`): its similarity and time map
+should come out the same.
 
 ## Scoring
 
@@ -385,6 +425,146 @@ adds that as a hint.
 - **Agreement is lower than on *Disco Inferno*** (0.64 against 0.67–0.71).
   The estimators find this song harder.
 
+## Harmonic misalignment (`misalignment.py`)
+
+**What it answers.** How far a chord sheet is from what the recording
+supports. It needs no gold; the evidence is lv-chordia's heads
+(`chord-estimation/lv_chordia_heads.py`), scored by `common/chord_scores.py`.
+
+**The score, per frame of 512/22 050 s:**
+
+  misalignment = best chord's score − played chord's score   (nats, ≥ 0)
+
+- **0** means the recording supports the played chord as well as any chord.
+- **It adds up:** per chord, per lyric line, per song.
+- **Drift:** the difference between two sheets, per chord.
+
+**[ORIGINAL]** design.
+
+**Two modes:**
+
+| mode | charges | C over a recorded C7 | C7 over a recorded C7 | C7 over a recorded C |
+|---|---|---|---|---|
+| `compatibility` (default) | the root and triad; and each extension the chord **plays**, only as far as the recording makes it less likely than no extension: max(0, log p(none) − log p(it)) | 0 | 0 | log p(none) − log p(b7) |
+| `identity` | every part, including "no 7th" | log p(b7) − log p(none) | 0 | log p(none) − log p(b7) |
+
+**Version 2, 2026-11-24.** The first version charged −log p(it) for every
+added extension. A 7th the recording *plays* was then still charged, about
+0.5 nats per frame at p = 0.6. On *Can't Help Falling in Love*, its 7th chords
+ranked costliest for that reason alone, and "add a 7th" made every chord
+worse. Version 2 charges an added note only where the recording argues
+against it. **[ORIGINAL]** change.
+
+**Why compatibility is the default.** A player strums *with* the recording:
+a note they leave out is still heard from the band, while a note they add
+may clash. This is `docs/ask_prof.md` §2.5's hypothesis, not yet tested with
+players.
+
+**Rules, fixed before any result:**
+
+| rule | value |
+|---|---|
+| a frame's misalignment is capped at | 10 nats |
+| frames treated as silence and not scored | where lv-chordia's P(no chord) ≥ 0.5 |
+| frames near a chord change that are not scored | within 0.1 s of it |
+| the bass | never scored |
+| "the best chord" chosen from | lv-chordia's `submission` chords without bass, plus the sheet's own chords |
+| not scorable | chords the heads cannot express (e.g. power chords, `X`); reported as such |
+
+**What it reports:**
+- **For the song:** mean misalignment, support (a softmax of the scores; in
+  identity mode, the played chord's posterior), seconds scored, the shares
+  silent and near a change.
+- **The costliest chords,** and what the recording prefers on each.
+- **With `--lines`:** a table per lyric line, with its costliest chord.
+- **With `--before`:** the drift from another sheet, per changed chord.
+- **With `--known-changes`:** the known-answer check (`docs/design.md`, V2).
+  Each chord is changed alone, and the report counts how often the
+  misalignment rose, stayed or fell:
+  - root a semitone up, and major↔minor: should rarely fall;
+  - add a 7th, drop the 7th: reported only. Under compatibility, adding a
+    note never gains and dropping one never costs. How often adding costs
+    nothing shows how often the recording supports the 7th.
+
+```sh
+uv run python chord-evaluation/misalignment.py results/chord-estimation/lv-chordia-heads/<song>.npz \
+    results/chord-estimation/lv-chordia-downbeats/<song>.lab --lines data/Custom_Songs/<song>/lines.lab \
+    --before results/chord-estimation/lv-chordia/<song>.lab --known-changes --out results/chord-evaluation/misalignment/<song>.json
+```
+
+**It cannot judge lv-chordia's own sheet against the truth.** That sheet is
+nearly the best path through the same evidence, so it scores near 0 by
+construction. Use it for:
+- what *changes* to a sheet cost: a beat grid, simplification, substitution;
+- sheets from elsewhere, such as a scraped sheet or BTC.
+
+**Checks** (`tests/chord-evaluation/test_misalignment.py`), on heads built by
+hand with every answer worked out by hand:
+- both modes on C over C7, and on C7 over C;
+- the cap, the silence rule and the boundary rule;
+- drift;
+- the per-line table;
+- the known-answer check.
+
+## Uncertainty map (`uncertainty.py`)
+
+**What it answers.** How much to trust each chord. The judge uses
+lv-chordia's own evidence, so it cannot see lv-chordia's own mistakes; this
+map points at them. **[ORIGINAL]** design (`docs/design.md`, B3).
+
+| check | flags a chord when | from |
+|---|---|---|
+| **margin** | the best **rival** chord is at least half as likely, i.e. the mean margin per frame is under log 2 ≈ 0.69 nats. The runner-up is named. | lv-chordia's heads, on `misalignment.py`'s scored frames |
+| **repetition** | its repeats have another chord, at the major/minor level, more often than not | the audio alone |
+
+**What counts as a rival:** a chord with another root or triad. C7 is not a
+rival of C, so a 7th the model is unsure of does not make C a close call. Am
+and C# are rivals.
+
+**How repeats are found:**
+- the code is `audio_signals.repeats` and `repetition`;
+- the features are beat-synchronous chroma from **librosa**: bass C1–B2,
+  treble from C3. The NNLS plugin is not needed, so this runs on Windows;
+- a repeat is a passage of at least 16 beats whose beat-by-beat cosine
+  averages at least 0.90, in any transposition. A repeat in a new key still
+  counts; *Happy Diwali* seems to change key.
+- **Not yet checked:** the 16 beats and 0.90 were set on NNLS chroma, and
+  have not been checked on librosa's.
+- **Broken on *Happy Diwali* as first run (2026-11-24).** Repeats were found
+  for 100 of 113 chords, and 98 "disagreed".
+- **The main cause:** chroma is never negative, so two *unrelated* beats
+  already have a high cosine: 0.93 on random chroma (`--diagnose`). NNLS
+  chroma is sparse, so 0.90 meant something there; librosa's is dense.
+- **The fix, now the default:** each beat's chroma is centred to mean 0, so
+  cosines become correlations. Random chroma then scores about 0.04.
+  **[ORIGINAL]** fix; `--uncentred` restores the old way.
+- **Possible further causes,** to check with the options below:
+  - transposition lets an Eb passage match a Bb passage a fifth away;
+  - averaging over every partner lets spurious ones swamp the real one.
+- **Options to find better settings:**
+  - `--diagnose`: prints the distribution of similarities, literal and
+    transposed, and which transpositions the matches use;
+  - `--repeat-threshold`: a stricter threshold;
+  - `--literal-repeats`: same key only;
+  - `--best-partner`: compare each beat with its single closest repeat only.
+- **Until settings are chosen on our songs, trust only the margin flags.**
+
+**Verdict:** "check" if either flag is raised, else "trust". N gets no margin.
+Lyrics are not used to find repeats: the same words can be sung over
+different music (the team's choice, 2026-11-24).
+
+```sh
+uv run python chord-evaluation/uncertainty.py results/chord-estimation/lv-chordia-heads/<song>.npz \
+    results/chord-estimation/lv-chordia-ukulele/<song>.lab --audio "data/Custom_Songs/<song>/<recording>.wav" \
+    --beats results/beat-tracking/beat-this/<recording>.txt --out results/chord-evaluation/uncertainty/<song>.json
+```
+
+**Checks** (`tests/chord-evaluation/test_uncertainty.py`):
+- margins and verdicts on heads built by hand;
+- repetition on chroma built by hand;
+- repetition end to end on a synthesized progression played twice and
+  labelled differently the second time. That test needs librosa.
+
 ## Running
 
 ```sh
@@ -428,6 +608,10 @@ merging.
 |---|---|---|
 | `chord-evaluation/align.py` | a recording against McGill's chroma: offset and same-recording check | yes |
 | `chord-evaluation/evaluate.py` | [ME]'s chord scores, after the shift and the overlap fix | yes |
+| `chord-evaluation/uncertainty.py` | the uncertainty map: margin against the best rival, and repetition from librosa chroma; a trust/check verdict per chord | yes |
+| `results/chord-evaluation/uncertainty/<song>.json` | its maps | yes |
+| `chord-evaluation/misalignment.py` | harmonic misalignment of a sheet against the recording's lv-chordia heads; drift; known-answer check | yes |
+| `results/chord-evaluation/misalignment/<song>.json` | its reports | yes |
 | `tests/chord-evaluation/` | a known shift recovered; scores on chords built by hand | yes |
 | `data/McGill-audio/<id>/` | recordings of McGill songs | no, copyrighted |
 | `results/chord-evaluation/alignment/<id>.json` | `align.py`'s result | yes |

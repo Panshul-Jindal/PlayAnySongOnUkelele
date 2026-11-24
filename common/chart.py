@@ -60,7 +60,7 @@ def load(path=PATH):
 
     Positions that leave a string unplayed are skipped: every string is strummed.
     """
-    with open(path) as fh:
+    with open(path, encoding="utf-8") as fh:
         chart = json.load(fh)
     return {(key, c["suffix"]): [absolute(p) for p in c["positions"] if -1 not in p["frets"]]
             for key, chords in chart["chords"].items() for c in chords}

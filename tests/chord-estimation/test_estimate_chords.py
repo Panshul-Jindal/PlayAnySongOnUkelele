@@ -15,7 +15,6 @@ import harte
 
 SR = 44100
 WEIGHTS = {
-    "autochord": os.path.expanduser("~/.autochord/chroma-seq-bilstm-crf-v1"),
     "btc": os.path.join(os.path.dirname(estimate_chords.__file__), "..", "data", "models", "btc"),
 }
 CHORDS = {("C", "maj"): [48, 60, 64, 67], ("A", "min"): [45, 57, 60, 64]}
@@ -39,6 +38,11 @@ def test_a_held_chord_is_named_for_most_of_its_time(estimator, tmp_path):
         segments = estimate_chords.estimate(path, estimator)
         right = sum(s.end - s.start for s in segments if harte.split(s.label)[:2] == (root, quality))
         assert right >= 0.9 * 6, (estimator, root, segments)
+
+
+def test_lv_chordia_is_the_default_and_autochord_is_retired():
+    assert estimate_chords.DEFAULT == "lv-chordia"
+    assert sorted(estimate_chords.ESTIMATORS) == ["btc", "lv-chordia"]
 
 
 def test_a_missing_file_stops_with_a_message():

@@ -371,7 +371,7 @@ def song_values(rows, segments, f):
 
 def write_table(path, rows):
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-    with open(path, "w", newline="") as fh:
+    with open(path, "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=COLUMNS + [k for k in rows[0] if k not in COLUMNS] if rows else COLUMNS)
         writer.writeheader()
         for r in rows:
@@ -445,7 +445,7 @@ def main():
         print(f"\n{name}: {len(flagged)} of {sum(is_chord(r['label']) for r in rows)} chords to check")
         for start, end, label, reasons in flagged[:15]:
             print(f"  {start:7.2f}-{end:7.2f}  {names.name(label):<8} {'; '.join(reasons)}")
-    with open(os.path.join(args.out, song + ".json"), "w") as fh:
+    with open(os.path.join(args.out, song + ".json"), "w", encoding="utf-8") as fh:
         json.dump(summary, fh, indent=2)
     print(f"\nwrote {args.out}/<estimate>/{song}.csv and {song}.json")
 

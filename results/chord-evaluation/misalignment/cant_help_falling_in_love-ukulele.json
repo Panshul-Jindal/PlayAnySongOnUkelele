@@ -1,0 +1,859 @@
+{
+  "heads": "results/chord-estimation/lv-chordia-heads/cant_help_falling_in_love.npz",
+  "sheet": "results/chord-estimation/lv-chordia-ukulele/cant_help_falling_in_love.lab",
+  "mode": "compatibility",
+  "rules": {
+    "floor_nats": 10.0,
+    "silence_p_n": 0.5,
+    "trim_s": 0.1,
+    "reference": "submission"
+  },
+  "song": {
+    "scored_s": 164.07,
+    "misalignment": 0.0185,
+    "support": 0.7212,
+    "total_nats": 130.74,
+    "seconds": 182.58,
+    "silent_share": 0.0169,
+    "trimmed_share": 0.0844,
+    "unscorable_labels": []
+  },
+  "chords": [
+    {
+      "start": 0.0,
+      "end": 0.19,
+      "label": "N",
+      "scored_s": 0.02,
+      "misalignment": 0.0,
+      "support": 0.352,
+      "total_nats": 0.0,
+      "recording_prefers": "N"
+    },
+    {
+      "start": 0.19,
+      "end": 2.21,
+      "label": "D:maj",
+      "scored_s": 1.83,
+      "misalignment": 0.0,
+      "support": 0.9329,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 2.21,
+      "end": 4.02,
+      "label": "A:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.7653,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 4.02,
+      "end": 9.54,
+      "label": "D:maj",
+      "scored_s": 5.34,
+      "misalignment": 0.0,
+      "support": 0.9491,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 9.54,
+      "end": 11.33,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8566,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 11.33,
+      "end": 14.93,
+      "label": "B:min",
+      "scored_s": 3.41,
+      "misalignment": 0.0,
+      "support": 0.9267,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 14.93,
+      "end": 16.72,
+      "label": "G:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.9059,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 16.72,
+      "end": 18.51,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8439,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 18.51,
+      "end": 22.08,
+      "label": "A:7",
+      "scored_s": 3.39,
+      "misalignment": 0.0481,
+      "support": 0.4374,
+      "total_nats": 7.02,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 22.08,
+      "end": 23.87,
+      "label": "G:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0061,
+      "support": 0.6587,
+      "total_nats": 0.42,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 23.87,
+      "end": 25.68,
+      "label": "A:7",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.4845,
+      "total_nats": 0.0,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 25.68,
+      "end": 27.47,
+      "label": "B:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8494,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 27.47,
+      "end": 29.3,
+      "label": "G:maj",
+      "scored_s": 1.65,
+      "misalignment": 0.3008,
+      "support": 0.4377,
+      "total_nats": 21.36,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 29.3,
+      "end": 31.11,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.7285,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 31.11,
+      "end": 32.93,
+      "label": "A:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.5654,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 32.93,
+      "end": 38.36,
+      "label": "D:maj",
+      "scored_s": 5.25,
+      "misalignment": 0.0,
+      "support": 0.934,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 38.36,
+      "end": 40.17,
+      "label": "F#:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8728,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 40.17,
+      "end": 43.75,
+      "label": "B:min",
+      "scored_s": 3.39,
+      "misalignment": 0.0,
+      "support": 0.9333,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 43.75,
+      "end": 45.56,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.9478,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 45.56,
+      "end": 47.35,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8973,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 47.35,
+      "end": 50.94,
+      "label": "A:7",
+      "scored_s": 3.37,
+      "misalignment": 0.027,
+      "support": 0.4843,
+      "total_nats": 3.92,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 50.94,
+      "end": 52.76,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.6926,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 52.76,
+      "end": 54.59,
+      "label": "A:7",
+      "scored_s": 1.65,
+      "misalignment": 0.0,
+      "support": 0.4889,
+      "total_nats": 0.0,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 54.59,
+      "end": 56.4,
+      "label": "B:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8479,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 56.4,
+      "end": 58.14,
+      "label": "G:maj",
+      "scored_s": 1.56,
+      "misalignment": 0.1302,
+      "support": 0.3985,
+      "total_nats": 8.72,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 58.14,
+      "end": 59.93,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0269,
+      "support": 0.7561,
+      "total_nats": 1.85,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 59.93,
+      "end": 61.65,
+      "label": "A:maj",
+      "scored_s": 1.53,
+      "misalignment": 0.0,
+      "support": 0.6011,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 61.65,
+      "end": 65.27,
+      "label": "D:maj",
+      "scored_s": 3.44,
+      "misalignment": 0.0,
+      "support": 0.9596,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 65.27,
+      "end": 67.06,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8227,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 67.06,
+      "end": 68.85,
+      "label": "C#:7",
+      "scored_s": 1.6,
+      "misalignment": 0.2403,
+      "support": 0.4016,
+      "total_nats": 16.58,
+      "recording_prefers": "C#:7"
+    },
+    {
+      "start": 68.85,
+      "end": 70.59,
+      "label": "F#:min",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.8543,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 70.59,
+      "end": 72.4,
+      "label": "C#:7",
+      "scored_s": 1.63,
+      "misalignment": 0.0008,
+      "support": 0.43,
+      "total_nats": 0.05,
+      "recording_prefers": "C#:7"
+    },
+    {
+      "start": 72.4,
+      "end": 74.16,
+      "label": "F#:min",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.7854,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 74.16,
+      "end": 75.93,
+      "label": "C#:7",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.2788,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:7"
+    },
+    {
+      "start": 75.93,
+      "end": 77.74,
+      "label": "F#:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.69,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 77.74,
+      "end": 79.55,
+      "label": "B:7",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.4386,
+      "total_nats": 0.0,
+      "recording_prefers": "B:7"
+    },
+    {
+      "start": 79.55,
+      "end": 81.34,
+      "label": "E:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.7866,
+      "total_nats": 0.0,
+      "recording_prefers": "E:min"
+    },
+    {
+      "start": 81.34,
+      "end": 83.13,
+      "label": "A:7",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.4833,
+      "total_nats": 0.0,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 83.13,
+      "end": 84.92,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8314,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 84.92,
+      "end": 86.7,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8254,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 86.7,
+      "end": 90.23,
+      "label": "B:min",
+      "scored_s": 3.34,
+      "misalignment": 0.0,
+      "support": 0.8707,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 90.23,
+      "end": 92.04,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.943,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 92.04,
+      "end": 93.81,
+      "label": "D:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8988,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 93.81,
+      "end": 97.38,
+      "label": "A:7",
+      "scored_s": 3.37,
+      "misalignment": 0.0547,
+      "support": 0.4619,
+      "total_nats": 7.94,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 97.38,
+      "end": 99.15,
+      "label": "G:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.6171,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 99.15,
+      "end": 100.96,
+      "label": "A:7",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.4816,
+      "total_nats": 0.0,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 100.96,
+      "end": 102.73,
+      "label": "B:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.5216,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 102.73,
+      "end": 104.49,
+      "label": "E:min",
+      "scored_s": 1.56,
+      "misalignment": 0.238,
+      "support": 0.3046,
+      "total_nats": 15.95,
+      "recording_prefers": "E:min"
+    },
+    {
+      "start": 104.49,
+      "end": 106.28,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8399,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 106.28,
+      "end": 108.04,
+      "label": "A:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.7771,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 108.04,
+      "end": 111.62,
+      "label": "D:maj",
+      "scored_s": 3.39,
+      "misalignment": 0.0,
+      "support": 0.966,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 111.62,
+      "end": 113.41,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8291,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 113.41,
+      "end": 115.19,
+      "label": "C#:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.51,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 115.19,
+      "end": 116.96,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8666,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 116.96,
+      "end": 118.72,
+      "label": "C#:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.4738,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 118.72,
+      "end": 120.49,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8239,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 120.49,
+      "end": 122.23,
+      "label": "C#:7",
+      "scored_s": 1.56,
+      "misalignment": 0.0006,
+      "support": 0.4321,
+      "total_nats": 0.04,
+      "recording_prefers": "C#:7"
+    },
+    {
+      "start": 122.23,
+      "end": 124.02,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8274,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 124.02,
+      "end": 125.78,
+      "label": "B:7",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.445,
+      "total_nats": 0.0,
+      "recording_prefers": "B:7"
+    },
+    {
+      "start": 125.78,
+      "end": 127.57,
+      "label": "E:min7",
+      "scored_s": 1.6,
+      "misalignment": 0.0051,
+      "support": 0.4808,
+      "total_nats": 0.36,
+      "recording_prefers": "E:min7"
+    },
+    {
+      "start": 127.57,
+      "end": 129.31,
+      "label": "A:7",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.4865,
+      "total_nats": 0.0,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 129.31,
+      "end": 131.12,
+      "label": "D:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8062,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 131.12,
+      "end": 132.89,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0002,
+      "support": 0.796,
+      "total_nats": 0.01,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 132.89,
+      "end": 136.42,
+      "label": "B:min",
+      "scored_s": 3.34,
+      "misalignment": 0.0,
+      "support": 0.8775,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 136.42,
+      "end": 138.21,
+      "label": "G:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.9466,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 138.21,
+      "end": 139.97,
+      "label": "D:maj",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.869,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 139.97,
+      "end": 143.55,
+      "label": "A:7",
+      "scored_s": 3.39,
+      "misalignment": 0.1372,
+      "support": 0.4542,
+      "total_nats": 20.04,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 143.55,
+      "end": 145.31,
+      "label": "G:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.6193,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 145.31,
+      "end": 147.08,
+      "label": "A:7",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.4838,
+      "total_nats": 0.0,
+      "recording_prefers": "A:7"
+    },
+    {
+      "start": 147.08,
+      "end": 148.89,
+      "label": "B:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.6655,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 148.89,
+      "end": 149.77,
+      "label": "G:maj",
+      "scored_s": 0.7,
+      "misalignment": 0.0,
+      "support": 0.5526,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 149.77,
+      "end": 150.65,
+      "label": "E:min",
+      "scored_s": 0.7,
+      "misalignment": 0.0,
+      "support": 0.4627,
+      "total_nats": 0.0,
+      "recording_prefers": "E:min"
+    },
+    {
+      "start": 150.65,
+      "end": 152.49,
+      "label": "D:maj",
+      "scored_s": 1.65,
+      "misalignment": 0.0,
+      "support": 0.7445,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 152.49,
+      "end": 154.27,
+      "label": "A:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.7639,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 154.27,
+      "end": 157.85,
+      "label": "D:maj",
+      "scored_s": 3.39,
+      "misalignment": 0.0,
+      "support": 0.9491,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 157.85,
+      "end": 159.59,
+      "label": "G:maj",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.8885,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 159.59,
+      "end": 161.38,
+      "label": "A:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.6965,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 161.38,
+      "end": 163.19,
+      "label": "B:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8104,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 163.19,
+      "end": 165.0,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.3782,
+      "support": 0.3397,
+      "total_nats": 26.48,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 165.0,
+      "end": 167.32,
+      "label": "D:maj",
+      "scored_s": 2.14,
+      "misalignment": 0.0,
+      "support": 0.8188,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 167.32,
+      "end": 171.41,
+      "label": "A:maj",
+      "scored_s": 3.9,
+      "misalignment": 0.0,
+      "support": 0.5266,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 171.41,
+      "end": 179.47,
+      "label": "D:maj",
+      "scored_s": 7.87,
+      "misalignment": 0.0,
+      "support": 0.8223,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 179.47,
+      "end": 182.58,
+      "label": "N",
+      "scored_s": 0.05,
+      "misalignment": 0.0,
+      "support": 0.4748,
+      "total_nats": 0.0,
+      "recording_prefers": "N"
+    }
+  ],
+  "drift": {
+    "frames_compared_s": 164.07,
+    "drift_per_frame": 0.0,
+    "drift_total_nats": 0.0,
+    "changed_chords": []
+  }
+}

@@ -3,7 +3,7 @@
 
     a recording, or its chords (.lab)
       -> preprocessing/remove_centre.py       with --remove-centre: the centre of the mix removed
-      -> chord-estimation/estimate_chords.py  for a recording: chords from --estimator
+      -> chord-estimation/estimate_chords.py  for a recording: chords from --estimator (default lv-chordia)
       -> transformations/merge_short.py       with --min-chord: no chord shorter than that
       -> transformations/substitute.py        with --substitute FROM=TO: chosen chords replaced
       -> transformations/drop_bass.py         slash chords lose their bass
@@ -21,8 +21,8 @@ to results/pipeline/. Specified in README.md; the starting sketch is in git
 history (commit 221aa7f).
 
 Usage:
-    python3 main.py results/chord-estimation/autochord/hey_soul_sister.lab
-    python3 main.py data/Custom_Songs/happy_diwali/Happy_Diwali.wav --estimator lv-chordia
+    python3 main.py results/chord-estimation/lv-chordia/hey_soul_sister.lab
+    python3 main.py data/Custom_Songs/happy_diwali/Happy_Diwali.wav
 """
 
 import argparse
@@ -67,8 +67,7 @@ def chords_from(path, estimator=None, centre_removed=False):
     """
     if path.lower().endswith(".lab"):
         return list(lab.read_lab(path)), os.path.splitext(os.path.basename(path))[0], path
-    if estimator is None:
-        raise SystemExit("a recording needs --estimator: " + ", ".join(sorted(estimate_chords.ESTIMATORS)))
+    estimator = estimator or estimate_chords.DEFAULT
     song = os.path.basename(os.path.dirname(os.path.abspath(path)))
     folder = estimator
     if centre_removed:
@@ -200,10 +199,11 @@ def report(path, segments, plain, dropped, versions, table, merged=(), min_chord
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("song", help="a song's chords (.lab), e.g. results/chord-estimation/autochord/hey_soul_sister.lab, "
+    parser.add_argument("song", help="a song's chords (.lab), e.g. results/chord-estimation/lv-chordia/hey_soul_sister.lab, "
                                      "or its recording, e.g. data/Custom_Songs/hey_soul_sister/<file>.wav")
-    parser.add_argument("--estimator", choices=sorted(estimate_chords.ESTIMATORS),
-                        help="for a recording: the chord estimator (chord-estimation/README.md)")
+    parser.add_argument("--estimator", default=estimate_chords.DEFAULT, choices=sorted(estimate_chords.ESTIMATORS),
+                        help=f"for a recording: the chord estimator, default {estimate_chords.DEFAULT} "
+                             "(chord-estimation/README.md)")
     parser.add_argument("--remove-centre", action="store_true",
                         help="for a recording: estimate from it with the centre of the mix removed (preprocessing/README.md)")
     parser.add_argument("--min-chord", type=float, default=0.0,
@@ -250,12 +250,12 @@ def main(argv=None):
             lines.append(f"{name:<13}" + "".join(f"{100 * scores[k]:9.1f}" for k in evaluate.METRICS))
 
     os.makedirs(args.out, exist_ok=True)
-    with open(os.path.join(args.out, song + ".txt"), "w") as fh:
+    with open(os.path.join(args.out, song + ".txt"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines) + "\n")
     lab.write_lab(os.path.join(args.out, song + ".lab"), plain)
     if path is not None:
         version = dict(versions)[choice]
-        with open(os.path.join(args.out, song + ".shapes.json"), "w") as fh:
+        with open(os.path.join(args.out, song + ".shapes.json"), "w", encoding="utf-8") as fh:
             json.dump({"capo": choice, "w_move": args.w_move, "shapes": [
                 None if x is None else {"start": seg.start, "label": seg.label, "frets": list(x.frets),
                                         "fingers": list(x.fingers), "chart": x.chart}

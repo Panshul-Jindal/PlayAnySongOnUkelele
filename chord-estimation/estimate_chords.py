@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Estimate a song's chords from its audio with one of three published models.
+"""Estimate a song's chords from its audio with one of two published models.
 
-  autochord    Bi-LSTM-CRF on NNLS-Chroma: major and minor chords, N
+  lv-chordia   Jiang et al., ISMIR 2019: a larger vocabulary, with bass notes (the default)
   btc          Park et al., ISMIR 2019: 170 chords, sevenths, sus, dim, aug (btc.py)
-  lv-chordia   Jiang et al., ISMIR 2019: a larger vocabulary, with bass notes
+
+autochord, the third, was retired: it needs TensorFlow and a Linux-only VAMP
+plugin, so it does not install on Windows. Its earlier results stay in
+results/chord-estimation/autochord/ (chord-estimation/README.md).
 
 Each estimator's own output is written unchanged, as a .lab file: normally
 results/chord-estimation/<estimator>/<song>.lab. Merging short chords is a
@@ -11,7 +14,7 @@ transformation (transformations/merge_short.py), applied the same way to every
 estimator. Specified in chord-estimation/README.md.
 
 Usage:
-    python3 chord-estimation/estimate_chords.py AUDIO LAB --estimator autochord|btc|lv-chordia
+    python3 chord-estimation/estimate_chords.py AUDIO LAB [--estimator lv-chordia|btc]
 """
 
 import argparse
@@ -24,14 +27,8 @@ sys.path.insert(0, HERE)
 
 import lab
 
-# autochord's saved model needs Keras 2 behaviour, through the tf-keras package;
-# it must be set before TensorFlow is first imported
-os.environ.setdefault("TF_USE_LEGACY_KERAS", "1")
-
-
-def autochord(path):
-    import autochord as model
-    return [lab.Segment(float(start), float(end), label) for start, end, label in model.recognize(path)]
+#: the estimator used when none is named
+DEFAULT = "lv-chordia"
 
 
 def btc(path):
@@ -47,10 +44,10 @@ def lv_chordia(path):
             for d in session.infer(os.path.abspath(path))]
 
 
-ESTIMATORS = {"autochord": autochord, "btc": btc, "lv-chordia": lv_chordia}
+ESTIMATORS = {"btc": btc, "lv-chordia": lv_chordia}
 
 
-def estimate(audio, estimator):
+def estimate(audio, estimator=DEFAULT):
     """The chosen estimator's segments for an audio file."""
     if not os.path.isfile(audio):
         raise SystemExit(f"audio not found: {audio}")
@@ -62,7 +59,8 @@ def main(argv=None):
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("audio", help="the song's recording")
     parser.add_argument("lab", help="where to write the chords, e.g. results/chord-estimation/btc/<song>.lab")
-    parser.add_argument("--estimator", required=True, choices=sorted(ESTIMATORS))
+    parser.add_argument("--estimator", default=DEFAULT, choices=sorted(ESTIMATORS),
+                        help=f"default {DEFAULT}")
     args = parser.parse_args(argv)
 
     segments = estimate(args.audio, args.estimator)

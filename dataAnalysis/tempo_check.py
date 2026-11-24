@@ -53,7 +53,7 @@ def quarter_notes(num, den):
 def phrases(path):
     """Yield (start, quarter_notes or None) for every timestamped line."""
     metre = (4, 4)
-    for line in open(path):
+    for line in open(path, encoding="utf-8"):
         line = line.rstrip("\n")
         m = METRE_HEADER.match(line)
         if m:
@@ -238,7 +238,7 @@ def main():
               f"{'phrase at':>10}{'BPM':>7}{'beats':>6}  title")
         for c, path, sa, ba, qa, sb, bb, qb in sorted(pairs, reverse=True)[:args.worst]:
             song = os.path.basename(os.path.dirname(path))
-            title = next((l.split(":", 1)[1].strip() for l in open(path)
+            title = next((l.split(":", 1)[1].strip() for l in open(path, encoding="utf-8")
                           if l.startswith("# title")), "")
             print(f"  {100 * c:6.1f}%  {song:<6}{sa:10.2f}{ba:7.1f}{qa:6.0f}  ->"
                   f"{sb:10.2f}{bb:7.1f}{qb:6.0f}  {title[:28]}")

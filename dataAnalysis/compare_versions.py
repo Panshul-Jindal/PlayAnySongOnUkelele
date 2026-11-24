@@ -36,7 +36,7 @@ from tempo_check import phrase_beats
 def header(path):
     """{'title': ..., 'artist': ..., ...} from the '# key: value' lines."""
     out = {}
-    for line in open(path):
+    for line in open(path, encoding="utf-8"):
         m = re.match(r"^#\s*(\w+):\s*(.*)$", line.rstrip("\n"))
         if m:
             out[m.group(1)] = m.group(2).strip()
@@ -46,7 +46,7 @@ def header(path):
 def parsed(path):
     """Annotation lines as (time, text); time is a float so 0.0 == 0.000000000."""
     out = []
-    for line in open(path):
+    for line in open(path, encoding="utf-8"):
         line = line.rstrip("\n")
         if not line.strip() or line.startswith("#"):
             continue
@@ -71,7 +71,7 @@ def compare_salami(old_dir, v2_root, show):
             counts["different song"] += 1
             different.append((sid, h_old.get("title"), h_new.get("title")))
             continue
-        if open(old).read() == open(new).read():
+        if open(old, encoding="utf-8").read() == open(new, encoding="utf-8").read():
             counts["identical"] += 1
             continue
         p_old, p_new = parsed(old), parsed(new)

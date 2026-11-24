@@ -22,7 +22,7 @@ _REPEAT = re.compile(r"\|\s*x(\d+)")
 def read(path):
     """(header dict, [Phrase, ...]) of one salami_chords.txt."""
     header, phrases, letter = {}, [], None
-    with open(path) as fh:
+    with open(path, encoding="utf-8") as fh:
         for line in fh:
             line = line.rstrip("\n")
             if line.startswith("#"):

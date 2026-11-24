@@ -94,7 +94,7 @@ def song_data(lab_path, title, lines_path=None, capo=0, table=None, beats_path=N
     if not segments:
         sys.exit(f"{lab_path}: no chords")
     if shapes_path:
-        with open(shapes_path) as fh:
+        with open(shapes_path, encoding="utf-8") as fh:
             plan = json.load(fh)
         if len(plan["shapes"]) != len(segments):
             sys.exit(f"{shapes_path}: {len(plan['shapes'])} shapes for {len(segments)} chords")
@@ -136,7 +136,7 @@ def clock(seconds):
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("lab", help="chords, e.g. results/chord-estimation/autochord/hey_soul_sister.lab")
+    parser.add_argument("lab", help="chords, e.g. results/chord-estimation/lv-chordia/hey_soul_sister.lab")
     parser.add_argument("out", help="the page to write, e.g. results/play-along/hey_soul_sister.html")
     parser.add_argument("--title", help="shown on the page (default: the .lab file's name)")
     parser.add_argument("--lines", help="tapped line times, e.g. data/Custom_Songs/hey_soul_sister/lines.lab")

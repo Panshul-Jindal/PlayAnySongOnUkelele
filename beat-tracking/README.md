@@ -1,22 +1,91 @@
 # beat-tracking
 
-Finds the beats of a song from its audio, so the play-along page can show when
-to strum. It is the first step of the project's beats-and-bars half: beats
-only, no bars yet.
+Finds the beats and the bars of a song from its audio, so the play-along page
+can show when to strum. It is the first step of the project's beats-and-bars
+half.
 
-**Status: built.** The automated checks pass; the checks by ear (below) are
-still to do.
+**Status, 2026-11-24.**
+- **Beat This! is the default tracker.** It finds downbeats as well as beats.
+- **librosa** stays, for comparison.
+- **Not yet done:** checking Beat This! on our songs, by ear and against taps.
 
 ## Terms
 
 - **Beat**: the steady pulse you tap your foot to, and strum on.
-- **Downbeat**: the first beat of a bar, the "1" of "1 2 3 4". Not found here.
+- **Downbeat**: the first beat of a bar, the "1" of "1 2 3 4".
 - **Tempo**: beats per minute (BPM).
 - **Beat tracker**: a method that turns audio into a list of beat times.
 
-## The tracker
+## Beat This! (the default)
 
-`beat_track` in librosa, already installed with autochord (librosa 1.0.0). Its
+**[BT24]** Foscarin, Schlüter & Widmer, "Beat This! Accurate Beat Tracking
+Without DBN Postprocessing", ISMIR 2024
+([arXiv 2407.21658](https://arxiv.org/abs/2407.21658)).
+- **Code:** [CPJKU/beat_this](https://github.com/CPJKU/beat_this), MIT.
+- **Installed as:** the PyPI package `beat-this` 1.1.0.
+
+**How it works.**
+- **Input:** a log-mel spectrogram at 22.05 kHz with a hop of 441 samples, so
+  50 frames per second [BT24 §3].
+- **Model:** a transformer that predicts, for every frame, the probability of
+  a beat and of a downbeat.
+- **Post-processing:** "minimal". It takes the peaks above 0.5 within ±70 ms,
+  then moves each downbeat to its nearest beat
+  (`beat_this/model/postprocessor.py`). There is no DBN.
+- **Place in the bar:** each beat is numbered by the package's own
+  `infer_beat_numbers` (`beat_this/utils.py`). It counts up from each downbeat,
+  and numbers a pickup bar from the first full bar's length.
+
+**Why it replaces librosa.**
+1. **It finds downbeats,** so there are bars. librosa cannot.
+2. **It does not assume one tempo.** librosa's default does, and drifts on
+   songs that change tempo (*Disco Inferno* below).
+3. **Its published accuracy,** on GTZAN, a test set left out of its training
+   [BT24, Table 2]:
+
+   | | beat F1 | CMLt | AMLt | downbeat F1 |
+   |---|---|---|---|---|
+   | **Beat This!**, main model, mean of 3 seeds | 89.1 | 79.8 | 89.8 | 78.3 |
+   | Hung et al., as reported there | 88.7 | 81.2 | 92.0 | 75.6 |
+
+   librosa has no published figure on GTZAN to compare with. **Ours on one
+   McGill song:** 0.704 beat F-measure with a varying tempo (below). That is
+   not the same test, so not a comparison.
+
+**Its known weakness [BT24 §4.3].** On *"complex or underrepresented
+pieces"* it can produce *"non-periodic beats, which drastically lower the
+continuity metrics"*. That makes our Hindi songs the ones to check by ear.
+
+**Training data [BT24 §4.1]:** many datasets, including Harmonix (pop), RWC
+pop, the Beatles and Ballroom. None is Indian film music.
+
+**How it runs here.**
+- **Model:** `final0`, the main model. Its README says it was *"trained on all
+  data except the GTZAN dataset"*; there are three seeds, and seed 0 is used.
+- **Weights:** about 78 MB, downloaded by `beat_this` the first time into
+  torch's hub cache. That needs the internet once.
+- **Audio:** passed as an array loaded by librosa, so torchaudio's file
+  loading is never used.
+- **torchaudio:** 2.11, torchaudio's last release. Its README says it works
+  with torch 2.11 *"and with every future `torch` release"* and *"does not pin
+  `torch` to a specific version"*.
+- **The optional DBN is not used.** It needs madmom, which the Beat This!
+  README says must be installed from git; we have not tried that on Windows.
+
+```sh
+uv run python beat-tracking/track_beats.py "data/Custom_Songs/<song>/<recording>.wav" \
+    results/beat-tracking/beat-this/<song>.txt --clicks data/preprocessed/clicks/<song>.wav
+```
+
+**`--clicks` writes the recording with a click on every beat:** 1 kHz on
+beats, 2 kHz on downbeats.
+- **Use:** listen to it and judge the beats and bars by ear.
+- **Where it goes:** `data/preprocessed/`, which git ignores, because it
+  contains the recording.
+
+## librosa (kept for comparison)
+
+`beat_track` in librosa, a direct dependency of the project (librosa 1.0.0). Its
 documentation cites Ellis, "Beat tracking by dynamic programming", *Journal of
 New Music Research* 36(1), 2007, pp. 51–60, as the method it implements; the
 paper itself is not yet read, so its details are not stated here. Defaults
@@ -52,6 +121,21 @@ librosa becomes a direct dependency of the project, rather than arriving only
 through autochord.
 
 ## Output
+
+**With Beat This!** each line also gives the beat's place in the bar, after a
+tab (1 = downbeat):
+
+```
+# beat-this 1.1.0, model final0, minimal post-processing (no DBN)
+0.460	3
+1.060	4
+1.660	1
+...
+```
+
+**Readers of beats only** (`read_beats`) ignore the second column, so the
+play-along page and the chord evaluation are unchanged. **`read_beat_numbers`**
+gives the places in the bar. librosa writes times only, as below.
 
 `beat-tracking/track_beats.py` reads a song's audio and writes
 `results/beat-tracking/librosa/<song>.txt`, the same song name as its folder in
@@ -196,12 +280,48 @@ uv run python beat-tracking/check_beats.py results/beat-tracking/librosa-varying
     --out results/beat-tracking/check/librosa-varying/1016.json
 ```
 
+## Checking against a player's taps
+
+**There is no gold for our songs, so a person makes the reference.**
+
+**How to tap.**
+- **Tool:** a beat-tapping tool such as Sonic Visualiser, or any player that
+  records key presses with their times.
+- **Take:** about 30 s of a song, typically a verse into a chorus.
+- **What to tap:** every beat. Mark the downbeats too, if you can count the
+  bars.
+- **Save as:** a beat file, `data/Custom_Songs/<song>/beats_tapped.txt`. It is
+  in `data/` because a person made it.
+
+**How to score it:**
+
+```sh
+uv run python beat-tracking/check_beats.py results/beat-tracking/beat-this/<song>.txt \
+    --taps data/Custom_Songs/<song>/beats_tapped.txt --out results/beat-tracking/check/beat-this/<song>.json
+```
+
+**What is reported:** mir_eval's beat F-measure (70 ms), CMLt and AMLt
+(Raffel et al., ISMIR 2014). With places in the bar in both files, the
+downbeat F-measure too.
+
+**Only the tapped stretch is scored.** Tracked beats outside it are left out,
+from half a gap before the first tap to half a gap after the last. The
+measures are called directly, because `mir_eval.beat.evaluate` first drops
+every beat before 5 s (`trim_beats`, in the installed `mir_eval/beat.py`).
+
+**A person's own lag.** A person taps a little early or late, by a steady
+amount. `median_offset` reports it, so a steady lag is not mistaken for the
+tracker's error. **[ORIGINAL]** method.
+
 ## Files
 
 | file | what it is | in git |
 |---|---|---|
-| `beat-tracking/track_beats.py` | audio → beat times and tempo; `--varying-tempo` lets the tempo change | yes |
-| `beat-tracking/check_beats.py` | tracked beats against a McGill song's annotation | yes |
+| `beat-tracking/track_beats.py` | audio → beats and places in the bar (Beat This!), or beats only (librosa, `--tracker librosa`); `--clicks` | yes |
+| `beat-tracking/check_beats.py` | tracked beats against a player's taps (`--taps`), or a McGill song's annotation | yes |
+| `results/beat-tracking/beat-this/<song>.txt` | Beat This!'s beats, with places in the bar | yes |
+| `data/Custom_Songs/<song>/beats_tapped.txt` | a player's tapped beats | yes: a person made it (`.gitignore` lets it through, as `lines.lab`) |
+| `data/preprocessed/clicks/<song>.wav` | the recording with clicks | no (copyrighted audio) |
 | `common/salami.py` | reads McGill's `salami_chords.txt`: phrases, sections, bars, a beat grid | yes |
 | `common/beats.py` | reads and writes beat files; the play-along page reads them too | yes |
 | `results/beat-tracking/librosa/<song>.txt` | the beat times, one tempo | yes |
@@ -213,10 +333,7 @@ uv run python beat-tracking/check_beats.py results/beat-tracking/librosa-varying
 
 ## Not in this version
 
-- downbeats and the meter, so no "1 2 3 4" counting and no bars;
-- strumming patterns;
-- moving chord changes onto beats;
-- other trackers, such as *Beat this!* (Foscarin, Schlüter & Widmer, ISMIR
-  2024; [code](https://github.com/CPJKU/beat_this), MIT licence), whose README
-  shows it returning both: *"To obtain a list of beats and downbeats for an
-  audio file, run: `beats, downbeats = file2beats(audio_path)`"*.
+- **Strumming patterns.**
+- **Moving chord changes onto beats.** This is next: beat-synchronous chord
+  decoding (`docs/design.md`).
+- **The play-along page** does not yet use places in the bar.

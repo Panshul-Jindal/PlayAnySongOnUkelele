@@ -241,7 +241,7 @@ def report_cascade(duration):
 
 def write_csv(path, duration, segments):
     import csv
-    with open(path, "w", newline="") as fh:
+    with open(path, "w", newline="", encoding="utf-8") as fh:
         writer = csv.writer(fh)
         writer.writerow(["label", "root", "quality", "bass",
                          "pitch_classes", "segments", "seconds"])

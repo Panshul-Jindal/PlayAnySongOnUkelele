@@ -62,7 +62,7 @@ def score(est, gold, shift=0.0, scale=1.0):
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("est", help="estimated chords, e.g. results/chord-estimation/autochord/<song>.lab")
+    parser.add_argument("est", help="estimated chords, e.g. results/chord-estimation/lv-chordia/<song>.lab")
     parser.add_argument("gold", help="gold chords, e.g. data/McGillBillboard/McGill-Billboard/1016/full.lab")
     parser.add_argument("--shift", type=float, default=0.0, help="seconds added to the gold times (from align.py)")
     parser.add_argument("--scale", type=float, default=1.0, help="factor the gold times are multiplied by first (from align.py)")
@@ -77,7 +77,7 @@ def main():
     print("".join(f"{100 * scores[k]:9.1f}" for k in METRICS))
     if args.out:
         os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
-        with open(args.out, "w") as fh:
+        with open(args.out, "w", encoding="utf-8") as fh:
             json.dump({"est": args.est, "gold": args.gold, "gold_shift_seconds": args.shift,
                        "gold_scale": args.scale, **scores}, fh, indent=2)
         print(f"wrote {args.out}")
