@@ -31,6 +31,8 @@ The current state, in one page: [`project_state.md`](project_state.md).
   an easy chord reached too fast from another is avoided only there.
 - **Uploads in the app's own folder** (`data/preprocessed/gradio-tmp/`): on the
   shared server another user's Gradio owned `/tmp/gradio`.
+- **The app's results apart from `results/`** (`data/preprocessed/app-results/`): songs run on
+  the server had changed tracked files, which stopped `git pull`.
 - **Optional background music** (`data/app/background.mp3`, git-ignored): soft,
   looped, an on/off button, faded out when a visitor starts adding a song.
 

@@ -38,6 +38,11 @@ import fetch_tab
 
 #: each run's page, recording and lyrics; the only folder the app serves
 RUNS = os.path.join(HERE, "data", "preprocessed", "app")
+#: the pipeline's outputs for songs run through the app, apart from the tracked results/: a server
+#: that runs songs then never changes files git tracks, so `git pull` always applies
+APP_RESULTS = os.path.join(HERE, "data", "preprocessed", "app-results")
+main.TAB_CHORDS = os.path.join(APP_RESULTS, "tab-alignment")
+main.PAGES = os.path.join(APP_RESULTS, "play-along")
 #: optional background music for the landing page: data/ is git-ignored, so a recording stays out of git
 MUSIC = os.path.join(HERE, "data", "app", "background.mp3")
 LEVELS = ("as the tab", "simplified", "easiest")
@@ -75,7 +80,7 @@ def make_page(url, recording, name, progress=gr.Progress()):
         raise gr.Error(f"Could not read that tab: {e}")
     song = main.slug(name.strip()) if name and name.strip() else main.slug(tab["song"])
     progress(0.15, desc="Separating the vocals and timing the words: a few minutes the first time")
-    main.main([recording, "--tab", url, "--name", song])
+    main.main([recording, "--tab", url, "--name", song, "--out", os.path.join(APP_RESULTS, "pipeline")])
 
     run = os.path.join(RUNS, uuid.uuid4().hex[:10])
     os.makedirs(run)

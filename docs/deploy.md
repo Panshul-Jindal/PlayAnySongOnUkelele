@@ -111,4 +111,5 @@ so in the log.
 | `models on cpu` | PyTorch does not see the GPU: check step 1's command, and `nvidia-smi` |
 | "Could not read that tab" | Ultimate Guitar refused the request, or the link is not a tab page |
 | uploads fail with `PermissionError: /tmp/gradio/…` | fixed in the app: another user's Gradio owned the shared `/tmp/gradio`; uploads now go to `data/preprocessed/gradio-tmp/` (or set `GRADIO_TEMP_DIR`) |
+| `git pull` refuses: "local changes … would be overwritten" in `results/` | older versions of the app wrote songs' results into the tracked `results/`; discard them with `git checkout -- results/` and pull again. The app now writes to `data/preprocessed/app-results/` (git-ignored) |
 | port already in use | another program on 7860: use `--port 7861` (and in the service file) |
