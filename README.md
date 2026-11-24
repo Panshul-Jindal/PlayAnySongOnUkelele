@@ -66,6 +66,20 @@ uv run python beat-tracking/track_beats.py \
 Give the beat file to the play-along page with `--beats`, and it shows a pulse
 on each beat, the tempo, and an optional click. See `beat-tracking/README.md`.
 
+## From an Ultimate Guitar tab: the play-along page
+
+Give a recording and its Ultimate Guitar tab: the chords come from the tab,
+timed by the words they sit on, simplified for a beginner, and shown in a
+play-along page with the tab's strumming pattern and a "too hard" button.
+
+```bash
+uv run python main.py data/Custom_Songs/UkeleleOriginal/Riptide/original.wav \
+    --tab https://tabs.ultimate-guitar.com/tab/vance-joy/riptide-ukulele-1391193 --name riptide
+```
+
+Then open `results/play-along/from-tab/riptide.html` and load the recording and
+`data/Custom_Songs/riptide/tab_lyrics.txt`. See `tab-alignment/README.md`.
+
 ## The pipeline: main.py
 
 **Status: built.** `main.py` chains the steps, in the order of its first

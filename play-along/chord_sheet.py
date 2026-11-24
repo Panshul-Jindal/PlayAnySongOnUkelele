@@ -72,11 +72,16 @@ def index_at(starts, t):
     return bisect.bisect_right(starts, t) - 1
 
 
-def chord_line(text, s, e, labels, starts, beat=0.0):
+def chord_line(text, s, e, labels, starts, beat=0.0, words=None):
     """Chord names over a lyric line sung from s until e, as page.html's chordLine.
 
     The chord sounding at s is left out when it started before s and the next
     one comes within `beat` seconds: it is the last line's chord still ringing.
+
+    With `words`, the start time of each of the line's words, each chord goes
+    over the word sung nearest its start instead, and only chords starting in
+    the line are written, from half a beat before s to half a beat before e:
+    the chord still ringing from the last line is not. **[ORIGINAL]** rule.
     """
     out = ""
 
@@ -84,6 +89,15 @@ def chord_line(text, s, e, labels, starts, beat=0.0):
         nonlocal out
         pos = max(pos, len(out) + 1 if out else 0)
         out += " " * (pos - len(out)) + name
+
+    columns = [m.start() for m in re.finditer(r"\S+", text)]
+    if words and len(words) == len(columns):
+        half = beat / 2
+        for label, start in zip(labels, starts):
+            if s - half <= start < e - half:
+                k = min(range(len(words)), key=lambda k: abs(words[k] - start))
+                put(columns[k], label)
+        return out
 
     i = max(0, index_at(starts, s))
     if beat > 0 and starts[i] < s and i + 1 < len(labels) and starts[i + 1] < e and starts[i + 1] - s < beat:
@@ -104,9 +118,10 @@ def chord_line(text, s, e, labels, starts, beat=0.0):
     return out
 
 
-def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, beats=None):
+def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, beats=None, word_starts=None):
     """The sheet's text. segments: the chords as they sound; plan: main.py --voicings's
-    shape for each segment (or None); line_starts: each lyric line's start; beats: beat times."""
+    shape for each segment (or None); line_starts: each lyric line's start; beats: beat times;
+    word_starts: for each line, its words' start times (chord_line places chords by them)."""
     if table is None:
         table = chart.load() if os.path.exists(chart.PATH) else {}
     played = [transpose(s.label, -capo) for s in segments]
@@ -130,7 +145,9 @@ def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, bea
 
     intro = []
     for name, start in zip(shown, starts):
-        if line_starts and start < line_starts[0] and name not in ("–", "?") and (not intro or intro[-1] != name):
+        first = line_starts[0] - (beat_at(beats, line_starts[0]) if beats else 0.5) / 2 if word_starts \
+            else line_starts[0] if line_starts else 0
+        if line_starts and start < first and name not in ("–", "?") and (not intro or intro[-1] != name):
             intro.append(name)
     if intro:
         out += ["Intro: " + " ".join(intro), ""]
@@ -138,7 +155,8 @@ def sheet(segments, capo, lyrics, line_starts, title, plan=None, table=None, bea
     for j, text in enumerate(lyrics[:len(line_starts)]):
         e = line_starts[j + 1] if j + 1 < len(line_starts) else end
         beat = beat_at(beats, line_starts[j]) if beats else 0.5
-        out += [chord_line(text, line_starts[j], e, shown, starts, beat), text, ""]
+        words = word_starts[j] if word_starts and j < len(word_starts) else None
+        out += [chord_line(text, line_starts[j], e, shown, starts, beat, words), text, ""]
     return "\n".join(out).rstrip("\n") + "\n"
 
 
