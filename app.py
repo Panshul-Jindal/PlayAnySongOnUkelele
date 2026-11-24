@@ -26,6 +26,11 @@ import uuid
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
+# uploads go to a folder of our own, not the shared /tmp/gradio: on a shared server another user's
+# Gradio may own that one, and then every upload fails with "Permission denied"
+os.environ.setdefault("GRADIO_TEMP_DIR", os.path.join(HERE, "data", "preprocessed", "gradio-tmp"))
+os.makedirs(os.environ["GRADIO_TEMP_DIR"], exist_ok=True)
+
 import gradio as gr
 
 import main
@@ -42,13 +47,14 @@ KEEP_DAYS = 7
 
 def clean_up(days):
     """Delete runs older than `days` days: they hold uploaded recordings and lyrics."""
-    if not os.path.isdir(RUNS):
-        return
     cutoff = time.time() - days * 86400
-    for run in os.listdir(RUNS):
-        path = os.path.join(RUNS, run)
-        if os.path.isdir(path) and os.path.getmtime(path) < cutoff:
-            shutil.rmtree(path, ignore_errors=True)
+    for folder in (RUNS, os.environ["GRADIO_TEMP_DIR"]):      # our runs, and Gradio's copies of uploads
+        if not os.path.isdir(folder):
+            continue
+        for entry in os.listdir(folder):
+            path = os.path.join(folder, entry)
+            if os.path.getmtime(path) < cutoff:
+                shutil.rmtree(path, ignore_errors=True) if os.path.isdir(path) else os.remove(path)
 
 
 def served(path):

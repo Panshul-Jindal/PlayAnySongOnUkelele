@@ -110,4 +110,5 @@ so in the log.
 | the page does not open from a phone | not on the campus network; or the app started without `--host 0.0.0.0`; or a firewall: `sudo ufw allow 7860` |
 | `models on cpu` | PyTorch does not see the GPU: check step 1's command, and `nvidia-smi` |
 | "Could not read that tab" | Ultimate Guitar refused the request, or the link is not a tab page |
+| uploads fail with `PermissionError: /tmp/gradio/…` | fixed in the app: another user's Gradio owned the shared `/tmp/gradio`; uploads now go to `data/preprocessed/gradio-tmp/` (or set `GRADIO_TEMP_DIR`) |
 | port already in use | another program on 7860: use `--port 7861` (and in the service file) |
