@@ -1,0 +1,33 @@
+photograph.lab: 66 segments, 243.9 s of chords
+
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0 10.13     0.0%
+   1  8.72     0.0%
+   2  5.61     0.0%
+   3 11.01     0.0%
+   4  3.06   100.0%   <- recommended
+   5 11.21     0.0%
+   6  8.42     0.0%   above fret 5: not considered
+   7  6.30     0.0%   above fret 5: not considered
+   8 10.91     0.0%   above fret 5: not considered
+   9  4.87     0.0%   above fret 5: not considered
+  10 10.44     0.0%   above fret 5: not considered
+  11  5.56     0.0%   above fret 5: not considered
+
+capo 4: the shapes to play, by share of chord time
+  C (sounds E)        29.8%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  Am (sounds C#m)     24.3%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  F (sounds A)        23.9%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  G (sounds B)        22.0%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+
+capo 0: the shapes to play, by share of chord time
+  E                   29.8%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  C#m                 24.3%   frets 1444  fingers 1234   span 3  fingers 4  barre 0   d 13
+  A                   23.9%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  B                   22.0%   frets 4322  fingers 3211   span 2  fingers 3  barre 1   d 10
+
+shapes in a row (difficulty/voicings.py, a finger move counts 2 points of d):
+  chart's first shapes: d 257 in all, 98 finger moves
+  chosen shapes:        d 257 in all, 98 finger moves

@@ -11,13 +11,17 @@ requires-python = ">=3.13"
 dependencies = [
     "audioop-lts>=0.2.1",     # pydub, lv-chordia's audio loader, imports audioop, removed in 3.13
     "beat-this>=1.1.0",       # beats and downbeats (beat-tracking/README.md)
+    "beautifulsoup4>=4.15.0", # tab-alignment/fetch_tab.py
+    "demucs>=4.0.1",          # tab-alignment: vocals separated before transcription
+    "faster-whisper>=1.2.1",  # tab-alignment/transcribe.py
     "librosa>=1.0.0",
     "lv-chordia",
     "mir-eval>=0.8.2",
     "numpy",
+    "requests>=2.34.2",       # tab-alignment/fetch_tab.py
     "scipy",
     "soundfile",
-    "torch>=2.13.0",          # lv-chordia, BTC and Beat This!
+    "torch>=2.13.0",          # lv-chordia, BTC, Beat This! and demucs
     "torchaudio>=2.11",       # Beat This!'s spectrogram; 2.11 is torchaudio's last release and does not pin torch
 ]
 
@@ -42,5 +46,5 @@ explicit = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # Our scripts are not packages, so tests import them from their folders.
-pythonpath = ["beat-tracking", "chord-estimation", "chord-evaluation", "common", "difficulty", "play-along", "preprocessing", "transformations", "."]
+pythonpath = ["beat-tracking", "chord-estimation", "chord-evaluation", "common", "difficulty", "play-along", "preprocessing", "simplification", "tab-alignment", "transformations", "."]
 addopts = ["--import-mode=importlib"]

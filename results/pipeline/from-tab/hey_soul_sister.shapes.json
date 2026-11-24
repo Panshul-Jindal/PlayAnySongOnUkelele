@@ -1,0 +1,1945 @@
+{
+ "capo": 4,
+ "w_move": 2.0,
+ "shapes": [
+  null,
+  {
+   "start": 6.965333333333334,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 7.274666666666667,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 9.44,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 9.55,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 11.914666666666667,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 14.08,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 17.162666666666667,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 19.018666666666668,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 21.813333333333333,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 24.586666666666666,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 26.442666666666668,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 27.370666666666665,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 27.68,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 31.701333333333334,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 34.794666666666664,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 36.650666666666666,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 39.12533333333333,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 41.57866666666666,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 44.064,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 46.24,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 46.39,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 47.477333333333334,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 51.18933333333333,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 53.973333333333336,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 54.89066666666667,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 55.82933333333333,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 56.757333333333335,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 58.922666666666665,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 60.14933333333333,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 60.86,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 61.38666666666666,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 63.552,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 65.22,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 66.02666666666667,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 66.336,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 69.12,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 71.904,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 73.14133333333334,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 75.92533333333333,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 77.16266666666667,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 78.4,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 82.42133333333334,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 86.44266666666667,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 88.608,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 91.08266666666667,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 93.55733333333333,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 96.96,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 97.00999999999999,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 97.05999999999999,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 100.96,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 104.064,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 106.24,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 108.40533333333333,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 110.88,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 113.664,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 115.82933333333334,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 117.99466666666666,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 120.14933333333333,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 120.768,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 122.944,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 124.78933333333333,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 125.408,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 126.03733333333334,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 128.192,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 129.42933333333335,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 130.16,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 130.66666666666666,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 133.4,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 134.52,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 135.31733333333332,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 135.62666666666667,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 137.472,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 140.256,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 143.04,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 145.51466666666667,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 148.29866666666666,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 150.464,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 152.32,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 155.72266666666667,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 158.19733333333335,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 159.43466666666666,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 160.36266666666666,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 163.14666666666668,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 164.384,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 165.01333333333332,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 165.62133333333333,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 167.78666666666666,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 169.024,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 169.74,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 170.54933333333332,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 172.736,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 174.12,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 174.912,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 175.21066666666667,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 177.06666666666666,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 177.06766666666667,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 177.99466666666666,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 180.43733333333333,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 182.82,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 184.02,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 184.8,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 185.10933333333332,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 187.88266666666667,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 189.42933333333335,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 192.20266666666666,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 193.13066666666666,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 193.44,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 193.74933333333334,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 193.75033333333334,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 193.8,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 196.224,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 196.53333333333333,
+   "label": "F:maj",
+   "frets": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 196.84266666666667,
+   "label": "G:maj",
+   "frets": [
+    0,
+    2,
+    3,
+    2
+   ],
+   "fingers": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "chart": true
+  },
+  {
+   "start": 197.152,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  }
+ ]
+}

@@ -71,6 +71,16 @@ button:disabled { opacity: .5; }
 #play { min-width: 52px; }
 #seek { flex: 1; min-width: 160px; accent-color: var(--accent); }
 #time { font-variant-numeric: tabular-nums; }
+#hardrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+#hardnote { text-transform: none; letter-spacing: 0; }
+#strumbox { margin-top: 24px; }
+#strum { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 8px;
+         font: 26px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+#strum span { min-width: 1.3em; padding: 2px 0; border-radius: 4px; text-align: center; color: var(--muted); }
+#strum span.beat { margin-left: 8px; }
+#strum span.stroke { color: var(--fg); }
+#strum span.accent { font-weight: 800; }
+#strum span.on { background: var(--accent); color: var(--on-accent); }
 </style>
 </head>
 <body>
@@ -87,6 +97,10 @@ button:disabled { opacity: .5; }
       <div id="now"></div>
       <div id="sounding"></div>
       <div id="nowshape" class="shape big"></div>
+      <div id="hardrow" hidden>
+        <button id="hard" title="H">Too hard for me</button>
+        <span id="hardnote" class="label"></span>
+      </div>
     </div>
     <div>
       <div class="label">next</div>
@@ -102,6 +116,10 @@ button:disabled { opacity: .5; }
     <pre id="nextline"></pre>
   </section>
   <section id="upcoming"></section>
+  <section id="strumbox" hidden>
+    <div class="label">strum <select id="strumpart"></select> <span id="strumbpm"></span></div>
+    <div id="strum"></div>
+  </section>
 </main>
 
 <section id="list">
@@ -122,7 +140,9 @@ button:disabled { opacity: .5; }
   <label>music <input id="volume" type="range" min="0" max="1" step="0.05" value="1"></label>
   <button id="tap" disabled>Tap lines</button>
   <button id="download" hidden>Download lines.lab</button>
-  <span class="keys">Space play/pause · ← → 5 s</span>
+  <button id="resethard" hidden>Reset my hard chords</button>
+  <button id="export" hidden>Export feedback</button>
+  <span class="keys">Space play/pause · ← → 5 s<span id="hardkey" hidden> · H too hard</span></span>
 </footer>
 
 <script id="song-data" type="application/json">{{DATA}}</script>
@@ -161,7 +181,7 @@ function lyricLines(text) {
   });
 }
 
-function chordLine(text, s, e, segs, starts, capo, beat) {
+function chordLine(text, s, e, segs, starts, capo, beat, words) {
   // chord names over a lyric line sung from s until e: first the chord sounding
   // at s, then each change above the point of the line it falls on in time,
   // moved to the start of a word; names never overlap. The chord sounding at s
@@ -173,6 +193,21 @@ function chordLine(text, s, e, segs, starts, capo, beat) {
     pos = Math.max(pos, out.length ? out.length + 1 : 0);
     out += " ".repeat(pos - out.length) + name;
   };
+  // with `words`, each word's start time: each chord starting in the line (from
+  // half a beat before s to half a beat before e) goes over the word sung nearest
+  // its start, and the last line's chord still ringing is not written
+  // (chord_sheet.py chord_line)
+  const columns = [...text.matchAll(/\S+/g)].map(m => m.index);
+  if (words && words.length === columns.length && columns.length) {
+    const half = beat / 2;
+    for (let k = 0; k < segs.length; k++) {
+      if (starts[k] < s - half || starts[k] >= e - half) continue;
+      let w = 0;
+      for (let j = 1; j < words.length; j++) if (Math.abs(words[j] - starts[k]) < Math.abs(words[w] - starts[k])) w = j;
+      put(columns[w], segs[k].names[capo]);
+    }
+    return out;
+  }
   let i = Math.max(0, indexAt(starts, s));
   if (beat > 0 && starts[i] < s && i + 1 < segs.length && starts[i + 1] < e && starts[i + 1] - s < beat) i++;
   put(0, segs[i].names[capo]);
@@ -259,13 +294,78 @@ function linesLab(starts, end) {
     (i + 1 < starts.length ? starts[i + 1] : end).toFixed(3) + "\tline " + (i + 1)).join("\n") + "\n";
 }
 
+// ---- personalisation: which chord a player plays, and at which capo ----
+
+const HARD_PENALTY = 10;   // d points a shape the player marked too hard costs on top of its own
+
+function playedAs(seg, c, hard) {
+  // what a player plays for seg at capo c, given the shape names they marked
+  // too hard: the chord's own shape, or its triad (transformations/reduce.py)
+  // when the own shape is marked and the triad is not. seg.own holds the
+  // chord's own names and shapes once the page has started swapping
+  const own = seg.own || seg;
+  const mine = {name: own.names[c], shape: own.shapes[c], d: seg.d ? seg.d[c] : null, swapped: false};
+  const t = seg.triad;
+  if (!t || !hard.has(mine.name) || hard.has(t.names[c]) || !t.shapes[c]) return mine;
+  return {name: t.names[c], shape: t.shapes[c], d: t.d[c], swapped: true};
+}
+
+function personalCost(segs, c, hard) {
+  // the song's difficulty D at capo c for this player: the time-weighted mean
+  // of d (difficulty/difficulty.py) over the chords played, plus HARD_PENALTY
+  // for each shape they marked too hard; chords without a score are left out
+  let total = 0, scored = 0;
+  for (const s of segs) {
+    if (s.label === "N" || s.label === "X") continue;
+    const p = playedAs(s, c, hard);
+    if (p.d === null || p.d === undefined) continue;
+    total += s.end - s.start;
+    scored += (s.end - s.start) * (p.d + (hard.has(p.name) ? HARD_PENALTY : 0));
+  }
+  return total ? scored / total : Infinity;
+}
+
+function bestCapo(segs, hard, capos) {
+  // of the given capos, the one with the smallest personalCost; on a tie, the lower
+  let best = capos[0], least = personalCost(segs, capos[0], hard);
+  for (const c of capos) {
+    const cost = personalCost(segs, c, hard);
+    if (cost < least - 1e-9) { best = c; least = cost; }
+  }
+  return best;
+}
+
+function barOffset(beats, starts) {
+  // which beat, counted mod 4, a bar starts on: the one most chord changes fall
+  // on (within 0.15 s), since chords mostly change on a bar's first beat
+  const count = [0, 0, 0, 0];
+  for (const t of starts) {
+    const b = indexAt(beats, t + 0.15);
+    if (b >= 0 && Math.abs(beats[b] - t) <= 0.15) count[b % 4]++;
+  }
+  return count.indexOf(Math.max(...count));
+}
+
+function strumStep(beats, t, perBeat, steps, offset) {
+  // which step of a strumming pattern of `steps` steps, `perBeat` to a beat,
+  // falls at time t, with bars starting on beats offset, offset + 4, ...;
+  // -1 outside the beats
+  const b = indexAt(beats, t);
+  if (b < 0 || b + 1 >= beats.length || steps <= 0) return -1;
+  const beatsInPattern = Math.max(1, Math.round(steps / perBeat));
+  const frac = (t - beats[b]) / (beats[b + 1] - beats[b]);
+  const beat = ((b - offset) % beatsInPattern + beatsInPattern) % beatsInPattern;
+  return Math.min(steps - 1, beat * perBeat + Math.floor(frac * perBeat));
+}
+
 // ---- the page ----
 
 const DATA = JSON.parse(document.getElementById("song-data").textContent);
 const SEGS = DATA.segments;
 const STARTS = SEGS.map(s => s.start);
 const BEATS = DATA.beats || [];
-const STORE = "play-along:" + DATA.source + ":lines";
+// a page made from a tab keeps its taps apart from a page of the same song made otherwise
+const STORE = "play-along:" + DATA.source + (DATA.words ? ":tab" : "") + ":lines";
 const TAPPED = "tapped in this browser";
 const $ = id => document.getElementById(id);
 const audio = new Audio();
@@ -312,6 +412,13 @@ function loadLineTimes() {
 
 function checkLyrics() {
   if (!lyrics) return;
+  // tapped times that don't fit this lyrics file give way to the page's own, if those fit
+  if (lineStarts && lineStarts.length !== lyrics.length && lineSource === TAPPED &&
+      DATA.lines && DATA.lines.length === lyrics.length) {
+    lineStarts = DATA.lines.map(l => l.start);
+    lineSource = "embedded in this page";
+    $("download").hidden = true;
+  }
   if (!lineStarts) {
     say("lyrics", "info", "Lyrics: " + lyrics.length + " lines. Press “Tap lines” to time them.");
   } else if (lineStarts.length !== lyrics.length) {
@@ -430,7 +537,8 @@ function renderLyrics(t, changed) {
     return;
   }
   const end = j + 1 < lineStarts.length ? lineStarts[j + 1] : (audio.duration || DATA.duration);
-  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo, beatAt(BEATS, lineStarts[j]));
+  const words = DATA.words && lineSource === "embedded in this page" ? DATA.words[j] : null;
+  chord.textContent = chordLine(lyrics[j], lineStarts[j], end, SEGS, STARTS, capo, beatAt(BEATS, lineStarts[j]), words);
   line.textContent = lyrics[j];
   next.textContent = lyrics[j + 1] || "";
 }
@@ -532,6 +640,148 @@ document.addEventListener("keydown", e => {
   else if (!tapping && e.code === "ArrowLeft") audio.currentTime = Math.max(0, audio.currentTime - 5);
   else if (!tapping && e.code === "ArrowRight") audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
 });
+
+// ---- personalisation: "too hard" marks, kept per player across songs ----
+
+const HARD_STORE = "ukulele-player:hard-shapes";
+const PERSONAL = SEGS.length > 0 && Array.isArray(SEGS[0].d);   // pages made from a tab carry the scores
+let hard = new Set();
+try { hard = new Set(JSON.parse(localStorage.getItem(HARD_STORE)) || []); } catch (e) { hard = new Set(); }
+
+function saveHard() {
+  try { localStorage.setItem(HARD_STORE, JSON.stringify([...hard])); } catch (e) { /* this visit only */ }
+}
+
+function applyHard() {
+  // every chord's names and shapes as this player plays them, at every capo
+  for (const s of SEGS) {
+    for (let c = 0; c < 12; c++) {
+      const p = playedAs(s, c, hard);
+      s.names[c] = p.name;
+      s.shapes[c] = p.shape;
+    }
+  }
+}
+
+function frets(shape) { return shape && shape.frets ? shape.frets.join("") : "?"; }
+
+function markHard() {
+  const t = audio.currentTime || 0;
+  const seg = SEGS[Math.max(0, indexAt(STARTS, t))];
+  if (!seg || seg.label === "N" || seg.label === "X") return;
+  const name = seg.names[capo];
+  hard.add(name);
+  saveHard();
+  applyHard();
+  const was = capo;
+  capo = bestCapo(SEGS, hard, [0, 1, 2, 3, 4, 5]);
+  $("capo").value = capo;
+  let text = name + " marked too hard.";
+  if (capo !== was) text += " Capo moved to " + (capo ? "fret " + capo : "none") + ": easier for you overall.";
+  if (seg.names[capo] !== name && capo === was) text += " Playing " + seg.names[capo] + " instead.";
+  if (capo === was && seg.names[capo] === name) text += " No easier way found for it; it costs more when choosing the capo.";
+  say("hard", "info", text);
+  showHard();
+  render(true);
+}
+
+function showHard() {
+  $("hardnote").textContent = hard.size ? "too hard for you: " + [...hard].join(", ") : "";
+  $("resethard").hidden = $("export").hidden = !hard.size;
+}
+
+function exportFeedback() {
+  // rows for data/player-feedback/comparisons.csv: each swap the page made, the
+  // triad played (easier) against the shape marked too hard (harder)
+  const player = (prompt("Your player id for the feedback file", "p1") || "p1").trim();
+  const date = new Date().toISOString().slice(0, 10);
+  const rows = new Set();
+  for (const s of SEGS) {
+    const p = playedAs(s, capo, hard);
+    if (!p.swapped) continue;
+    const own = s.own;
+    rows.add([date, player, DATA.song || DATA.source, capo, p.name + " " + frets(p.shape),
+              own.names[capo] + " " + frets(own.shapes[capo]), "yes",
+              '"marked too hard in the play-along page"'].join(","));
+  }
+  const text = rows.size ? [...rows].join("\n") + "\n" : "# no swaps yet: marked too hard, with no easier triad: " + [...hard].join(" ") + "\n";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], {type: "text/csv"}));
+  a.download = "feedback.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+if (PERSONAL) {
+  for (const s of SEGS) s.own = {names: s.names.slice(), shapes: s.shapes.slice()};
+  $("hardrow").hidden = false;
+  $("hardkey").hidden = false;
+  if (hard.size) {
+    applyHard();
+    const mine = bestCapo(SEGS, hard, [0, 1, 2, 3, 4, 5]);
+    if (mine !== capo) {
+      say("hard", "info", "Opened at capo " + (mine ? "fret " + mine : "none") + " instead of " +
+          (capo ? "fret " + capo : "none") + ": easier with the chords you find too hard.");
+      capo = mine;
+      $("capo").value = capo;
+    }
+  }
+  showHard();
+  $("hard").addEventListener("click", e => { markHard(); e.currentTarget.blur(); });
+  $("resethard").addEventListener("click", e => {
+    hard = new Set();
+    saveHard();
+    applyHard();
+    capo = DATA.capo || 0;
+    $("capo").value = capo;
+    say("hard", "info", "Your too-hard marks are cleared.");
+    showHard();
+    render(true);
+    e.currentTarget.blur();
+  });
+  $("export").addEventListener("click", e => { exportFeedback(); e.currentTarget.blur(); });
+  document.addEventListener("keydown", e => {
+    if (e.code === "KeyH" && !tapping && audio.readyState > 0 && !e.ctrlKey && !e.metaKey) markHard();
+  });
+}
+
+// ---- the strumming pattern, from the tab, in time with the beats ----
+
+const STRUMS = DATA.strummings || [];
+const ARROW = {"down": "↓", "up": "↑", "palm mute": "▪", "pause": "·"};
+let strumShown = -2, strumPattern = 0;
+const BAR_OFFSET = BEATS.length ? barOffset(BEATS, STARTS) : 0;
+
+function drawStrum() {
+  const box = $("strum"), pat = STRUMS[strumPattern];
+  box.textContent = "";
+  pat.steps.forEach((st, k) => {
+    const span = document.createElement("span");
+    span.textContent = (st.effect === "mute" ? "x" : "") + (ARROW[st.stroke] || "?");
+    span.className = (st.stroke === "down" || st.stroke === "up" ? "stroke" : "") +
+      (st.effect === "accent" ? " accent" : "") + (k && k % pat.per_beat === 0 ? " beat" : "");
+    box.appendChild(span);
+  });
+  $("strumbpm").textContent = pat.bpm ? "the tab's tempo " + pat.bpm + " BPM" : "";
+  strumShown = -2;
+}
+
+if (STRUMS.length && STRUMS[0].steps.length) {
+  $("strumbox").hidden = false;
+  STRUMS.forEach((p, k) => $("strumpart").add(new Option(p.part || "pattern " + (k + 1), k)));
+  $("strumpart").addEventListener("change", e => { strumPattern = Number(e.target.value); drawStrum(); e.target.blur(); });
+  drawStrum();
+  (function strumFrame() {
+    const pat = STRUMS[strumPattern];
+    const k = BEATS.length ? strumStep(BEATS, audio.currentTime || 0, pat.per_beat, pat.steps.length, BAR_OFFSET) : -1;
+    if (k !== strumShown) {
+      [...$("strum").children].forEach((span, j) => span.classList.toggle("on", j === k));
+      strumShown = k;
+    }
+    requestAnimationFrame(strumFrame);
+  })();
+}
 
 loadLineTimes();
 (function frame() { render(false); requestAnimationFrame(frame); })();

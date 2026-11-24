@@ -45,10 +45,12 @@ MODEL = "final0"
 TRACKERS = ("beat-this", "librosa")
 
 
-def track(y, sr):
-    """librosa, one tempo: (tempo in BPM, beat times in seconds) for audio y at sample rate sr."""
+def track(y, sr, start_bpm=START_BPM):
+    """librosa, one tempo: (tempo in BPM, beat times in seconds) for audio y at sample rate sr.
+
+    start_bpm is the tracker's first guess at the tempo, e.g. a tab's."""
     import librosa
-    tempo, times = librosa.beat.beat_track(y=y, sr=sr, start_bpm=START_BPM, tightness=TIGHTNESS, units="time")
+    tempo, times = librosa.beat.beat_track(y=y, sr=sr, start_bpm=start_bpm, tightness=TIGHTNESS, units="time")
     return float(np.atleast_1d(tempo)[0]), [float(t) for t in times]
 
 

@@ -1,0 +1,58 @@
+{
+ "tab words": 293,
+ "heard words": 291,
+ "tab words matched": 269,
+ "chords": {
+  "word": 90,
+  "word, interpolated": 14,
+  "line end": 10
+ },
+ "capo": 4,
+ "snap shift s (median, 90%, max)": [
+  0.06,
+  0.13,
+  0.16
+ ],
+ "key": {
+  "tab capo": 4,
+  "fit at capo": 0.79,
+  "best shift": 4,
+  "fit at best": 0.79,
+  "used": 4
+ },
+ "url": "https://tabs.ultimate-guitar.com/tab/train/hey-soul-sister-ukulele-1331391",
+ "recommended_capo": 4,
+ "versions": {
+  "as the tab": {
+   "capo": 4,
+   "w_fit": null,
+   "D": 3.85,
+   "changes": 114,
+   "notes": 1.0,
+   "chroma": 1.0
+  },
+  "triads only": {
+   "capo": 4,
+   "D": 3.85,
+   "changes": 114,
+   "notes": 1.0,
+   "chroma": 1.0
+  },
+  "simplified": {
+   "capo": 2,
+   "w_fit": 2,
+   "D": 2.94,
+   "changes": 93,
+   "notes": 0.919,
+   "chroma": 1.082
+  },
+  "easiest": {
+   "capo": 2,
+   "w_fit": 0,
+   "D": 2.8,
+   "changes": 93,
+   "notes": 0.881,
+   "chroma": 0.892
+  }
+ }
+}
