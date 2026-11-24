@@ -4,7 +4,7 @@
  "shapes": [
   null,
   {
-   "start": 6.861496598639456,
+   "start": 6.501587301587302,
    "label": "C:maj",
    "frets": [
     0,
@@ -106,7 +106,7 @@
    "chart": true
   },
   {
-   "start": 38.080725623582765,
+   "start": 38.44063492063492,
    "label": "F:maj",
    "frets": [
     2,
@@ -225,7 +225,7 @@
    "chart": true
   },
   {
-   "start": 68.92843537414966,
+   "start": 68.76,
    "label": "C:maj",
    "frets": [
     0,
@@ -293,23 +293,6 @@
    "chart": true
   },
   {
-   "start": 95.75909297052154,
-   "label": "D:min",
-   "frets": [
-    2,
-    2,
-    1,
-    0
-   ],
-   "fingers": [
-    2,
-    3,
-    1,
-    0
-   ],
-   "chart": true
-  },
-  {
    "start": 98.74285714285715,
    "label": "A:min7",
    "frets": [
@@ -361,7 +344,7 @@
    "chart": true
   },
   {
-   "start": 110.66630385487528,
+   "start": 110.2831746031746,
    "label": "C:maj",
    "frets": [
     0,
@@ -396,6 +379,23 @@
   },
   {
    "start": 121.11528344671201,
+   "label": "G:sus4",
+   "frets": [
+    0,
+    2,
+    3,
+    3
+   ],
+   "fingers": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 122.22984126984127,
    "label": "C:maj",
    "frets": [
     0,
@@ -429,7 +429,7 @@
    "chart": true
   },
   {
-   "start": 132.07000000000002,
+   "start": 130.53,
    "label": "F:maj",
    "frets": [
     2,
@@ -446,7 +446,7 @@
    "chart": true
   },
   {
-   "start": 137.50857142857143,
+   "start": 144.59065759637187,
    "label": "C:maj",
    "frets": [
     0,
@@ -463,7 +463,7 @@
    "chart": true
   },
   {
-   "start": 144.9621768707483,
+   "start": 149.43201814058958,
    "label": "F:maj",
    "frets": [
     2,
@@ -476,28 +476,28 @@
     0,
     1,
     0
-   ],
-   "chart": true
-  },
-  {
-   "start": 152.41578231292516,
-   "label": "C:maj",
-   "frets": [
-    0,
-    0,
-    0,
-    3
-   ],
-   "fingers": [
-    0,
-    0,
-    0,
-    3
    ],
    "chart": true
   },
   {
    "start": 154.28498866213152,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 155.39954648526077,
    "label": "F:maj",
    "frets": [
     2,
@@ -514,7 +514,7 @@
    "chart": true
   },
   {
-   "start": 156.1425850340136,
+   "start": 156.5257142857143,
    "label": "G:7",
    "frets": [
     0,
@@ -531,7 +531,7 @@
    "chart": true
   },
   {
-   "start": 158.01179138321996,
+   "start": 157.64027210884353,
    "label": "C:maj",
    "frets": [
     0,
@@ -548,7 +548,7 @@
    "chart": true
   },
   {
-   "start": 164.94,
+   "start": 164.3392290249433,
    "label": "F:maj",
    "frets": [
     2,
@@ -560,6 +560,40 @@
     2,
     0,
     1,
+    0
+   ],
+   "chart": true
+  },
+  {
+   "start": 168.06603174603174,
+   "label": "C:maj",
+   "frets": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "fingers": [
+    0,
+    0,
+    0,
+    3
+   ],
+   "chart": true
+  },
+  {
+   "start": 169.56371882086168,
+   "label": "A:min",
+   "frets": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "fingers": [
+    2,
+    0,
+    0,
     0
    ],
    "chart": true
@@ -599,7 +633,7 @@
    "chart": true
   },
   {
-   "start": 179.01000000000002,
+   "start": 179.43,
    "label": "F:maj",
    "frets": [
     2,
@@ -616,7 +650,7 @@
    "chart": true
   },
   {
-   "start": 193.79374149659864,
+   "start": 191.78,
    "label": "C:maj",
    "frets": [
     0,
@@ -633,7 +667,7 @@
    "chart": true
   },
   {
-   "start": 202.73342403628118,
+   "start": 201.61886621315193,
    "label": "F:maj",
    "frets": [
     2,
@@ -650,7 +684,7 @@
    "chart": true
   },
   {
-   "start": 206.4602267573696,
+   "start": 206.0887074829932,
    "label": "C:maj",
    "frets": [
     0,

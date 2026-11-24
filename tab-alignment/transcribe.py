@@ -25,6 +25,11 @@ import subprocess
 import sys
 import tempfile
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "common"))
+
+from devices import on_gpu, torch_device
+
 #: faster-whisper model: English-only "small" runs on a CPU in about real time
 MODEL = "small.en"
 #: Whisper's prompt is cut to its last 224 tokens; this many characters stays under that
@@ -35,20 +40,50 @@ def separate(audio, out_wav):
     """Write the vocals of `audio` to `out_wav` with Demucs htdemucs; return out_wav."""
     with tempfile.TemporaryDirectory() as tmp:
         subprocess.run([sys.executable, "-m", "demucs", "--two-stems", "vocals", "-n", "htdemucs",
-                        "-o", tmp, audio], check=True)
+                        "-d", torch_device(), "-o", tmp, audio], check=True)
         name = os.path.splitext(os.path.basename(audio))[0]
         os.makedirs(os.path.dirname(os.path.abspath(out_wav)), exist_ok=True)
         shutil.move(os.path.join(tmp, "htdemucs", name, "vocals.wav"), out_wav)
     return out_wav
 
 
+def _load_cuda_libraries():
+    """Load the cuBLAS and cuDNN that PyTorch's CUDA build installed (nvidia-*-cu12 packages),
+    so CTranslate2, which faster-whisper runs on, finds them without LD_LIBRARY_PATH."""
+    import ctypes
+    import glob
+    import importlib.util
+    for package, pattern in (("nvidia.cublas", "libcublas*.so*"), ("nvidia.cudnn", "libcudnn*.so*")):
+        spec = importlib.util.find_spec(package)
+        for folder in (spec.submodule_search_locations or []) if spec else []:
+            for lib in sorted(glob.glob(os.path.join(folder, "lib", pattern))):
+                try:
+                    ctypes.CDLL(lib, mode=ctypes.RTLD_GLOBAL)
+                except OSError:
+                    pass
+
+
+def whisper_model(model=MODEL):
+    """faster-whisper's model on the GPU (float16) when there is one, else on the CPU (int8).
+    Falls back to the CPU if the GPU can't be used."""
+    from faster_whisper import WhisperModel
+    if on_gpu():
+        try:
+            _load_cuda_libraries()
+            device = torch_device()
+            index = int(device.split(":")[1]) if ":" in device else 0
+            return WhisperModel(model, device="cuda", device_index=index, compute_type="float16")
+        except Exception as e:  # noqa: BLE001  any failure: the CPU still works
+            print(f"Whisper on the GPU failed ({e}); using the CPU", file=sys.stderr)
+    return WhisperModel(model, device="cpu", compute_type="int8")
+
+
 def transcribe(audio, prompt=None, model=MODEL):
     """[{"word", "start", "end"}] for every word Whisper hears in `audio`."""
     import librosa
-    from faster_whisper import WhisperModel
     # decoded here, not by faster-whisper: its decoder breaks with av 19 (open() lost metadata_errors)
     samples, _ = librosa.load(audio, sr=16000, mono=True)
-    whisper = WhisperModel(model, device="cpu", compute_type="int8")
+    whisper = whisper_model(model)
     segments, _ = whisper.transcribe(samples, language="en", word_timestamps=True, vad_filter=False,
                                      initial_prompt=prompt[:PROMPT_CHARS] if prompt else None,
                                      condition_on_previous_text=False)

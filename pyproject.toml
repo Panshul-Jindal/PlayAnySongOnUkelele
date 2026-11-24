@@ -35,13 +35,26 @@ dev = [
 # LV-Chordia is installed from source (upstream stopped publishing to PyPI
 # after 1.1.0), pinned to one commit; its wheel carries the model weights.
 lv-chordia = { git = "https://github.com/openmirlab/lv-chordia", rev = "d8ab9ac99bce081bb79065d717f96e2c3b2099c8" }
-# CPU-only torch: far smaller than the default CUDA build.
-torch = { index = "pytorch-cpu" }
-torchaudio = { index = "pytorch-cpu" }
+# torch: the CUDA 12.6 build on Linux, so a server's GPUs are used (it runs on
+# the CPU where there is no GPU; CUDA 12.6 needs an NVIDIA driver >= 560, and
+# 2.14 is the newest torch built for CUDA 12); the CPU-only build elsewhere.
+torch = [
+    { index = "pytorch-cu126", marker = "sys_platform == 'linux'" },
+    { index = "pytorch-cpu", marker = "sys_platform != 'linux'" },
+]
+torchaudio = [
+    { index = "pytorch-cu126", marker = "sys_platform == 'linux'" },
+    { index = "pytorch-cpu", marker = "sys_platform != 'linux'" },
+]
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
 explicit = true
 
 [tool.pytest.ini_options]

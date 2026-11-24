@@ -25,6 +25,7 @@ recording (.wav) ────┘    (tab_to_lab.md)     (simplification.md)   (a
 | chord evidence and judge | lv-chordia's heads; harmonic misalignment | built (Madhava) | [`design.md`](design.md) §2, §4 |
 | 3. personalisation | re-decoding with the player's costs, in the browser: speaker adaptation, for players | built | [`app_and_page.md`](app_and_page.md) |
 | the app | Gradio | built | [`app_and_page.md`](app_and_page.md) |
+| hosting | the GPU server on the college network, `http://192.168.50.208:7860` | being set up | [`deploy.md`](deploy.md) |
 
 ## Headline numbers (10 songs) **[ORIGINAL]**
 
@@ -69,7 +70,7 @@ The Climb was run later through the app.
   until players agree.
 - The page has not been clicked through with sound by us.
 - Repeatability: Demucs + Whisper vary by a few words between runs.
-- CPU only; English only.
+- English only. GPU support is added for the server (`deploy.md`); laptops still run on the CPU.
 
 ## Run it
 

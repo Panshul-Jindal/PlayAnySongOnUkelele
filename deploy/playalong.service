@@ -1,0 +1,20 @@
+# The play-along app as a systemd user service: always running, restarted if it
+# stops or the machine reboots. Install it as docs/deploy.md describes.
+#
+# Edit WorkingDirectory if the repository is somewhere else, and
+# CUDA_VISIBLE_DEVICES to pick the GPU (0, 1, 2 or 3: nvidia-smi shows which are free).
+
+[Unit]
+Description=Ukulele play-along app (PlayAnySongOnUkelele)
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/Ukelele/PlayAnySongOnUkelele
+Environment=CUDA_VISIBLE_DEVICES=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=%h/.local/bin/uv run python app.py --host 0.0.0.0 --port 7860
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

@@ -127,7 +127,8 @@ def lv_chordia_heads_for(audio, song):
         return own
     path = os.path.join(HEADS, f"{song}-{recording_stamp(audio)}.npz")
     if not os.path.exists(path):
-        ensemble = lv_chordia_heads.load_ensemble()
+        from devices import torch_device
+        ensemble = lv_chordia_heads.load_ensemble(torch_device())
         mean, _ = lv_chordia_heads.extract(audio, ensemble)
         lv_chordia_heads.save(path, mean, None, lv_chordia_heads.model_names(ensemble))
     return path

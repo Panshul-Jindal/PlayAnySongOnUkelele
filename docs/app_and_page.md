@@ -77,8 +77,7 @@ automated yet.
 
 - Not clicked through with sound by us yet; tested on its logic and by
   fetching every served file.
-- CPU only: a CUDA build of torch would cut a new song from minutes to seconds,
-  at the cost of a large reinstall.
+- On a laptop's CPU a new song takes minutes; the GPU server is for that ([`deploy.md`](deploy.md)).
 - Line times come from Whisper, so lyrics display best with the tab's own
   lyrics file (`tab_lyrics.txt`), which the app loads; a lyrics file from
   elsewhere breaks lines differently.

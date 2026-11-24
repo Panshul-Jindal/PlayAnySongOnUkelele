@@ -1,35 +1,35 @@
-the_climb.lab: 62 segments, 221.4 s of chords
+the_climb.lab: 62 segments, 221.8 s of chords
 
-bass dropped: 2 segments, 1.0% of chord time (E:maj/3)
+bass dropped: 2 segments, 0.5% of chord time (E:maj/3)
 
 capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
-   0  9.37     0.0%
-   1  9.76     0.0%
-   2  5.06     0.0%
-   3 10.93     0.0%
-   4  2.99   100.0%   <- recommended
-   5 11.12     0.0%
-   6  8.71     0.0%   above fret 5: not considered
-   7  5.23     0.0%   above fret 5: not considered
-   8 11.68     0.0%   above fret 5: not considered
-   9  4.24     0.0%   above fret 5: not considered
-  10 10.33     0.0%   above fret 5: not considered
-  11  6.79     0.0%   above fret 5: not considered
+   0  9.26     0.0%
+   1  9.84     0.0%
+   2  5.09     0.0%
+   3 10.91     0.0%
+   4  3.07   100.0%   <- recommended
+   5 11.14     0.0%
+   6  8.65     0.0%   above fret 5: not considered
+   7  5.24     0.0%   above fret 5: not considered
+   8 11.66     0.0%   above fret 5: not considered
+   9  4.14     0.0%   above fret 5: not considered
+  10 10.35     0.0%   above fret 5: not considered
+  11  6.86     0.0%   above fret 5: not considered
 
 capo 4: the shapes to play, by share of chord time
-  C (sounds E)        48.6%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
-  F (sounds A)        29.4%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
-  Dm (sounds F#m)     10.6%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
-  Am (sounds C#m)      7.2%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
-  Em (sounds Abm)      2.4%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
+  C (sounds E)        47.5%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  F (sounds A)        30.4%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Dm (sounds F#m)     11.2%   frets 2210  fingers 2310   span 1  fingers 3  barre 0   d 6
+  Am (sounds C#m)      6.5%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+  Em (sounds Abm)      2.6%   frets 0432  fingers 0321   span 2  fingers 3  barre 0   d 9
   G (sounds B)         1.8%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
 
 capo 0: the shapes to play, by share of chord time
-  E                   48.6%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
-  A                   29.4%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
-  F#m                 10.6%   frets 2120  fingers 2130   span 1  fingers 3  barre 0   d 6
-  C#m                  7.2%   frets 1444  fingers 1234   span 3  fingers 4  barre 0   d 13
-  Abm                  2.4%   frets 1342  fingers 1342   span 3  fingers 4  barre 0   d 13
+  E                   47.5%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  A                   30.4%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  F#m                 11.2%   frets 2120  fingers 2130   span 1  fingers 3  barre 0   d 6
+  C#m                  6.5%   frets 1444  fingers 1234   span 3  fingers 4  barre 0   d 13
+  Abm                  2.6%   frets 1342  fingers 1342   span 3  fingers 4  barre 0   d 13
   B                    1.8%   frets 4322  fingers 3211   span 2  fingers 3  barre 1   d 10
 
 shapes in a row (difficulty/voicings.py, a finger move counts 2 points of d):

@@ -9,6 +9,26 @@ The current state, in one page: [`project_state.md`](project_state.md).
 
 ---
 
+## 2026-11-24, later: hosting on the GPU server, a new look
+
+- **GPU when present** (`common/devices.py`): Demucs, Whisper (float16) and
+  lv-chordia run on the GPU; the CPU otherwise. `PLAYALONG_DEVICE` overrides.
+- **PyTorch's CUDA 12.6 build on Linux** (`pyproject.toml`): torch 2.14.1+cu126,
+  torchaudio 2.11.0+cu126, the newest built for CUDA 12, which the server's
+  575 driver supports; the CPU build elsewhere stays 2.15.
+- **The app as a campus service** ([`deploy.md`](deploy.md)): `--host 0.0.0.0`,
+  2 songs at once on a GPU, runs deleted after 7 days, an optional password;
+  `deploy/playalong.service` keeps it running; `deploy/server_check.py` checks a
+  server first. The AI-CoE server (4 × RTX 6000 Ada) passed: reachable from
+  phones and laptops on campus Wi-Fi at `192.168.50.208`.
+- **A new look for the app:** a cream page with staff lines, always light; a
+  sunset header with floating notes, a spinning record and a drawn ukulele; the
+  pipeline as five coloured steps naming each technique; the three headline
+  numbers; example tabs; a result card with a big button to the page and the
+  levels as tiles.
+- **Optional background music** (`data/app/background.mp3`, git-ignored): soft,
+  looped, an on/off button, faded out when a visitor starts adding a song.
+
 ## 2026-11-24: chords from Ultimate Guitar, simplification by decoding, the app
 
 Seven commits on `main`, two of them merges with Madhava's work

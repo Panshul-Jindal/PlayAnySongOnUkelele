@@ -12,4 +12,5 @@ data/McGill-audio
 data/models
 # lv-chordia's heads: binary, rebuilt by chord-estimation/lv_chordia_heads.py
 results/chord-estimation/lv-chordia-heads/*.npz
-*.wav
+*.wav# the app's background music: a recording, kept out of git
+data/app/
