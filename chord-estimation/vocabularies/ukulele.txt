@@ -1,0 +1,31 @@
+# The ukulele vocabulary: chord types with at most 4 notes, written on C.
+# A ukulele has four strings, so it can sound at most four different notes.
+# [ORIGINAL] list, 2026-11-24, as follows:
+#   - every type in lv-chordia's `submission` dictionary with at most 4 notes,
+#     left without its slash bass (the bass is not scored: chord_decoder --no-bass);
+#   - plus maj6, min6, minmaj7, add9 and minor add9, which have 4 notes and
+#     shapes in chords-db's ukulele list (suffixes 6, m6, mmaj7, add9, madd9).
+# Left out: 9, maj9, min9 (5 notes), 11 (6 notes), 13 (7 notes).
+# Note counts are checked by tests/chord-estimation/test_chord_decoder.py with
+# common/harte.py, and expressibility by lv-chordia's heads with chord_indices.
+# The 6th and add-9 chords use the 13th and 9th heads: decode WITHOUT
+# --no-extended, or they tie with plain major and minor.
+# Lines starting with # are comments (common/chord_scores.read_templates).
+C:maj
+C:min
+C:7
+C:maj7
+C:min7
+C:minmaj7
+C:maj6
+C:min6
+C:dim
+C:dim7
+C:hdim7
+C:aug
+C:sus2
+C:sus4
+C:sus4(b7)
+C:maj(9)
+C:min(9)
+N

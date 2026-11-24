@@ -6,6 +6,12 @@
 uv sync
 ```
 
+Works on Windows, Linux and macOS: Python 3.13, CPU-only torch, and
+lv-chordia from a pinned commit. autochord is retired, and with it
+TensorFlow and `vamp` (`chord-estimation/README.md`). Computing new NNLS
+chroma for McGill alignment needs `vamp` and a plugin installed by hand, on
+Linux, macOS or WSL (`chord-evaluation/README.md`).
+
 ## Download the dataset
 
 ```bash
@@ -31,7 +37,9 @@ dataset skip when `data/` is missing.
 
 ## Chord estimation
 
-Three published estimators, one script: `autochord`, `btc` and `lv-chordia`.
+Two published estimators, one script: `lv-chordia` (the default) and `btc`.
+A third, `autochord`, is retired; its earlier results stay in
+`results/chord-estimation/autochord/`.
 
 ```bash
 uv run python chord-estimation/estimate_chords.py \

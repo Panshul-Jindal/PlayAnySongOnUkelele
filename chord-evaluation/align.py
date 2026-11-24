@@ -31,14 +31,30 @@ STEP = 2048 / 44100
 
 def mcgill_chroma(folder):
     """The 24 chroma values per frame from a McGill folder's bothchroma.csv."""
-    with open(os.path.join(folder, "bothchroma.csv")) as fh:
+    with open(os.path.join(folder, "bothchroma.csv"), encoding="utf-8") as fh:
         return np.array([[float(x) for x in row[2:26]] for row in csv.reader(fh)])
 
 
+#: what to do when the NNLS-Chroma plugin cannot run here
+NO_NNLS = ("NNLS-Chroma is not available here. It needs the `vamp` Python host and the "
+           "NNLS-Chroma VAMP plugin; neither installs on Windows. Saved alignments in "
+           "results/chord-evaluation/alignment/ still work everywhere. To compute new ones, "
+           "see chord-evaluation/README.md (Linux, macOS or WSL).")
+
+
 def audio_chroma(path):
-    """The same 24 values per frame for an audio file, from the NNLS-Chroma plugin autochord installs."""
+    """The same 24 values per frame for an audio file, from the NNLS-Chroma VAMP plugin.
+
+    Needs `vamp` and the plugin, which autochord used to install (Linux only);
+    both are now installed by hand (chord-evaluation/README.md).
+    """
+    try:
+        import vamp
+    except ImportError:
+        raise SystemExit(NO_NNLS)
+    if "nnls-chroma:nnls-chroma" not in vamp.list_plugins():
+        raise SystemExit(NO_NNLS)
     import librosa
-    import vamp
     y, _ = librosa.load(path, sr=44100, mono=True)
     return np.asarray(vamp.collect(y, 44100, "nnls-chroma:nnls-chroma", output="bothchroma",
                                    parameters={"rollon": 1.0})["matrix"][1])
@@ -124,7 +140,7 @@ def time_map(local, fallback_shift):
 
 def read_map(path):
     """(scale, shift) from an alignment file written by this script."""
-    with open(path) as fh:
+    with open(path, encoding="utf-8") as fh:
         result = json.load(fh)
     m = result.get("time_map") or {"scale": 1.0, "shift": result["gold_shift_seconds"]}
     return m["scale"], m["shift"]
@@ -157,7 +173,7 @@ def main():
           + ("" if on_line is None else f" ({on_line} of {used} windows within 0.1 s of the line)"))
     if args.out:
         os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
-        with open(args.out, "w") as fh:
+        with open(args.out, "w", encoding="utf-8") as fh:
             json.dump(result, fh, indent=2)
         print(f"wrote {args.out}")
 

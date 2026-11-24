@@ -29,14 +29,15 @@ def js(expression):
     """The value of a JavaScript expression evaluated after the pure functions."""
     pure = re.search(r"// ---- pure functions.*?\n(.*?)// ---- the page", page(), re.S).group(1)
     script = pure + "\nconsole.log(JSON.stringify(" + expression + "));"
-    done = subprocess.run([NODE, "-e", script], capture_output=True, text=True, check=True)
+    # Node writes UTF-8; Windows would otherwise decode it as cp1252 ("…" -> "â€¦")
+    done = subprocess.run([NODE, "-e", script], capture_output=True, text=True, encoding="utf-8", check=True)
     return json.loads(done.stdout)
 
 
 def test_the_script_parses(tmp_path):
     scripts = re.findall(r"<script>(.*?)</script>", page(), re.S)
     path = tmp_path / "page.js"
-    path.write_text("\n".join(scripts))
+    path.write_text("\n".join(scripts), encoding="utf-8")
     subprocess.run([NODE, "--check", str(path)], check=True)
 
 

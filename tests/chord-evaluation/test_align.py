@@ -1,6 +1,7 @@
 """Checks of chord-evaluation/align.py on inputs built by hand."""
 
 import numpy as np
+import pytest
 
 import align
 
@@ -58,3 +59,11 @@ def test_the_time_map_is_read_back_or_falls_back_to_the_single_shift(tmp_path):
     without.write_text(json.dumps({"gold_shift_seconds": -0.2}))
     assert align.read_map(with_map) == (0.99, 0.1)
     assert align.read_map(without) == (1.0, -0.2)
+
+
+def test_without_the_nnls_plugin_align_stops_with_a_message(monkeypatch):
+    # Windows has no vamp build: computing NNLS chroma must say so, not crash
+    import sys
+    monkeypatch.setitem(sys.modules, "vamp", None)
+    with pytest.raises(SystemExit, match="NNLS-Chroma is not available"):
+        align.audio_chroma("any.wav")

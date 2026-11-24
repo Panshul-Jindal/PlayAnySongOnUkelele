@@ -20,7 +20,7 @@ pytestmark = pytest.mark.skipif(not os.path.exists(chart.PATH), reason="needs ./
 
 @pytest.fixture(scope="module")
 def raw():
-    with open(chart.PATH) as fh:
+    with open(chart.PATH, encoding="utf-8") as fh:
         return json.load(fh)
 
 

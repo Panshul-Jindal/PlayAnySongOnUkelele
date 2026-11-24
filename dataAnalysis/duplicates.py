@@ -32,7 +32,7 @@ import lab
 def header(path):
     """{'title': ..., 'artist': ..., ...} from the '# key: value' lines."""
     out = {}
-    for line in open(path):
+    for line in open(path, encoding="utf-8"):
         m = re.match(r"^#\s*(\w+):\s*(.*)$", line.rstrip("\n"))
         if m:
             out[m.group(1)] = m.group(2).strip()
@@ -42,7 +42,7 @@ def header(path):
 def timed_lines(path):
     """Salami annotation lines split into ([timestamps], [text after the tab])."""
     stamps, texts = [], []
-    for line in open(path):
+    for line in open(path, encoding="utf-8"):
         if line.strip() and not line.startswith("#"):
             stamp, _, text = line.rstrip("\n").partition("\t")
             stamps.append(float(stamp))
@@ -66,7 +66,7 @@ def main():
     args = parser.parse_args()
 
     songs_dir = os.path.join(args.root, "McGill-Billboard")
-    index = [r for r in csv.DictReader(open(os.path.join(args.root, "billboard-2.0-index.csv")))
+    index = [r for r in csv.DictReader(open(os.path.join(args.root, "billboard-2.0-index.csv"), encoding="utf-8"))
              if r["title"]]  # unannotated slots carry only id, date and rank
     folders = sorted(f"{int(r['id']):04d}" for r in index)
     by_index = group((f"{int(r['id']):04d}", (r["title"], r["artist"])) for r in index)
@@ -87,8 +87,8 @@ def main():
     print(f"folders belonging to those songs            {sum(len(v) for v in repeated.values())}")
     identical = 0
     for (title, _), ids in repeated.items():
-        sal = [open(os.path.join(songs_dir, f, "salami_chords.txt")).read() for f in ids]
-        labs = [open(os.path.join(songs_dir, f, "full.lab")).read() for f in ids]
+        sal = [open(os.path.join(songs_dir, f, "salami_chords.txt"), encoding="utf-8").read() for f in ids]
+        labs = [open(os.path.join(songs_dir, f, "full.lab"), encoding="utf-8").read() for f in ids]
         if len(set(sal)) == 1 and len(set(labs)) == 1:
             identical += 1
             continue

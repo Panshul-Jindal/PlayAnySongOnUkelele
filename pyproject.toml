@@ -2,20 +2,28 @@
 name = "playanysongonukelele"
 version = "0.1.0"
 requires-python = ">=3.13"
+# What our code imports, and what lv-chordia needs on Python 3.13. autochord, and
+# with it TensorFlow, tf-keras, vamp and setuptools<81 (for its pkg_resources),
+# was retired: chord-estimation/README.md. vamp is deliberately not listed, even
+# for Linux only: uv locks for every platform, and on Windows reading vamp's
+# metadata can mean building it. Only chord-evaluation/align.py's NNLS chroma
+# needs it; how to install it there is in chord-evaluation/README.md.
 dependencies = [
-    "audioop-lts>=0.2.1",
-    "autochord>=0.1.4",
-    "beautifulsoup4>=4.15.0",
-    "demucs>=4.0.1",
-    "faster-whisper>=1.2.1",
-    "gradio>=6.32.0",
+    "audioop-lts>=0.2.1",     # pydub, lv-chordia's audio loader, imports audioop, removed in 3.13
+    "beat-this>=1.1.0",       # beats and downbeats (beat-tracking/README.md)
+    "beautifulsoup4>=4.15.0", # tab-alignment/fetch_tab.py
+    "demucs>=4.0.1",          # tab-alignment: vocals separated before transcription
+    "faster-whisper>=1.2.1",  # tab-alignment/transcribe.py
+    "gradio>=6.32.0",         # app.py: the web app for testers
     "librosa>=1.0.0",
     "lv-chordia",
     "mir-eval>=0.8.2",
-    "requests>=2.34.2",
-    "setuptools<81",
-    "tf-keras>=2.21.0",
-    "torch>=2.13.0",
+    "numpy",
+    "requests>=2.34.2",       # tab-alignment/fetch_tab.py
+    "scipy",
+    "soundfile",
+    "torch>=2.13.0",          # lv-chordia, BTC, Beat This! and demucs
+    "torchaudio>=2.11",       # Beat This!'s spectrogram; 2.11 is torchaudio's last release and does not pin torch
 ]
 
 [dependency-groups]
@@ -29,6 +37,7 @@ dev = [
 lv-chordia = { git = "https://github.com/openmirlab/lv-chordia", rev = "d8ab9ac99bce081bb79065d717f96e2c3b2099c8" }
 # CPU-only torch: far smaller than the default CUDA build.
 torch = { index = "pytorch-cpu" }
+torchaudio = { index = "pytorch-cpu" }
 
 [[tool.uv.index]]
 name = "pytorch-cpu"

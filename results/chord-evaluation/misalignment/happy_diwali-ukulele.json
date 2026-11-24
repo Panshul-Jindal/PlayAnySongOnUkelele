@@ -1,0 +1,1159 @@
+{
+  "heads": "results/chord-estimation/lv-chordia-heads/happy_diwali.npz",
+  "sheet": "results/chord-estimation/lv-chordia-ukulele/happy_diwali.lab",
+  "mode": "compatibility",
+  "rules": {
+    "floor_nats": 10.0,
+    "silence_p_n": 0.5,
+    "trim_s": 0.1,
+    "reference": "submission"
+  },
+  "song": {
+    "scored_s": 233.2,
+    "misalignment": 0.0703,
+    "support": 0.6649,
+    "total_nats": 706.39,
+    "seconds": 276.6,
+    "silent_share": 0.0817,
+    "trimmed_share": 0.0752,
+    "unscorable_labels": []
+  },
+  "chords": [
+    {
+      "start": 0.0,
+      "end": 19.16,
+      "label": "N",
+      "scored_s": 0.53,
+      "misalignment": 0.1726,
+      "support": 0.4299,
+      "total_nats": 3.97,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 19.16,
+      "end": 20.78,
+      "label": "Eb:maj",
+      "scored_s": 1.44,
+      "misalignment": 0.0,
+      "support": 0.8244,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 20.78,
+      "end": 23.15,
+      "label": "Bb:maj",
+      "scored_s": 2.18,
+      "misalignment": 0.2876,
+      "support": 0.562,
+      "total_nats": 27.04,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 23.15,
+      "end": 23.99,
+      "label": "Eb:maj",
+      "scored_s": 0.65,
+      "misalignment": 0.0,
+      "support": 0.935,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 23.99,
+      "end": 26.35,
+      "label": "Bb:maj",
+      "scored_s": 2.16,
+      "misalignment": 0.0692,
+      "support": 0.4964,
+      "total_nats": 6.43,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 26.35,
+      "end": 27.19,
+      "label": "F:min",
+      "scored_s": 0.65,
+      "misalignment": 0.0,
+      "support": 0.7224,
+      "total_nats": 0.0,
+      "recording_prefers": "F:min"
+    },
+    {
+      "start": 27.19,
+      "end": 28.77,
+      "label": "Bb:maj",
+      "scored_s": 1.39,
+      "misalignment": 0.0168,
+      "support": 0.5452,
+      "total_nats": 1.01,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 28.77,
+      "end": 31.18,
+      "label": "F:min",
+      "scored_s": 2.23,
+      "misalignment": 0.877,
+      "support": 0.3773,
+      "total_nats": 84.2,
+      "recording_prefers": "F:min"
+    },
+    {
+      "start": 31.18,
+      "end": 31.97,
+      "label": "Ab:maj",
+      "scored_s": 0.6,
+      "misalignment": 0.0656,
+      "support": 0.4773,
+      "total_nats": 1.71,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 31.97,
+      "end": 35.97,
+      "label": "Bb:maj",
+      "scored_s": 3.81,
+      "misalignment": 0.0,
+      "support": 0.8804,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 35.97,
+      "end": 39.17,
+      "label": "Eb:maj",
+      "scored_s": 3.02,
+      "misalignment": 0.0,
+      "support": 0.816,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 39.17,
+      "end": 42.38,
+      "label": "Bb:maj",
+      "scored_s": 3.02,
+      "misalignment": 0.129,
+      "support": 0.606,
+      "total_nats": 16.77,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 42.38,
+      "end": 45.58,
+      "label": "Eb:maj",
+      "scored_s": 3.02,
+      "misalignment": 0.0,
+      "support": 0.7802,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 45.58,
+      "end": 48.79,
+      "label": "Bb:maj",
+      "scored_s": 3.02,
+      "misalignment": 0.0055,
+      "support": 0.6494,
+      "total_nats": 0.72,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 48.79,
+      "end": 49.57,
+      "label": "Eb:maj",
+      "scored_s": 0.56,
+      "misalignment": 0.0,
+      "support": 0.9597,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 49.57,
+      "end": 51.97,
+      "label": "Bb:maj",
+      "scored_s": 2.21,
+      "misalignment": 0.4492,
+      "support": 0.5099,
+      "total_nats": 42.67,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 51.97,
+      "end": 52.78,
+      "label": "Eb:maj",
+      "scored_s": 0.63,
+      "misalignment": 0.0,
+      "support": 0.9415,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 52.78,
+      "end": 54.38,
+      "label": "Bb:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.5718,
+      "support": 0.4644,
+      "total_nats": 34.88,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 54.38,
+      "end": 55.17,
+      "label": "C:min",
+      "scored_s": 0.6,
+      "misalignment": 0.0167,
+      "support": 0.3977,
+      "total_nats": 0.43,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 55.17,
+      "end": 55.98,
+      "label": "F:min",
+      "scored_s": 0.63,
+      "misalignment": 0.0,
+      "support": 0.7354,
+      "total_nats": 0.0,
+      "recording_prefers": "F:min"
+    },
+    {
+      "start": 55.98,
+      "end": 56.77,
+      "label": "Bb:maj",
+      "scored_s": 0.6,
+      "misalignment": 0.0296,
+      "support": 0.7796,
+      "total_nats": 0.77,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 56.77,
+      "end": 58.35,
+      "label": "Ab:maj",
+      "scored_s": 1.39,
+      "misalignment": 0.096,
+      "support": 0.389,
+      "total_nats": 5.76,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 58.35,
+      "end": 59.19,
+      "label": "F:min",
+      "scored_s": 0.65,
+      "misalignment": 0.0,
+      "support": 0.8144,
+      "total_nats": 0.0,
+      "recording_prefers": "F:min"
+    },
+    {
+      "start": 59.19,
+      "end": 60.0,
+      "label": "G:min",
+      "scored_s": 0.63,
+      "misalignment": 0.0,
+      "support": 0.5213,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 60.0,
+      "end": 60.79,
+      "label": "Ab:maj",
+      "scored_s": 0.6,
+      "misalignment": 0.117,
+      "support": 0.5561,
+      "total_nats": 3.04,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 60.79,
+      "end": 63.97,
+      "label": "Bb:maj",
+      "scored_s": 3.0,
+      "misalignment": 0.0927,
+      "support": 0.841,
+      "total_nats": 11.96,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 63.97,
+      "end": 67.99,
+      "label": "Eb:maj",
+      "scored_s": 3.83,
+      "misalignment": 0.0,
+      "support": 0.8361,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 67.99,
+      "end": 69.59,
+      "label": "Ab:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.9677,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 69.59,
+      "end": 70.38,
+      "label": "Eb:maj",
+      "scored_s": 0.6,
+      "misalignment": 0.0,
+      "support": 0.9019,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 70.38,
+      "end": 71.17,
+      "label": "Bb:maj",
+      "scored_s": 0.6,
+      "misalignment": 0.0,
+      "support": 0.58,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 71.17,
+      "end": 72.77,
+      "label": "C:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.8724,
+      "total_nats": 0.0,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 72.77,
+      "end": 74.37,
+      "label": "G:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.5878,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 74.37,
+      "end": 75.98,
+      "label": "Ab:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.9529,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 75.98,
+      "end": 79.97,
+      "label": "Eb:maj",
+      "scored_s": 3.81,
+      "misalignment": 0.0165,
+      "support": 0.8393,
+      "total_nats": 2.71,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 79.97,
+      "end": 80.76,
+      "label": "G:min",
+      "scored_s": 0.6,
+      "misalignment": 0.0,
+      "support": 0.6003,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 80.76,
+      "end": 83.17,
+      "label": "Ab:maj",
+      "scored_s": 2.23,
+      "misalignment": 0.1525,
+      "support": 0.7373,
+      "total_nats": 14.64,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 83.17,
+      "end": 83.99,
+      "label": "Bb:maj",
+      "scored_s": 0.63,
+      "misalignment": 0.0,
+      "support": 0.4478,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 83.99,
+      "end": 85.59,
+      "label": "C:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.7564,
+      "total_nats": 0.0,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 85.59,
+      "end": 87.19,
+      "label": "G:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.5194,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 87.19,
+      "end": 88.77,
+      "label": "Ab:maj",
+      "scored_s": 1.39,
+      "misalignment": 0.0,
+      "support": 0.9303,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 88.77,
+      "end": 93.58,
+      "label": "Eb:maj",
+      "scored_s": 4.62,
+      "misalignment": 0.0646,
+      "support": 0.7737,
+      "total_nats": 12.86,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 93.58,
+      "end": 95.18,
+      "label": "Ab:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.9571,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 95.18,
+      "end": 95.99,
+      "label": "Eb:maj",
+      "scored_s": 0.63,
+      "misalignment": 0.0,
+      "support": 0.9057,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 95.99,
+      "end": 96.76,
+      "label": "Bb:maj",
+      "scored_s": 0.58,
+      "misalignment": 0.0004,
+      "support": 0.3428,
+      "total_nats": 0.01,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 96.76,
+      "end": 98.38,
+      "label": "C:min",
+      "scored_s": 1.44,
+      "misalignment": 0.0,
+      "support": 0.909,
+      "total_nats": 0.0,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 98.38,
+      "end": 99.96,
+      "label": "G:min",
+      "scored_s": 1.39,
+      "misalignment": 0.0,
+      "support": 0.5879,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 99.96,
+      "end": 101.56,
+      "label": "Ab:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.9565,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 101.56,
+      "end": 105.56,
+      "label": "Eb:maj",
+      "scored_s": 3.81,
+      "misalignment": 0.0234,
+      "support": 0.8436,
+      "total_nats": 3.84,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 105.56,
+      "end": 106.37,
+      "label": "G:min",
+      "scored_s": 0.63,
+      "misalignment": 0.0,
+      "support": 0.6796,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 106.37,
+      "end": 108.76,
+      "label": "Ab:maj",
+      "scored_s": 2.21,
+      "misalignment": 0.0,
+      "support": 0.9049,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 108.76,
+      "end": 109.55,
+      "label": "Bb:maj",
+      "scored_s": 0.6,
+      "misalignment": 0.0083,
+      "support": 0.279,
+      "total_nats": 0.22,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 109.55,
+      "end": 111.15,
+      "label": "C:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.7865,
+      "total_nats": 0.0,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 111.15,
+      "end": 112.76,
+      "label": "G:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.6553,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 112.76,
+      "end": 115.17,
+      "label": "Ab:maj",
+      "scored_s": 2.23,
+      "misalignment": 0.0078,
+      "support": 0.8786,
+      "total_nats": 0.75,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 115.17,
+      "end": 119.19,
+      "label": "Eb:maj",
+      "scored_s": 3.83,
+      "misalignment": 0.0665,
+      "support": 0.7829,
+      "total_nats": 10.98,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 119.19,
+      "end": 122.37,
+      "label": "C#:maj",
+      "scored_s": 3.0,
+      "misalignment": 0.0,
+      "support": 0.5461,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 122.37,
+      "end": 125.57,
+      "label": "Eb:maj",
+      "scored_s": 3.02,
+      "misalignment": 0.0,
+      "support": 0.7166,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 125.57,
+      "end": 127.18,
+      "label": "C#:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.7393,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 127.18,
+      "end": 128.78,
+      "label": "Eb:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.6532,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 128.78,
+      "end": 136.77,
+      "label": "F#:maj",
+      "scored_s": 7.8,
+      "misalignment": 0.0934,
+      "support": 0.7273,
+      "total_nats": 31.37,
+      "recording_prefers": "F#:maj"
+    },
+    {
+      "start": 136.77,
+      "end": 138.37,
+      "label": "Eb:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.7341,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:min"
+    },
+    {
+      "start": 138.37,
+      "end": 139.97,
+      "label": "C#:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.8097,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 139.97,
+      "end": 141.55,
+      "label": "B:maj",
+      "scored_s": 1.39,
+      "misalignment": 0.0,
+      "support": 0.803,
+      "total_nats": 0.0,
+      "recording_prefers": "B:maj"
+    },
+    {
+      "start": 141.55,
+      "end": 143.15,
+      "label": "C#:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.8104,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 143.15,
+      "end": 146.38,
+      "label": "Bb:maj",
+      "scored_s": 3.04,
+      "misalignment": 0.0,
+      "support": 0.9439,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 146.38,
+      "end": 149.58,
+      "label": "Eb:maj",
+      "scored_s": 3.02,
+      "misalignment": 0.0147,
+      "support": 0.8054,
+      "total_nats": 1.91,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 149.58,
+      "end": 151.16,
+      "label": "Ab:maj",
+      "scored_s": 1.39,
+      "misalignment": 0.0,
+      "support": 0.9268,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 151.16,
+      "end": 152.76,
+      "label": "Eb:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.4618,
+      "support": 0.5061,
+      "total_nats": 28.17,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 152.76,
+      "end": 154.39,
+      "label": "C:min",
+      "scored_s": 1.44,
+      "misalignment": 0.0,
+      "support": 0.8023,
+      "total_nats": 0.0,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 154.39,
+      "end": 155.97,
+      "label": "G:min",
+      "scored_s": 1.39,
+      "misalignment": 0.0,
+      "support": 0.4222,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 155.97,
+      "end": 157.57,
+      "label": "Ab:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.9403,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 157.57,
+      "end": 162.35,
+      "label": "Eb:maj",
+      "scored_s": 4.6,
+      "misalignment": 0.0603,
+      "support": 0.7367,
+      "total_nats": 11.94,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 162.35,
+      "end": 164.77,
+      "label": "Ab:maj",
+      "scored_s": 2.23,
+      "misalignment": 0.1617,
+      "support": 0.7594,
+      "total_nats": 15.52,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 164.77,
+      "end": 165.56,
+      "label": "Bb:maj",
+      "scored_s": 0.6,
+      "misalignment": 0.0,
+      "support": 0.3923,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 165.56,
+      "end": 167.16,
+      "label": "C:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.7685,
+      "total_nats": 0.0,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 167.16,
+      "end": 168.76,
+      "label": "G:min",
+      "scored_s": 1.42,
+      "misalignment": 0.0,
+      "support": 0.4841,
+      "total_nats": 0.0,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 168.76,
+      "end": 170.36,
+      "label": "Ab:maj",
+      "scored_s": 1.39,
+      "misalignment": 0.0,
+      "support": 0.922,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 170.36,
+      "end": 171.97,
+      "label": "Eb:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0007,
+      "support": 0.7754,
+      "total_nats": 0.04,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 171.97,
+      "end": 173.57,
+      "label": "Ab:maj",
+      "scored_s": 1.42,
+      "misalignment": 0.0081,
+      "support": 0.4907,
+      "total_nats": 0.5,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 173.57,
+      "end": 180.09,
+      "label": "G:min",
+      "scored_s": 6.34,
+      "misalignment": 0.0768,
+      "support": 0.4782,
+      "total_nats": 20.98,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 180.09,
+      "end": 182.11,
+      "label": "Eb:maj",
+      "scored_s": 1.83,
+      "misalignment": 0.0,
+      "support": 0.5871,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 182.11,
+      "end": 188.24,
+      "label": "G:min",
+      "scored_s": 5.94,
+      "misalignment": 0.151,
+      "support": 0.367,
+      "total_nats": 38.65,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 188.24,
+      "end": 190.26,
+      "label": "Eb:maj",
+      "scored_s": 1.83,
+      "misalignment": 0.0,
+      "support": 0.8549,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 190.26,
+      "end": 194.35,
+      "label": "G:min",
+      "scored_s": 3.9,
+      "misalignment": 0.0212,
+      "support": 0.8276,
+      "total_nats": 3.57,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 194.35,
+      "end": 196.39,
+      "label": "Bb:maj",
+      "scored_s": 1.86,
+      "misalignment": 0.0275,
+      "support": 0.544,
+      "total_nats": 2.2,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 196.39,
+      "end": 198.44,
+      "label": "Eb:maj",
+      "scored_s": 1.86,
+      "misalignment": 0.0,
+      "support": 0.8246,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 198.44,
+      "end": 200.34,
+      "label": "Bb:maj",
+      "scored_s": 1.72,
+      "misalignment": 0.1895,
+      "support": 0.5897,
+      "total_nats": 14.02,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 200.34,
+      "end": 202.45,
+      "label": "Eb:maj",
+      "scored_s": 1.9,
+      "misalignment": 0.0,
+      "support": 0.8533,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 202.45,
+      "end": 204.43,
+      "label": "Bb:maj",
+      "scored_s": 1.79,
+      "misalignment": 0.0,
+      "support": 0.7848,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 204.43,
+      "end": 214.2,
+      "label": "Eb:maj",
+      "scored_s": 9.5,
+      "misalignment": 0.3201,
+      "support": 0.6344,
+      "total_nats": 130.92,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 214.2,
+      "end": 216.25,
+      "label": "Ab:maj",
+      "scored_s": 1.86,
+      "misalignment": 0.0,
+      "support": 0.823,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 216.25,
+      "end": 218.29,
+      "label": "Bb:maj",
+      "scored_s": 1.86,
+      "misalignment": 0.0,
+      "support": 0.6707,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 218.29,
+      "end": 220.33,
+      "label": "C:min",
+      "scored_s": 1.23,
+      "misalignment": 0.0063,
+      "support": 0.5713,
+      "total_nats": 0.33,
+      "recording_prefers": "C:min"
+    },
+    {
+      "start": 220.33,
+      "end": 222.4,
+      "label": "Ab:maj",
+      "scored_s": 1.88,
+      "misalignment": 0.0,
+      "support": 0.6323,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 222.4,
+      "end": 225.49,
+      "label": "Bb:maj",
+      "scored_s": 2.9,
+      "misalignment": 0.1602,
+      "support": 0.6483,
+      "total_nats": 20.03,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 225.49,
+      "end": 228.55,
+      "label": "Eb:maj",
+      "scored_s": 2.88,
+      "misalignment": 0.0,
+      "support": 0.679,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 228.55,
+      "end": 230.62,
+      "label": "Bb:maj",
+      "scored_s": 1.88,
+      "misalignment": 0.0,
+      "support": 0.6305,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 230.62,
+      "end": 234.73,
+      "label": "Ab:maj",
+      "scored_s": 3.92,
+      "misalignment": 0.0,
+      "support": 0.4772,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 234.73,
+      "end": 237.8,
+      "label": "G:min",
+      "scored_s": 2.88,
+      "misalignment": 0.0485,
+      "support": 0.2871,
+      "total_nats": 6.02,
+      "recording_prefers": "G:min"
+    },
+    {
+      "start": 237.8,
+      "end": 240.86,
+      "label": "F:min7",
+      "scored_s": 2.88,
+      "misalignment": 0.2237,
+      "support": 0.1768,
+      "total_nats": 27.74,
+      "recording_prefers": "F:min7"
+    },
+    {
+      "start": 240.86,
+      "end": 242.93,
+      "label": "Bb:maj",
+      "scored_s": 1.88,
+      "misalignment": 0.0104,
+      "support": 0.5008,
+      "total_nats": 0.84,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 242.93,
+      "end": 244.97,
+      "label": "Eb:maj",
+      "scored_s": 1.86,
+      "misalignment": 0.0,
+      "support": 0.8165,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 244.97,
+      "end": 247.01,
+      "label": "Bb:maj",
+      "scored_s": 1.86,
+      "misalignment": 0.0078,
+      "support": 0.4996,
+      "total_nats": 0.62,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 247.01,
+      "end": 251.12,
+      "label": "Ab:maj",
+      "scored_s": 3.92,
+      "misalignment": 0.0,
+      "support": 0.4362,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 251.12,
+      "end": 255.21,
+      "label": "Eb:maj",
+      "scored_s": 3.9,
+      "misalignment": 0.1465,
+      "support": 0.3068,
+      "total_nats": 24.62,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 255.21,
+      "end": 257.28,
+      "label": "F:min7",
+      "scored_s": 1.88,
+      "misalignment": 0.0982,
+      "support": 0.1871,
+      "total_nats": 7.95,
+      "recording_prefers": "F:min7"
+    },
+    {
+      "start": 257.28,
+      "end": 259.34,
+      "label": "Bb:maj",
+      "scored_s": 1.88,
+      "misalignment": 0.0003,
+      "support": 0.5534,
+      "total_nats": 0.02,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 259.34,
+      "end": 261.55,
+      "label": "Eb:maj",
+      "scored_s": 2.02,
+      "misalignment": 0.0,
+      "support": 0.8712,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 261.55,
+      "end": 265.06,
+      "label": "G:min",
+      "scored_s": 3.32,
+      "misalignment": 0.2173,
+      "support": 0.3872,
+      "total_nats": 31.07,
+      "recording_prefers": "G:min7"
+    },
+    {
+      "start": 265.06,
+      "end": 267.12,
+      "label": "Ab:maj",
+      "scored_s": 1.88,
+      "misalignment": 0.0,
+      "support": 0.5732,
+      "total_nats": 0.0,
+      "recording_prefers": "Ab:maj"
+    },
+    {
+      "start": 267.12,
+      "end": 268.17,
+      "label": "Bb:maj",
+      "scored_s": 0.86,
+      "misalignment": 0.0,
+      "support": 0.4643,
+      "total_nats": 0.0,
+      "recording_prefers": "Bb:maj"
+    },
+    {
+      "start": 268.17,
+      "end": 273.18,
+      "label": "Eb:maj",
+      "scored_s": 4.83,
+      "misalignment": 0.0,
+      "support": 0.6897,
+      "total_nats": 0.0,
+      "recording_prefers": "Eb:maj"
+    },
+    {
+      "start": 273.18,
+      "end": 276.6,
+      "label": "N",
+      "scored_s": 0.09,
+      "misalignment": 0.0,
+      "support": 0.4386,
+      "total_nats": 0.0,
+      "recording_prefers": "N"
+    }
+  ],
+  "drift": {
+    "frames_compared_s": 233.2,
+    "drift_per_frame": 0.0,
+    "drift_total_nats": 0.0,
+    "changed_chords": []
+  }
+}

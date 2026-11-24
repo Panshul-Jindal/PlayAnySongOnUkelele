@@ -42,7 +42,7 @@ ID = re.compile(r"^\d{4}$")
 def header(path):
     """{'title': ..., 'artist': ..., ...} from the '# key: value' lines."""
     out = {}
-    with open(path) as fh:
+    with open(path, encoding="utf-8") as fh:
         for line in fh:
             m = re.match(r"^#\s*(\w+):\s*(.*)$", line.rstrip("\n"))
             if m:
@@ -148,7 +148,7 @@ def main():
 
     rows = [(c, k, title, artist, same_files(os.path.join(src, c), os.path.join(src, k)))
             for c, k, (title, artist) in copies]
-    with open(csv_path, "w", newline="") as fh:
+    with open(csv_path, "w", newline="", encoding="utf-8") as fh:
         writer = csv.writer(fh)
         writer.writerow(["removed_id", "kept_id", "title", "artist", "identical"])
         writer.writerows(rows)

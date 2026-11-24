@@ -1,27 +1,53 @@
-"""Beat files: one beat time per line, in seconds from the start of the audio;
-lines starting with # are comments. The format is in beat-tracking/README.md.
+"""Beat files: one beat per line, its time in seconds from the start of the audio,
+optionally followed by a tab and its place in the bar (1 = downbeat); lines
+starting with # are comments. The format is in beat-tracking/README.md.
 """
 
 
-def read_beats(path):
-    """(beat times, comment lines without their #)."""
-    times, comments = [], []
-    with open(path) as fh:
+def _beat_lines(path):
+    """(the fields of each beat line, comment lines without their #)."""
+    rows, comments = [], []
+    with open(path, encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
             if line.startswith("#"):
                 comments.append(line[1:].strip())
             elif line:
-                times.append(float(line))
-    return times, comments
+                rows.append(line.split())
+    return rows, comments
 
 
-def write_beats(path, times, comment=None):
-    """Beat times to the nearest millisecond, after a comment line if one is given."""
-    with open(path, "w") as fh:
+def read_beats(path):
+    """(beat times, comment lines without their #). A place-in-bar column is ignored."""
+    rows, comments = _beat_lines(path)
+    return [float(r[0]) for r in rows], comments
+
+
+def read_beat_numbers(path):
+    """Each beat's place in the bar (1 = downbeat), or None if the file has no such column."""
+    rows, _ = _beat_lines(path)
+    if not rows or any(len(r) < 2 for r in rows):
+        return None
+    return [int(r[1]) for r in rows]
+
+
+def downbeats(times, numbers):
+    """The beat times numbered 1."""
+    return [t for t, n in zip(times, numbers) if n == 1]
+
+
+def write_beats(path, times, comment=None, numbers=None):
+    """Beat times to the nearest millisecond, after a comment line if one is given;
+    with `numbers`, each beat's place in the bar after a tab."""
+    with open(path, "w", encoding="utf-8") as fh:
         if comment:
             fh.write(f"# {comment}\n")
-        fh.writelines(f"{t:.3f}\n" for t in times)
+        if numbers is None:
+            fh.writelines(f"{t:.3f}\n" for t in times)
+        else:
+            if len(numbers) != len(times):
+                raise ValueError("one number per beat")
+            fh.writelines(f"{t:.3f}\t{n}\n" for t, n in zip(times, numbers))
 
 
 def near(times, beats, window):

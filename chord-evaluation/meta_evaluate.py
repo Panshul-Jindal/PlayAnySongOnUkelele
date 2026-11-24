@@ -195,7 +195,7 @@ def main():
 
     summary = {"song": song, "gold_scale": scale, "gold_shift": shift, "estimates": song_level,
                "checks": checks, "auc": aucs}
-    with open(os.path.join(args.out, song + "_meta.json"), "w") as fh:
+    with open(os.path.join(args.out, song + "_meta.json"), "w", encoding="utf-8") as fh:
         json.dump(summary, fh, indent=2)
 
     print(f"{'signal':<20}{'AUC':>6}  95% interval   segments (right)")

@@ -35,3 +35,39 @@ def test_double_tempo_is_reported_as_a_ratio_of_two():
     assert out["f_measure"] == pytest.approx(2 / 3)
     assert out["cmlt"] == 0.0
     assert out["amlt"] > 0.9
+
+
+# Taps every 0.5 s from 1.0 s to 30.5 s, in 4/4 with the first tap a downbeat.
+TAPS = np.arange(1.0, 31.0, 0.5)
+TAP_NUMBERS = [i % 4 + 1 for i in range(len(TAPS))]
+# A tracker over the whole 60 s song, on the same grid and the same bars.
+TRACKED = np.arange(0.0, 60.0, 0.5)
+TRACKED_NUMBERS = [(i - 2) % 4 + 1 for i in range(len(TRACKED))]   # 1.0 s is beat 3 from 0 s: a downbeat
+
+
+def test_beats_outside_the_tapped_stretch_are_not_counted_as_extra():
+    out = check_beats.against_taps(TRACKED, TAPS, TRACKED_NUMBERS, TAP_NUMBERS)
+    # half a gap either side: 0.75 s to 30.75 s holds 1.0 ... 30.5, the 60 taps' own times
+    assert out["tracked_in_stretch"] == 60 == out["taps"]
+    assert out["f_measure"] == pytest.approx(1.0)
+    assert out["downbeat_f_measure"] == pytest.approx(1.0)
+    assert out["tempo_ratio"] == pytest.approx(1.0)
+
+
+def test_taps_before_5_s_are_kept():
+    # mir_eval's evaluate() would trim beats before 5 s; the tapped stretch starts at 1 s
+    out = check_beats.against_taps(TRACKED, TAPS)
+    assert out["tapped_from"] == 1.0 and out["f_measure"] == pytest.approx(1.0)
+
+
+def test_a_steady_30_ms_lag_is_inside_the_window_and_reported():
+    out = check_beats.against_taps(TRACKED + 0.03, TAPS)
+    assert out["f_measure"] == pytest.approx(1.0)
+    assert out["median_offset"] == pytest.approx(0.03)
+
+
+def test_bars_one_beat_out_score_no_downbeats():
+    shifted = [n % 4 + 1 for n in TRACKED_NUMBERS]     # every downbeat moved one beat later
+    out = check_beats.against_taps(TRACKED, TAPS, shifted, TAP_NUMBERS)
+    assert out["f_measure"] == pytest.approx(1.0)
+    assert out["downbeat_f_measure"] == 0.0

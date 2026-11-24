@@ -17,7 +17,7 @@ _BLANK = object()
 
 def read_lab(path, keep_blank=False):
     """Yield Segments from one .lab file, skipping blank/label-less lines."""
-    with open(path) as fh:
+    with open(path, encoding="utf-8") as fh:
         for lineno, line in enumerate(fh, 1):
             parts = line.rstrip("\n").split("\t")
             if len(parts) < 3 or not parts[2].strip():
@@ -34,7 +34,7 @@ def read_lab(path, keep_blank=False):
 def write_lab(path, segments):
     """Write Segments as a .lab file, one ``start <TAB> end <TAB> label`` line each."""
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-    with open(path, "w") as fh:
+    with open(path, "w", encoding="utf-8") as fh:
         fh.writelines(f"{s.start}\t{s.end}\t{s.label}\n" for s in segments)
 
 

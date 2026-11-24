@@ -38,3 +38,27 @@ def test_one_beat_follows_the_tempo_where_it_is_asked():
     assert abs(beat_at(beats, 18.0) - 0.5) < 1e-9
     assert beat_at(beats, 100.0) == 0.5
     assert beat_at([1.0, 2.0], 1.5) == 0.5
+
+
+def test_places_in_the_bar_are_written_after_a_tab_and_read_back(tmp_path):
+    from beats import downbeats, read_beat_numbers
+    path = tmp_path / "beats.txt"
+    write_beats(path, [0.5, 1.0, 1.5, 2.0, 2.5], "beat-this", numbers=[3, 4, 1, 2, 3])
+    assert path.read_text(encoding="utf-8") == "# beat-this\n0.500\t3\n1.000\t4\n1.500\t1\n2.000\t2\n2.500\t3\n"
+    # readers that only want times are unaffected by the second column
+    assert read_beats(path) == ([0.5, 1.0, 1.5, 2.0, 2.5], ["beat-this"])
+    assert read_beat_numbers(path) == [3, 4, 1, 2, 3]
+    assert downbeats(*read_beats(path)[:1], read_beat_numbers(path)) == [1.5]
+
+
+def test_a_file_without_places_in_the_bar_has_no_numbers(tmp_path):
+    from beats import read_beat_numbers
+    path = tmp_path / "beats.txt"
+    write_beats(path, [0.5, 1.0])
+    assert read_beat_numbers(path) is None
+
+
+def test_one_number_per_beat_is_required(tmp_path):
+    import pytest
+    with pytest.raises(ValueError):
+        write_beats(tmp_path / "b.txt", [0.5, 1.0], numbers=[1])

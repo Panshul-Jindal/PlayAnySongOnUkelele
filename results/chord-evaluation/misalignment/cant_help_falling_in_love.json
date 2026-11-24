@@ -1,0 +1,1587 @@
+{
+  "heads": "results/chord-estimation/lv-chordia-heads/cant_help_falling_in_love.npz",
+  "sheet": "results/chord-estimation/lv-chordia-downbeats/cant_help_falling_in_love.lab",
+  "mode": "compatibility",
+  "rules": {
+    "floor_nats": 10.0,
+    "silence_p_n": 0.5,
+    "trim_s": 0.1,
+    "reference": "submission"
+  },
+  "song": {
+    "scored_s": 164.26,
+    "misalignment": 0.1186,
+    "support": 0.717,
+    "total_nats": 838.93,
+    "seconds": 182.58,
+    "silent_share": 0.0169,
+    "trimmed_share": 0.0834,
+    "unscorable_labels": []
+  },
+  "chords": [
+    {
+      "start": 0.0,
+      "end": 0.19,
+      "label": "N",
+      "scored_s": 0.02,
+      "misalignment": 0.0,
+      "support": 0.3672,
+      "total_nats": 0.0,
+      "recording_prefers": "N"
+    },
+    {
+      "start": 0.19,
+      "end": 2.21,
+      "label": "D:maj",
+      "scored_s": 1.83,
+      "misalignment": 0.0,
+      "support": 0.9342,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 2.21,
+      "end": 4.02,
+      "label": "A:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.7681,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 4.02,
+      "end": 9.54,
+      "label": "D:maj",
+      "scored_s": 5.34,
+      "misalignment": 0.0,
+      "support": 0.9507,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 9.54,
+      "end": 11.33,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8579,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 11.33,
+      "end": 14.93,
+      "label": "B:min",
+      "scored_s": 3.41,
+      "misalignment": 0.0,
+      "support": 0.9297,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 14.93,
+      "end": 16.72,
+      "label": "G:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.9119,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 16.72,
+      "end": 18.51,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.848,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 18.51,
+      "end": 22.08,
+      "label": "A:7",
+      "scored_s": 3.39,
+      "misalignment": 0.5118,
+      "support": 0.3396,
+      "total_nats": 74.72,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 22.08,
+      "end": 23.87,
+      "label": "G:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0061,
+      "support": 0.7141,
+      "total_nats": 0.42,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 23.87,
+      "end": 25.68,
+      "label": "A:7",
+      "scored_s": 1.63,
+      "misalignment": 0.5114,
+      "support": 0.3642,
+      "total_nats": 35.8,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 25.68,
+      "end": 27.47,
+      "label": "B:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8627,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 27.47,
+      "end": 29.3,
+      "label": "G:maj",
+      "scored_s": 1.65,
+      "misalignment": 0.3008,
+      "support": 0.4499,
+      "total_nats": 21.36,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 29.3,
+      "end": 31.11,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.7294,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 31.11,
+      "end": 32.93,
+      "label": "A:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.6919,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 32.93,
+      "end": 38.36,
+      "label": "D:maj",
+      "scored_s": 5.25,
+      "misalignment": 0.0,
+      "support": 0.9363,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 38.36,
+      "end": 40.17,
+      "label": "F#:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8735,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 40.17,
+      "end": 43.75,
+      "label": "B:min",
+      "scored_s": 3.39,
+      "misalignment": 0.0,
+      "support": 0.9362,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 43.75,
+      "end": 45.56,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.9492,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 45.56,
+      "end": 47.35,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8982,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 47.35,
+      "end": 50.94,
+      "label": "A:7",
+      "scored_s": 3.37,
+      "misalignment": 0.4474,
+      "support": 0.3844,
+      "total_nats": 64.87,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 50.94,
+      "end": 52.76,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.7465,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 52.76,
+      "end": 54.59,
+      "label": "A:7",
+      "scored_s": 1.65,
+      "misalignment": 0.425,
+      "support": 0.3873,
+      "total_nats": 30.17,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 54.59,
+      "end": 56.4,
+      "label": "B:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8621,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 56.4,
+      "end": 58.14,
+      "label": "G:maj",
+      "scored_s": 1.56,
+      "misalignment": 0.1302,
+      "support": 0.423,
+      "total_nats": 8.72,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 58.14,
+      "end": 59.93,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0269,
+      "support": 0.7571,
+      "total_nats": 1.85,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 59.93,
+      "end": 61.65,
+      "label": "A:maj",
+      "scored_s": 1.53,
+      "misalignment": 0.0,
+      "support": 0.7115,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 61.65,
+      "end": 65.27,
+      "label": "D:maj",
+      "scored_s": 3.44,
+      "misalignment": 0.0,
+      "support": 0.9605,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 65.27,
+      "end": 67.06,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8354,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 67.06,
+      "end": 68.85,
+      "label": "C#:7",
+      "scored_s": 1.6,
+      "misalignment": 0.7065,
+      "support": 0.304,
+      "total_nats": 48.75,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 68.85,
+      "end": 70.59,
+      "label": "F#:min",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.8648,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 70.59,
+      "end": 72.4,
+      "label": "C#:7",
+      "scored_s": 1.63,
+      "misalignment": 0.5298,
+      "support": 0.3196,
+      "total_nats": 37.09,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 72.4,
+      "end": 74.16,
+      "label": "F#:min",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.8059,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 74.16,
+      "end": 75.93,
+      "label": "C#:7",
+      "scored_s": 1.58,
+      "misalignment": 0.6013,
+      "support": 0.1978,
+      "total_nats": 40.89,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 75.93,
+      "end": 77.74,
+      "label": "F#:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.7468,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 77.74,
+      "end": 79.55,
+      "label": "B:7",
+      "scored_s": 1.63,
+      "misalignment": 0.3151,
+      "support": 0.3725,
+      "total_nats": 22.06,
+      "recording_prefers": "B:maj"
+    },
+    {
+      "start": 79.55,
+      "end": 81.34,
+      "label": "E:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8168,
+      "total_nats": 0.0,
+      "recording_prefers": "E:min"
+    },
+    {
+      "start": 81.34,
+      "end": 83.13,
+      "label": "A:7",
+      "scored_s": 1.6,
+      "misalignment": 0.2836,
+      "support": 0.4192,
+      "total_nats": 19.57,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 83.13,
+      "end": 84.92,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.852,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 84.92,
+      "end": 86.7,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8338,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 86.7,
+      "end": 90.23,
+      "label": "B:min",
+      "scored_s": 3.34,
+      "misalignment": 0.0,
+      "support": 0.8817,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 90.23,
+      "end": 92.04,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.9447,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 92.04,
+      "end": 93.81,
+      "label": "D:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.9012,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 93.81,
+      "end": 97.38,
+      "label": "A:7",
+      "scored_s": 3.37,
+      "misalignment": 0.4685,
+      "support": 0.369,
+      "total_nats": 67.93,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 97.38,
+      "end": 99.15,
+      "label": "G:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.7,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 99.15,
+      "end": 100.96,
+      "label": "A:7",
+      "scored_s": 1.63,
+      "misalignment": 0.4876,
+      "support": 0.3676,
+      "total_nats": 34.13,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 100.96,
+      "end": 102.73,
+      "label": "B:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.602,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 102.73,
+      "end": 104.49,
+      "label": "E:min",
+      "scored_s": 1.56,
+      "misalignment": 0.238,
+      "support": 0.3529,
+      "total_nats": 15.95,
+      "recording_prefers": "E:min"
+    },
+    {
+      "start": 104.49,
+      "end": 106.28,
+      "label": "D:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8413,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 106.28,
+      "end": 108.04,
+      "label": "A:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8132,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 108.04,
+      "end": 111.62,
+      "label": "D:maj",
+      "scored_s": 3.39,
+      "misalignment": 0.0,
+      "support": 0.9666,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 111.62,
+      "end": 113.41,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8337,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 113.41,
+      "end": 115.19,
+      "label": "C#:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.6188,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 115.19,
+      "end": 116.96,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.874,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 116.96,
+      "end": 118.72,
+      "label": "C#:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.6055,
+      "total_nats": 0.0,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 118.72,
+      "end": 120.49,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8377,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 120.49,
+      "end": 122.23,
+      "label": "C#:7",
+      "scored_s": 1.56,
+      "misalignment": 0.5488,
+      "support": 0.3174,
+      "total_nats": 36.77,
+      "recording_prefers": "C#:maj"
+    },
+    {
+      "start": 122.23,
+      "end": 124.02,
+      "label": "F#:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.8429,
+      "total_nats": 0.0,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 124.02,
+      "end": 125.78,
+      "label": "B:7",
+      "scored_s": 1.58,
+      "misalignment": 0.3774,
+      "support": 0.3642,
+      "total_nats": 25.66,
+      "recording_prefers": "B:maj"
+    },
+    {
+      "start": 125.78,
+      "end": 127.57,
+      "label": "E:min7",
+      "scored_s": 1.6,
+      "misalignment": 0.6251,
+      "support": 0.3367,
+      "total_nats": 43.13,
+      "recording_prefers": "E:min"
+    },
+    {
+      "start": 127.57,
+      "end": 129.31,
+      "label": "A:7",
+      "scored_s": 1.56,
+      "misalignment": 0.2949,
+      "support": 0.4174,
+      "total_nats": 19.76,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 129.31,
+      "end": 131.12,
+      "label": "D:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8321,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 131.12,
+      "end": 132.89,
+      "label": "F#:min",
+      "scored_s": 1.58,
+      "misalignment": 0.0002,
+      "support": 0.8027,
+      "total_nats": 0.01,
+      "recording_prefers": "F#:min"
+    },
+    {
+      "start": 132.89,
+      "end": 136.42,
+      "label": "B:min",
+      "scored_s": 3.34,
+      "misalignment": 0.0,
+      "support": 0.8876,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 136.42,
+      "end": 138.21,
+      "label": "G:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.9484,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 138.21,
+      "end": 139.97,
+      "label": "D:maj",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.8722,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 139.97,
+      "end": 143.55,
+      "label": "A:7",
+      "scored_s": 3.39,
+      "misalignment": 0.5964,
+      "support": 0.3491,
+      "total_nats": 87.08,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 143.55,
+      "end": 145.31,
+      "label": "G:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.6972,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 145.31,
+      "end": 147.08,
+      "label": "A:7",
+      "scored_s": 1.58,
+      "misalignment": 0.4,
+      "support": 0.3907,
+      "total_nats": 27.2,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 147.08,
+      "end": 148.89,
+      "label": "B:min",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.7261,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 148.89,
+      "end": 150.65,
+      "label": "G:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.7142,
+      "support": 0.3563,
+      "total_nats": 48.57,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 150.65,
+      "end": 152.49,
+      "label": "D:maj",
+      "scored_s": 1.65,
+      "misalignment": 0.0,
+      "support": 0.7462,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 152.49,
+      "end": 154.27,
+      "label": "A:maj",
+      "scored_s": 1.58,
+      "misalignment": 0.0,
+      "support": 0.8039,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 154.27,
+      "end": 157.85,
+      "label": "D:maj",
+      "scored_s": 3.39,
+      "misalignment": 0.0,
+      "support": 0.9508,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 157.85,
+      "end": 159.59,
+      "label": "G:maj",
+      "scored_s": 1.56,
+      "misalignment": 0.0,
+      "support": 0.8916,
+      "total_nats": 0.0,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 159.59,
+      "end": 161.38,
+      "label": "A:maj",
+      "scored_s": 1.6,
+      "misalignment": 0.0,
+      "support": 0.7532,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 161.38,
+      "end": 163.19,
+      "label": "B:min",
+      "scored_s": 1.63,
+      "misalignment": 0.0,
+      "support": 0.8243,
+      "total_nats": 0.0,
+      "recording_prefers": "B:min"
+    },
+    {
+      "start": 163.19,
+      "end": 165.0,
+      "label": "G:maj",
+      "scored_s": 1.63,
+      "misalignment": 0.3782,
+      "support": 0.3658,
+      "total_nats": 26.48,
+      "recording_prefers": "G:maj"
+    },
+    {
+      "start": 165.0,
+      "end": 167.32,
+      "label": "D:maj",
+      "scored_s": 2.14,
+      "misalignment": 0.0,
+      "support": 0.8211,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 167.32,
+      "end": 171.41,
+      "label": "A:maj",
+      "scored_s": 3.9,
+      "misalignment": 0.0,
+      "support": 0.659,
+      "total_nats": 0.0,
+      "recording_prefers": "A:maj"
+    },
+    {
+      "start": 171.41,
+      "end": 179.47,
+      "label": "D:maj",
+      "scored_s": 7.87,
+      "misalignment": 0.0,
+      "support": 0.8231,
+      "total_nats": 0.0,
+      "recording_prefers": "D:maj"
+    },
+    {
+      "start": 179.47,
+      "end": 182.58,
+      "label": "N",
+      "scored_s": 0.05,
+      "misalignment": 0.0,
+      "support": 0.4753,
+      "total_nats": 0.0,
+      "recording_prefers": "N"
+    }
+  ],
+  "lines": [
+    {
+      "start": 7.72,
+      "end": 14.534,
+      "text": "line 1",
+      "scored_s": 6.46,
+      "misalignment": 0.0,
+      "support": 0.9155,
+      "total_nats": 0.0,
+      "costliest_chord": "D:maj at 4.02 s (0.0 nats)"
+    },
+    {
+      "start": 14.534,
+      "end": 21.785,
+      "text": "line 2",
+      "scored_s": 6.69,
+      "misalignment": 0.2391,
+      "support": 0.621,
+      "total_nats": 68.86,
+      "costliest_chord": "A:7 at 18.51 s (74.72 nats)"
+    },
+    {
+      "start": 21.785,
+      "end": 27.221,
+      "text": "line 3",
+      "scored_s": 4.88,
+      "misalignment": 0.2004,
+      "support": 0.6241,
+      "total_nats": 42.08,
+      "costliest_chord": "A:7 at 18.51 s (74.72 nats)"
+    },
+    {
+      "start": 27.221,
+      "end": 36.298,
+      "text": "line 4",
+      "scored_s": 8.31,
+      "misalignment": 0.0597,
+      "support": 0.7543,
+      "total_nats": 21.36,
+      "costliest_chord": "G:maj at 27.47 s (21.36 nats)"
+    },
+    {
+      "start": 36.298,
+      "end": 42.919,
+      "text": "line 5",
+      "scored_s": 6.25,
+      "misalignment": 0.0,
+      "support": 0.9204,
+      "total_nats": 0.0,
+      "costliest_chord": "D:maj at 32.93 s (0.0 nats)"
+    },
+    {
+      "start": 42.919,
+      "end": 50.814,
+      "text": "line 6",
+      "scored_s": 7.31,
+      "misalignment": 0.2042,
+      "support": 0.6748,
+      "total_nats": 64.31,
+      "costliest_chord": "A:7 at 47.35 s (64.87 nats)"
+    },
+    {
+      "start": 50.814,
+      "end": 56.086,
+      "text": "line 7",
+      "scored_s": 4.69,
+      "misalignment": 0.1521,
+      "support": 0.6528,
+      "total_nats": 30.73,
+      "costliest_chord": "A:7 at 47.35 s (64.87 nats)"
+    },
+    {
+      "start": 56.086,
+      "end": 65.057,
+      "text": "line 8",
+      "scored_s": 8.24,
+      "misalignment": 0.0298,
+      "support": 0.7703,
+      "total_nats": 10.58,
+      "costliest_chord": "G:maj at 56.40 s (8.72 nats)"
+    },
+    {
+      "start": 65.057,
+      "end": 68.734,
+      "text": "line 9",
+      "scored_s": 3.3,
+      "misalignment": 0.3399,
+      "support": 0.585,
+      "total_nats": 48.26,
+      "costliest_chord": "C#:7 at 67.06 s (48.75 nats)"
+    },
+    {
+      "start": 68.734,
+      "end": 72.295,
+      "text": "line 10",
+      "scored_s": 3.18,
+      "misalignment": 0.2706,
+      "support": 0.5866,
+      "total_nats": 37.07,
+      "costliest_chord": "C#:7 at 67.06 s (48.75 nats)"
+    },
+    {
+      "start": 72.295,
+      "end": 75.789,
+      "text": "line 11",
+      "scored_s": 3.11,
+      "misalignment": 0.3004,
+      "support": 0.502,
+      "total_nats": 40.25,
+      "costliest_chord": "C#:7 at 74.16 s (40.89 nats)"
+    },
+    {
+      "start": 75.789,
+      "end": 82.959,
+      "text": "line 12",
+      "scored_s": 6.43,
+      "misalignment": 0.1491,
+      "support": 0.5887,
+      "total_nats": 41.3,
+      "costliest_chord": "C#:7 at 74.16 s (40.89 nats)"
+    },
+    {
+      "start": 82.959,
+      "end": 89.36,
+      "text": "line 13",
+      "scored_s": 5.8,
+      "misalignment": 0.0059,
+      "support": 0.854,
+      "total_nats": 1.48,
+      "costliest_chord": "A:7 at 81.34 s (19.57 nats)"
+    },
+    {
+      "start": 89.36,
+      "end": 96.838,
+      "text": "line 14",
+      "scored_s": 6.92,
+      "misalignment": 0.2007,
+      "support": 0.6832,
+      "total_nats": 59.82,
+      "costliest_chord": "A:7 at 93.81 s (67.93 nats)"
+    },
+    {
+      "start": 96.838,
+      "end": 102.351,
+      "text": "line 15",
+      "scored_s": 4.95,
+      "misalignment": 0.1983,
+      "support": 0.5352,
+      "total_nats": 42.25,
+      "costliest_chord": "A:7 at 93.81 s (67.93 nats)"
+    },
+    {
+      "start": 102.351,
+      "end": 111.529,
+      "text": "line 16",
+      "scored_s": 8.41,
+      "misalignment": 0.0441,
+      "support": 0.7892,
+      "total_nats": 15.95,
+      "costliest_chord": "E:min at 102.73 s (15.95 nats)"
+    },
+    {
+      "start": 111.529,
+      "end": 115.172,
+      "text": "line 17",
+      "scored_s": 3.2,
+      "misalignment": 0.0,
+      "support": 0.7263,
+      "total_nats": 0.0,
+      "costliest_chord": "D:maj at 108.04 s (0.0 nats)"
+    },
+    {
+      "start": 115.172,
+      "end": 118.626,
+      "text": "line 18",
+      "scored_s": 3.16,
+      "misalignment": 0.0,
+      "support": 0.7397,
+      "total_nats": 0.0,
+      "costliest_chord": "C#:maj at 113.41 s (0.0 nats)"
+    },
+    {
+      "start": 118.626,
+      "end": 122.174,
+      "text": "line 19",
+      "scored_s": 3.13,
+      "misalignment": 0.2724,
+      "support": 0.5795,
+      "total_nats": 36.77,
+      "costliest_chord": "C#:7 at 120.49 s (36.77 nats)"
+    },
+    {
+      "start": 122.174,
+      "end": 129.143,
+      "text": "line 20",
+      "scored_s": 6.27,
+      "misalignment": 0.3222,
+      "support": 0.4927,
+      "total_nats": 86.99,
+      "costliest_chord": "E:min7 at 125.78 s (43.13 nats)"
+    },
+    {
+      "start": 129.143,
+      "end": 135.328,
+      "text": "line 21",
+      "scored_s": 5.62,
+      "misalignment": 0.0065,
+      "support": 0.845,
+      "total_nats": 1.57,
+      "costliest_chord": "A:7 at 127.57 s (19.76 nats)"
+    },
+    {
+      "start": 135.328,
+      "end": 143.029,
+      "text": "line 22",
+      "scored_s": 7.13,
+      "misalignment": 0.2579,
+      "support": 0.6684,
+      "total_nats": 79.18,
+      "costliest_chord": "A:7 at 139.97 s (87.08 nats)"
+    },
+    {
+      "start": 143.029,
+      "end": 148.456,
+      "text": "line 23",
+      "scored_s": 4.83,
+      "misalignment": 0.1687,
+      "support": 0.5748,
+      "total_nats": 35.09,
+      "costliest_chord": "A:7 at 139.97 s (87.08 nats)"
+    },
+    {
+      "start": 148.456,
+      "end": 157.595,
+      "text": "line 24",
+      "scored_s": 8.38,
+      "misalignment": 0.1345,
+      "support": 0.7639,
+      "total_nats": 48.57,
+      "costliest_chord": "G:maj at 148.89 s (48.57 nats)"
+    },
+    {
+      "start": 157.595,
+      "end": 163.09,
+      "text": "line 25",
+      "scored_s": 4.95,
+      "misalignment": 0.0,
+      "support": 0.8252,
+      "total_nats": 0.0,
+      "costliest_chord": "D:maj at 154.27 s (0.0 nats)"
+    },
+    {
+      "start": 163.09,
+      "end": 182.555,
+      "text": "line 26",
+      "scored_s": 15.58,
+      "misalignment": 0.0395,
+      "support": 0.733,
+      "total_nats": 26.48,
+      "costliest_chord": "G:maj at 163.19 s (26.48 nats)"
+    }
+  ],
+  "drift": {
+    "frames_compared_s": 161.52,
+    "drift_per_frame": 0.0221,
+    "drift_total_nats": 153.75,
+    "changed_chords": [
+      {
+        "start": 0.0,
+        "end": 0.19,
+        "label": "N",
+        "was": [
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 2.21,
+        "end": 4.02,
+        "label": "A:maj",
+        "was": [
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 9.54,
+        "end": 11.33,
+        "label": "F#:min",
+        "was": [
+          "B:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 16.72,
+        "end": 18.51,
+        "label": "D:maj",
+        "was": [
+          "D:maj/3",
+          "G:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 18.51,
+        "end": 22.08,
+        "label": "A:7",
+        "was": [
+          "A:maj/5",
+          "D:maj/3"
+        ],
+        "drift_nats": 35.86
+      },
+      {
+        "start": 22.08,
+        "end": 23.87,
+        "label": "G:maj",
+        "was": [
+          "A:7"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 23.87,
+        "end": 25.68,
+        "label": "A:7",
+        "was": [
+          "G:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 27.47,
+        "end": 29.3,
+        "label": "G:maj",
+        "was": [
+          "B:min",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 29.3,
+        "end": 31.11,
+        "label": "D:maj",
+        "was": [
+          "A:maj",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 32.93,
+        "end": 38.36,
+        "label": "D:maj",
+        "was": [
+          "A:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 38.36,
+        "end": 40.17,
+        "label": "F#:min",
+        "was": [
+          "B:min",
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 45.56,
+        "end": 47.35,
+        "label": "D:maj",
+        "was": [
+          "G:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 50.94,
+        "end": 52.76,
+        "label": "G:maj",
+        "was": [
+          "A:7"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 52.76,
+        "end": 54.59,
+        "label": "A:7",
+        "was": [
+          "B:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 56.4,
+        "end": 58.14,
+        "label": "G:maj",
+        "was": [
+          "B:min",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 58.14,
+        "end": 59.93,
+        "label": "D:maj",
+        "was": [
+          "A:maj",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 61.65,
+        "end": 65.27,
+        "label": "D:maj",
+        "was": [
+          "A:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 65.27,
+        "end": 67.06,
+        "label": "F#:min",
+        "was": [
+          "C#:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 67.06,
+        "end": 68.85,
+        "label": "C#:7",
+        "was": [
+          "C#:maj"
+        ],
+        "drift_nats": 48.75
+      },
+      {
+        "start": 68.85,
+        "end": 70.59,
+        "label": "F#:min",
+        "was": [
+          "C#:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 74.16,
+        "end": 75.93,
+        "label": "C#:7",
+        "was": [
+          "F#:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 81.34,
+        "end": 83.13,
+        "label": "A:7",
+        "was": [
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 84.92,
+        "end": 86.7,
+        "label": "F#:min",
+        "was": [
+          "B:min",
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 90.23,
+        "end": 92.04,
+        "label": "G:maj",
+        "was": [
+          "B:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 92.04,
+        "end": 93.81,
+        "label": "D:maj",
+        "was": [
+          "D:maj/3"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 97.38,
+        "end": 99.15,
+        "label": "G:maj",
+        "was": [
+          "A:7"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 102.73,
+        "end": 104.49,
+        "label": "E:min",
+        "was": [
+          "B:min",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 104.49,
+        "end": 106.28,
+        "label": "D:maj",
+        "was": [
+          "A:maj",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 108.04,
+        "end": 111.62,
+        "label": "D:maj",
+        "was": [
+          "A:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 111.62,
+        "end": 113.41,
+        "label": "F#:min",
+        "was": [
+          "C#:maj",
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 115.19,
+        "end": 116.96,
+        "label": "F#:min",
+        "was": [
+          "C#:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 120.49,
+        "end": 122.23,
+        "label": "C#:7",
+        "was": [
+          "F#:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 122.23,
+        "end": 124.02,
+        "label": "F#:min",
+        "was": [
+          "C#:7"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 124.02,
+        "end": 125.78,
+        "label": "B:7",
+        "was": [
+          "E:min7",
+          "F#:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 125.78,
+        "end": 127.57,
+        "label": "E:min7",
+        "was": [
+          "A:7"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 129.31,
+        "end": 131.12,
+        "label": "D:maj",
+        "was": [
+          "A:7",
+          "F#:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 131.12,
+        "end": 132.89,
+        "label": "F#:min",
+        "was": [
+          "B:min"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 132.89,
+        "end": 136.42,
+        "label": "B:min",
+        "was": [
+          "G:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 138.21,
+        "end": 139.97,
+        "label": "D:maj",
+        "was": [
+          "D:maj/3"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 143.55,
+        "end": 145.31,
+        "label": "G:maj",
+        "was": [
+          "A:7"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 148.89,
+        "end": 150.65,
+        "label": "G:maj",
+        "was": [
+          "D:maj/5",
+          "E:min"
+        ],
+        "drift_nats": 44.64
+      },
+      {
+        "start": 150.65,
+        "end": 152.49,
+        "label": "D:maj",
+        "was": [
+          "A:maj",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 152.49,
+        "end": 154.27,
+        "label": "A:maj",
+        "was": [
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 163.19,
+        "end": 165.0,
+        "label": "G:maj",
+        "was": [
+          "B:min",
+          "D:maj/5",
+          "E:min"
+        ],
+        "drift_nats": 24.5
+      },
+      {
+        "start": 165.0,
+        "end": 167.32,
+        "label": "D:maj",
+        "was": [
+          "A:maj",
+          "D:maj/5"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 167.32,
+        "end": 171.41,
+        "label": "A:maj",
+        "was": [
+          "D:maj"
+        ],
+        "drift_nats": 0.0
+      },
+      {
+        "start": 171.41,
+        "end": 179.47,
+        "label": "D:maj",
+        "was": [
+          "N"
+        ],
+        "drift_nats": 0.0
+      }
+    ]
+  },
+  "known_changes": {
+    "root a semitone up": {
+      "chords": 80,
+      "rose": 80,
+      "same": 0,
+      "fell": 0,
+      "share_not_falling": 1.0,
+      "expected": "should rarely fall"
+    },
+    "major <-> minor": {
+      "chords": 63,
+      "rose": 63,
+      "same": 0,
+      "fell": 0,
+      "share_not_falling": 1.0,
+      "expected": "should rarely fall"
+    },
+    "add a 7th": {
+      "chords": 63,
+      "rose": 63,
+      "same": 0,
+      "fell": 0,
+      "share_not_falling": 1.0,
+      "expected": "reported only"
+    },
+    "drop the 7th": {
+      "chords": 17,
+      "rose": 0,
+      "same": 0,
+      "fell": 17,
+      "share_not_falling": 0.0,
+      "expected": "reported only"
+    }
+  }
+}

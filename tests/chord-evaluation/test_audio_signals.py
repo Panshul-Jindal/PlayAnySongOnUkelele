@@ -102,7 +102,9 @@ def test_the_plain_estimator_of_a_variant():
 
 def test_nnls_features_put_a_synthesized_c_major_first(tmp_path):
     # End to end through the NNLS plugin: C2 in the bass, C4 E4 G4 above, 3 s.
-    pytest.importorskip("vamp")
+    vamp = pytest.importorskip("vamp")
+    if "nnls-chroma:nnls-chroma" not in vamp.list_plugins():
+        pytest.skip("the NNLS-Chroma VAMP plugin is not installed (chord-evaluation/README.md)")
     import soundfile
     sr = 44100
     t = np.arange(sr * 3) / sr

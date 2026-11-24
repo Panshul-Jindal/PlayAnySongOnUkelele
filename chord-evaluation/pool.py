@@ -52,7 +52,7 @@ def segments(song, estimates, folder=sig.OUT):
         s, r, w = [], [], []
         for est in estimates:
             path = os.path.join(folder, est, song + ".csv")
-            with open(path) as fh:
+            with open(path, encoding="utf-8") as fh:
                 for row in csv.DictReader(fh):
                     score, truth = value(row.get(column)), value(row.get(f"right_{level}"))
                     if score is None or truth is None or not sig.is_chord(row["label"]):
@@ -80,7 +80,7 @@ def song_level(songs, estimates, folder=sig.OUT):
     from scipy.stats import spearmanr
     out = {k: {"spearman": [], "gold_best": 0, "songs": 0} for k in meta.SONG}
     for song in songs:
-        with open(os.path.join(folder, song + "_meta.json")) as fh:
+        with open(os.path.join(folder, song + "_meta.json"), encoding="utf-8") as fh:
             levels = json.load(fh)["estimates"]
         mir = [levels[e]["mir_eval_majmin"] for e in estimates]
         for key in meta.SONG:
@@ -125,7 +125,7 @@ def main():
         if rhos:
             print(f"{key:<20}{np.median(rhos):+16.2f}  {sum(r > 0 for r in rhos):>5} of {len(rhos):<10}"
                   f"  {v['gold_best']} of {v['songs']}" if v["songs"] else "  -")
-    with open(args.out, "w") as fh:
+    with open(args.out, "w", encoding="utf-8") as fh:
         json.dump(result, fh, indent=2)
     print(f"\nwrote {args.out}")
 

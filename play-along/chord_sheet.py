@@ -172,7 +172,7 @@ def check_ignored(path):
 
 def read_plan(path, segments):
     """main.py --voicings's plan, one shape (or None) per segment, checked against the chords."""
-    with open(path) as fh:
+    with open(path, encoding="utf-8") as fh:
         plan = json.load(fh)
     if len(plan["shapes"]) != len(segments):
         sys.exit(f"{path}: {len(plan['shapes'])} shapes for {len(segments)} chords")

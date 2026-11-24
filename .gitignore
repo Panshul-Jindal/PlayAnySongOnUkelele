@@ -6,6 +6,10 @@ data/preprocessed
 data/Custom_Songs/**
 !data/Custom_Songs/*/
 !data/Custom_Songs/*/lines.lab
+!data/Custom_Songs/*/beats_tapped.txt
 data/chords-db
 data/McGill-audio
 data/models
+# lv-chordia's heads: binary, rebuilt by chord-estimation/lv_chordia_heads.py
+results/chord-estimation/lv-chordia-heads/*.npz
+*.wav
