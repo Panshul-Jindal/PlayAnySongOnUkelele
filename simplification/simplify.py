@@ -15,8 +15,10 @@ The decoder (common/viterbi.py) picks one option per step to minimise
     + CHANGE per chord change + MOVE per finger move between consecutive shapes
 
 where d is a shape's difficulty at the chosen capo (difficulty/difficulty.py),
-fit is the chord's mean log-probability over the recording's frames during
-that step (chord-evaluation/fidelity.py's template model), and finger moves are
+fit is how well the chord fits the recording during that step: minus its mean
+lv-chordia misalignment (chord-evaluation/misalignment.py), or, without
+lv-chordia's heads, its mean log-probability under fidelity.py's chroma
+template model; finger moves are
 difficulty/voicings.py's. w_fit trades ease against fidelity: infinite keeps
 the original; 0 ignores the music. main.py supplies d, fit and moves, so this
 file needs nothing beyond common/.
@@ -24,7 +26,9 @@ file needs nothing beyond common/.
 Levels **[ORIGINAL]**: decoding at every capo 0-5 and every w_fit in W_FIT,
 each level is the version with the smallest difficulty that keeps at least
 the level's floors of both fidelities: the likelihood ratio against the
-original (chroma) and the share of the original's notes kept (notes). Both,
+original (lv-chordia's, else the template model's) and the share of the
+original's notes kept (notes). The template model is the weaker judge: on Can't
+Help Falling in Love it rated a version 1.01 that lv-chordia rated 0.23. Both,
 because on Can't Help Falling in Love a version that swapped G for C over 25 s
 kept a likelihood ratio of 0.885, near triads-only's 0.923, but only 72% of
 the notes.

@@ -92,9 +92,10 @@ def simplification_table(songs):
         cells = []
         for lv in LEVELS:
             v = versions[lv]
-            cells.append(f"D {v['D']:.2f}, capo {v['capo']}, {v['changes']} ch, notes {v['notes']:.2f}, LR {v['chroma']:.2f}")
+            ratio = v.get("lv-chordia", v["chroma"])      # lv-chordia's likelihood ratio when its heads exist
+            cells.append(f"D {v['D']:.2f}, capo {v['capo']}, {v['changes']} ch, notes {v['notes']:.2f}, LR {ratio:.2f}")
             acc = sums[lv]
-            acc[0] += v["D"]; acc[1] += v["notes"]; acc[2] += v["chroma"]; acc[3] += 1
+            acc[0] += v["D"]; acc[1] += v["notes"]; acc[2] += ratio; acc[3] += 1
         out.append(f"| {song} | " + " | ".join(cells) + " |")
     n = sums[LEVELS[0]][3]
     if n:
@@ -113,8 +114,9 @@ def main():
     for song in songs:
         row = song_row(song)
         (rows.append(row) if row else skipped.append(song))
-    text = "## Website to .lab\n\n" + table(rows) + "\n## Simplification (D: difficulty, ch: chord changes, " \
-        "notes: share of the tab's notes kept, LR: likelihood ratio against the tab)\n\n" + simplification_table(songs)
+    text = ("## Website to .lab\n\n" + table(rows) + "\n## Simplification (D: difficulty, ch: chord changes, "
+            "notes: share of the tab's notes kept, LR: lv-chordia's likelihood ratio against the tab, "
+            "chord-evaluation/fidelity.py)\n\n" + simplification_table(songs))
     if skipped:
         text += f"\nNot run yet: {', '.join(skipped)}\n"
     os.makedirs(RESULTS, exist_ok=True)

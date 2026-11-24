@@ -29,30 +29,34 @@
    "D": 3.8,
    "changes": 91,
    "notes": 1.0,
-   "chroma": 1.0
+   "chroma": 1.0,
+   "lv-chordia": 1.0
   },
   "triads only": {
    "capo": 1,
    "D": 3.77,
    "changes": 86,
    "notes": 0.995,
-   "chroma": 0.994
+   "chroma": 0.994,
+   "lv-chordia": 1.039
   },
   "simplified": {
    "capo": 1,
-   "w_fit": 0.25,
-   "D": 2.24,
-   "changes": 75,
-   "notes": 0.957,
-   "chroma": 0.902
+   "w_fit": 4,
+   "D": 3.54,
+   "changes": 78,
+   "notes": 0.989,
+   "chroma": 0.987,
+   "lv-chordia": 1.026
   },
   "easiest": {
    "capo": 1,
-   "w_fit": 0,
-   "D": 2.24,
-   "changes": 75,
-   "notes": 0.957,
-   "chroma": 0.897
+   "w_fit": 4,
+   "D": 3.54,
+   "changes": 78,
+   "notes": 0.989,
+   "chroma": 0.987,
+   "lv-chordia": 1.026
   }
  }
 }

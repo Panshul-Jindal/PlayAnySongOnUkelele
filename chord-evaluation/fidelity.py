@@ -27,8 +27,17 @@ it. **[ORIGINAL]** metrics:
            here, unverified); the ratio of path probabilities is the likelihood
            ratio suggested for this project.
 
-Planned: lv-chordia's own likelihood ratio (log-probability of the simplified
-path over the tab's, the professor's suggestion), added to METRICS when ready.
+  lv-chordia  from the recording, with lv-chordia's own model: the drift of
+           chord-evaluation/misalignment.py (compatibility mode) between the
+           original and the simplified version, per scored frame, as a ratio,
+           exp(-drift): 1 when the simplified chords fit the recording as well
+           as the original's, below 1 when worse. Since misalignment is the best
+           chord's score minus the played chord's, the drift is the mean log
+           score of the original's chords minus the simplified's, so this is
+           the likelihood ratio again, with lv-chordia's heads as the acoustic
+           model (and misalignment.py's rules: capped at FLOOR nats a frame,
+           silent frames left out). Needs the heads
+           (chord-estimation/lv_chordia_heads.py); left out without them.
 
 Usage:
     python3 chord-evaluation/fidelity.py ORIGINAL.lab SIMPLIFIED.lab [AUDIO]
@@ -53,17 +62,44 @@ HOP, SR = 4096, 22050
 
 @dataclass
 class Audio:
-    """A recording's chroma: frame times (s) and a 12 x frames matrix, each frame scaled to length 1."""
+    """A recording's chroma (frame times in s, 12 x frames, each frame scaled to length 1),
+    and, if computed, lv-chordia's six heads (common/chord_scores.py)."""
     times: np.ndarray
     chroma: np.ndarray
+    heads: list = None
 
     @classmethod
-    def load(cls, path):
+    def load(cls, path, heads_path=None):
         import librosa
         y, _ = librosa.load(path, sr=SR, mono=True)
         c = librosa.feature.chroma_cqt(y=y, sr=SR, hop_length=HOP)
         c = c / np.maximum(np.linalg.norm(c, axis=0, keepdims=True), 1e-9)
-        return cls(librosa.frames_to_time(np.arange(c.shape[1]), sr=SR, hop_length=HOP), c)
+        heads = None
+        if heads_path:
+            from chord_scores import load_heads
+            heads = load_heads(heads_path)[0]
+        return cls(librosa.frames_to_time(np.arange(c.shape[1]), sr=SR, hop_length=HOP), c, heads)
+
+    def __post_init__(self):
+        self._scores, self._best = {}, None
+
+    def lv_misalignment(self, label):
+        """Per lv-chordia frame: misalignment.py's misalignment of `label` (compatibility mode,
+        capped at FLOOR nats); FLOOR where the heads cannot express the chord."""
+        import misalignment as mis
+        if self._best is None:
+            self._best = mis.best_score(self.heads, "compatibility")[0]
+        if label not in self._scores:
+            played = mis.chord_score(self.heads, label, "compatibility")
+            self._scores[label] = mis.FLOOR * np.ones(len(self._best)) if played is None else \
+                np.clip(np.maximum(self._best, played) - played, 0.0, mis.FLOOR)
+        return self._scores[label]
+
+    def lv_frames(self):
+        """(lv-chordia frame centres in s, whether each is scored: not silent)."""
+        import misalignment as mis
+        n = len(self.heads[0])
+        return (np.arange(n) + 0.5) * mis.DELTA, self.heads[0][:, 0] < mis.SILENCE
 
 
 def notes(label):
@@ -134,8 +170,31 @@ def chroma_ratio(original, simplified, audio):
     return float(np.exp(np.mean(diffs))) if diffs else 1.0
 
 
+def lv_chordia_ratio(original, simplified, audio):
+    """exp(-drift): misalignment.py's drift from the original to the simplified, per scored frame."""
+    if audio is None or audio.heads is None:
+        raise ValueError("the lv-chordia metric needs lv-chordia's heads")
+    centres, scored = audio.lv_frames()
+    o, s = label_at(original, centres), label_at(simplified, centres)
+    diffs = []
+    for k in np.flatnonzero(scored):
+        if o[k] and o[k] not in ("N", "X"):
+            diffs.append((k, o[k], s[k] or "N"))
+    if not diffs:
+        return 1.0
+    total = 0.0
+    for k, a, b in diffs:
+        total += audio.lv_misalignment(b)[k] - audio.lv_misalignment(a)[k]
+    return float(np.exp(-total / len(diffs)))
+
+
 #: fidelity metrics by name: metric(original, simplified, audio) -> float
-METRICS = {"notes": notes_kept, "chroma": chroma_ratio}
+METRICS = {"notes": notes_kept, "chroma": chroma_ratio, "lv-chordia": lv_chordia_ratio}
+
+
+def available(audio):
+    """The metrics this audio can feed: lv-chordia only with heads."""
+    return {k: f for k, f in METRICS.items() if k != "lv-chordia" or (audio is not None and audio.heads is not None)}
 
 
 def main():

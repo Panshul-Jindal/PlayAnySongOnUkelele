@@ -14,18 +14,18 @@
 | let_it_go | 252/328 (77%) | 1 → +1 | 0.98 | 92 | 86 (93%) | 91 (99%) | 1 | 0 | 1 |
 | **all 10 songs** | 2740/3060 (90%) | 5 corrected | | 974 | 843 (87%) | 905 (93%) | 64 | 58 | |
 
-## Simplification (D: difficulty, ch: chord changes, notes: share of the tab's notes kept, LR: likelihood ratio against the tab)
+## Simplification (D: difficulty, ch: chord changes, notes: share of the tab's notes kept, LR: lv-chordia's likelihood ratio against the tab, chord-evaluation/fidelity.py)
 
 | song | as the tab | triads only | simplified | easiest |
 |---|---|---|---|---|
-| riptide | D 2.47, capo 1, 119 ch, notes 1.00, LR 1.00 | D 2.47, capo 1, 119 ch, notes 1.00, LR 1.00 | D 1.98, capo 1, 107 ch, notes 0.90, LR 1.52 | D 1.95, capo 1, 105 ch, notes 0.89, LR 1.46 |
-| cant_help_falling_in_love | D 4.26, capo 2, 80 ch, notes 1.00, LR 1.00 | D 4.48, capo 2, 80 ch, notes 0.97, LR 0.92 | D 2.98, capo 2, 65 ch, notes 0.94, LR 1.01 | D 2.83, capo 2, 65 ch, notes 0.89, LR 0.80 |
-| imyours | D 4.03, capo 4, 73 ch, notes 1.00, LR 1.00 | D 4.11, capo 4, 73 ch, notes 0.99, LR 1.00 | D 2.43, capo 4, 70 ch, notes 0.93, LR 1.00 | D 2.43, capo 4, 70 ch, notes 0.93, LR 1.00 |
-| love_yourself | D 2.96, capo 4, 133 ch, notes 1.00, LR 1.00 | D 2.96, capo 4, 133 ch, notes 1.00, LR 1.00 | D 2.75, capo 2, 117 ch, notes 0.92, LR 1.00 | D 2.46, capo 4, 117 ch, notes 0.85, LR 0.85 |
-| perfect | D 4.61, capo 1, 101 ch, notes 1.00, LR 1.00 | D 4.61, capo 1, 101 ch, notes 1.00, LR 1.00 | D 3.04, capo 1, 85 ch, notes 0.90, LR 1.07 | D 2.87, capo 1, 83 ch, notes 0.90, LR 0.95 |
-| photograph | D 3.06, capo 4, 65 ch, notes 1.00, LR 1.00 | D 3.06, capo 4, 65 ch, notes 1.00, LR 1.00 | D 2.72, capo 4, 60 ch, notes 0.91, LR 1.11 | D 2.58, capo 4, 60 ch, notes 0.85, LR 0.91 |
-| hey_soul_sister | D 3.85, capo 4, 114 ch, notes 1.00, LR 1.00 | D 3.85, capo 4, 114 ch, notes 1.00, LR 1.00 | D 2.94, capo 2, 93 ch, notes 0.92, LR 1.08 | D 2.80, capo 2, 93 ch, notes 0.88, LR 0.89 |
-| someone_you_loved | D 3.17, capo 1, 80 ch, notes 1.00, LR 1.00 | D 3.17, capo 1, 80 ch, notes 1.00, LR 1.00 | D 2.74, capo 1, 79 ch, notes 0.93, LR 0.94 | D 2.71, capo 1, 77 ch, notes 0.90, LR 0.84 |
-| 10000_reasons | D 4.58, capo 0, 132 ch, notes 1.00, LR 1.00 | D 4.58, capo 0, 129 ch, notes 0.99, LR 0.99 | D 2.89, capo 5, 121 ch, notes 0.90, LR 1.14 | D 2.85, capo 0, 109 ch, notes 0.86, LR 0.94 |
-| let_it_go | D 3.80, capo 1, 91 ch, notes 1.00, LR 1.00 | D 3.77, capo 1, 86 ch, notes 0.99, LR 0.99 | D 2.24, capo 1, 75 ch, notes 0.96, LR 0.90 | D 2.24, capo 1, 75 ch, notes 0.96, LR 0.90 |
-| **mean of 10 songs** | D 3.68, notes 1.00, LR 1.00 | D 3.71, notes 1.00, LR 0.99 | D 2.67, notes 0.92, LR 1.08 | D 2.57, notes 0.89, LR 0.95 |
+| riptide | D 2.47, capo 1, 119 ch, notes 1.00, LR 1.00 | D 2.47, capo 1, 119 ch, notes 1.00, LR 1.00 | D 2.43, capo 1, 91 ch, notes 0.94, LR 1.14 | D 2.43, capo 1, 91 ch, notes 0.94, LR 1.14 |
+| cant_help_falling_in_love | D 4.26, capo 2, 80 ch, notes 1.00, LR 1.00 | D 4.48, capo 2, 80 ch, notes 0.97, LR 1.03 | D 3.83, capo 2, 71 ch, notes 0.98, LR 1.01 | D 3.24, capo 2, 63 ch, notes 0.97, LR 0.76 |
+| imyours | D 4.03, capo 4, 73 ch, notes 1.00, LR 1.00 | D 4.11, capo 4, 73 ch, notes 0.99, LR 1.03 | D 3.93, capo 4, 71 ch, notes 1.00, LR 0.99 | D 3.93, capo 4, 71 ch, notes 1.00, LR 0.99 |
+| love_yourself | D 2.96, capo 4, 133 ch, notes 1.00, LR 1.00 | D 2.96, capo 4, 133 ch, notes 1.00, LR 1.00 | D 2.72, capo 4, 115 ch, notes 0.93, LR 1.06 | D 2.71, capo 4, 115 ch, notes 0.91, LR 0.89 |
+| perfect | D 4.61, capo 1, 101 ch, notes 1.00, LR 1.00 | D 4.61, capo 1, 101 ch, notes 1.00, LR 1.00 | D 3.27, capo 1, 86 ch, notes 0.99, LR 0.95 | D 3.16, capo 1, 83 ch, notes 0.99, LR 0.84 |
+| photograph | D 3.06, capo 4, 65 ch, notes 1.00, LR 1.00 | D 3.06, capo 4, 65 ch, notes 1.00, LR 1.00 | D 3.03, capo 4, 61 ch, notes 0.99, LR 1.01 | D 2.87, capo 4, 60 ch, notes 0.98, LR 0.76 |
+| hey_soul_sister | D 3.85, capo 4, 114 ch, notes 1.00, LR 1.00 | D 3.85, capo 4, 114 ch, notes 1.00, LR 1.00 | D 3.66, capo 4, 82 ch, notes 0.96, LR 0.92 | D 3.66, capo 4, 82 ch, notes 0.96, LR 0.92 |
+| someone_you_loved | D 3.17, capo 1, 80 ch, notes 1.00, LR 1.00 | D 3.17, capo 1, 80 ch, notes 1.00, LR 1.00 | D 3.14, capo 1, 79 ch, notes 1.00, LR 0.99 | D 3.01, capo 1, 78 ch, notes 1.00, LR 0.78 |
+| 10000_reasons | D 4.58, capo 0, 132 ch, notes 1.00, LR 1.00 | D 4.58, capo 0, 129 ch, notes 0.99, LR 1.04 | D 3.69, capo 0, 120 ch, notes 0.97, LR 0.92 | D 3.69, capo 0, 120 ch, notes 0.97, LR 0.92 |
+| let_it_go | D 3.80, capo 1, 91 ch, notes 1.00, LR 1.00 | D 3.77, capo 1, 86 ch, notes 0.99, LR 1.04 | D 3.54, capo 1, 78 ch, notes 0.99, LR 1.03 | D 3.54, capo 1, 78 ch, notes 0.99, LR 1.03 |
+| **mean of 10 songs** | D 3.68, notes 1.00, LR 1.00 | D 3.71, notes 1.00, LR 1.01 | D 3.32, notes 0.97, LR 1.00 | D 3.22, notes 0.97, LR 0.90 |

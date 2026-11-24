@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from fidelity import BETA, Audio, chroma_ratio, notes_kept
+from fidelity import lv_chordia_ratio
 from lab import Segment
 
 
@@ -35,3 +36,22 @@ def test_chroma_ratio():
     original = [Segment(0, 2, "C:maj")]
     assert chroma_ratio(original, original, audio) == pytest.approx(1.0)
     assert chroma_ratio(original, [Segment(0, 2, "A:min")], audio) == pytest.approx(np.exp(-BETA / 3))
+
+
+def test_lv_chordia_ratio_with_heads_built_by_hand():
+    # Fake heads for 100 frames: the triad head gives C:maj (class 1, common/chord_scores.py
+    # chord_indices) probability 0.6 and A:min (class 22) 0.3, the rest 0.1 spread over the
+    # other 71 classes; every extension head says "none" (class 0) for sure. Then, in
+    # misalignment.py's compatibility mode, C:maj's score is log 0.6, the best in every frame,
+    # and A:min's is log 0.3: playing A:min for C:maj drifts by log 2 a frame, and the ratio is
+    # exp(-log 2) = 1/2. No frame is silent (P(N), class 0 of the triad head, is small).
+    from misalignment import DELTA
+    n = 100
+    triad = np.full((n, 73), 0.1 / 71)
+    triad[:, 1], triad[:, 22] = 0.6, 0.3
+    heads = [triad, np.full((n, 13), 1 / 13)] + [np.eye(k)[[0] * n] for k in (4, 4, 3, 3)]
+    audio = Audio(np.array([0.0]), np.zeros((12, 1)), heads)
+    end = n * DELTA
+    original = [Segment(0, end, "C:maj")]
+    assert lv_chordia_ratio(original, original, audio) == pytest.approx(1.0)
+    assert lv_chordia_ratio(original, [Segment(0, end, "A:min")], audio) == pytest.approx(0.5)

@@ -64,7 +64,7 @@ def make_page(url, recording, name, progress=gr.Progress()):
         report = json.load(fh)
     key = report["key"]
     rows = "\n".join(
-        f"| {lv} | {v['capo']} | {v['D']} | {v['changes']} | {round(100 * v['notes'])}% | {v['chroma']} |"
+        f"| {lv} | {v['capo']} | {v['D']} | {v['changes']} | {round(100 * v['notes'])}% | {v.get('lv-chordia', v['chroma'])} |"
         for lv, v in ((lv, report["versions"][lv]) for lv in LEVELS))
     note = (f"The tab's key was corrected by {key['used']:+d} semitones to match your recording."
             if key["used"] != key["tab capo"] else "The tab's capo matches your recording.")

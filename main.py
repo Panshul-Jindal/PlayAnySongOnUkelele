@@ -73,6 +73,8 @@ SONGS = os.path.join(HERE, "data", "Custom_Songs")
 #: separated vocals and the words heard in them (they hold lyrics: git ignores data/preprocessed/)
 VOCALS = os.path.join(HERE, "data", "preprocessed", "vocals")
 WORDS = os.path.join(HERE, "data", "preprocessed", "asr")
+#: lv-chordia's heads for recordings other than the songs' own (git ignores data/preprocessed/)
+HEADS = os.path.join(HERE, "data", "preprocessed", "lv-chordia-heads")
 #: chords timed from a tab, with the beats they were snapped to
 TAB_CHORDS = os.path.join(HERE, "results", "tab-alignment")
 #: recordings main.py --tab finds in a song's folder
@@ -108,6 +110,29 @@ def slug(text):
     return "_".join(re.findall(r"[a-z0-9]+", text.lower()))
 
 
+def recording_stamp(audio):
+    """A short name for this recording file, so caches of a song's older recording aren't reused."""
+    import hashlib
+    return hashlib.sha1(f"{os.path.abspath(audio)}:{os.path.getsize(audio)}".encode()).hexdigest()[:8]
+
+
+def lv_chordia_heads_for(audio, song):
+    """The path of lv-chordia's heads for this recording, computed once
+    (chord-estimation/lv_chordia_heads.py): the song's own file in
+    results/chord-estimation/lv-chordia-heads/ if the recording is the one in its
+    folder, else data/preprocessed/lv-chordia-heads/<song>-<recording>.npz."""
+    import lv_chordia_heads
+    own = os.path.join(lv_chordia_heads.OUT, song + ".npz")
+    if os.path.exists(own) and lv_chordia_heads.song_name(audio) == song:
+        return own
+    path = os.path.join(HEADS, f"{song}-{recording_stamp(audio)}.npz")
+    if not os.path.exists(path):
+        ensemble = lv_chordia_heads.load_ensemble()
+        mean, _ = lv_chordia_heads.extract(audio, ensemble)
+        lv_chordia_heads.save(path, mean, None, lv_chordia_heads.model_names(ensemble))
+    return path
+
+
 def chords_from_tab(audio, url, song=None, separate=True):
     """(segments, song, the .lab they are in, extras) for a recording and its tab's URL.
 
@@ -129,8 +154,7 @@ def chords_from_tab(audio, url, song=None, separate=True):
         fh.write(parse_tab.lyrics(lines))
 
     # cached per recording, not just per song: a song may get a new recording
-    import hashlib
-    stamp = hashlib.sha1(f"{os.path.abspath(audio)}:{os.path.getsize(audio)}".encode()).hexdigest()[:8]
+    stamp = recording_stamp(audio)
     words_path = os.path.join(WORDS, f"{song}-{stamp}.json")
     if not os.path.exists(words_path):
         heard_from = audio
@@ -228,7 +252,7 @@ def tradeoff(original, audio, table):
         capo = best(scores)
         out[name] = {"capo": capo, "D": round(scores[capo], 2),
                      "changes": sum(1 for a, b in zip(plain, plain[1:]) if a.label != b.label),
-                     **{m: round(f(original, plain, audio), 3) for m, f in fidelity.METRICS.items()}}
+                     **{m: round(f(original, plain, audio), 3) for m, f in fidelity.available(audio).items()}}
     return out
 
 
@@ -246,7 +270,21 @@ def levels(original, audio, table):
     frames = {i: [k for k, t in enumerate(audio.times) if s.start <= t < s.end] for i, s in enumerate(original)}
     fits = {}
 
-    def fit(i, label):     # mean log-probability of the chord over the segment's frames
+    lv = audio.heads is not None
+    if lv:     # lv-chordia's frames: centres, and which are scored (not silent)
+        centres, scored = audio.lv_frames()
+        lv_rows = {i: np.flatnonzero(scored & (centres >= s.start) & (centres < s.end)) for i, s in enumerate(original)}
+
+    def fit(i, label):
+        """The chord's fit over segment i: minus its mean lv-chordia misalignment there
+        (chord-evaluation/misalignment.py), or, without heads, its mean log-probability
+        under the chroma template model (fidelity.py)."""
+        if (i, label) in fits:
+            return fits[i, label]
+        if lv:
+            rows = lv_rows[i]
+            fits[i, label] = -float(np.mean(audio.lv_misalignment(label)[rows])) if len(rows) and label not in ("N", "X") else 0.0
+            return fits[i, label]
         if (i, label) not in fits:
             idx = frames[i]
             ok = idx and fidelity.template(label) is not None
@@ -285,15 +323,16 @@ def levels(original, audio, table):
                 continue
             scores = {"capo": capo, "w_fit": w, "D": round(D, 2),
                       "changes": len(version) - 1,
-                      **{m: round(f(original, version, audio), 3) for m, f in fidelity.METRICS.items()}}
+                      **{m: round(f(original, version, audio), 3) for m, f in fidelity.available(audio).items()}}
             found.append((scores, version))
     out = {}
     decoder = decoder_data(original, fit, table)
     tab = [(sc, v) for sc, v in found if sc["w_fit"] == float("inf")]
     sc, v = min(tab, key=lambda x: (x[0]["D"], x[0]["capo"]))
     out["as the tab"] = (sc["capo"], v, sc)
+    judge = "lv-chordia" if lv else "chroma"     # the audio fidelity the floors apply to
     for name, least_ratio, least_notes in simplify.LEVELS:
-        ok = [(sc, v) for sc, v in found if sc["chroma"] >= least_ratio and sc["notes"] >= least_notes] or tab
+        ok = [(sc, v) for sc, v in found if sc[judge] >= least_ratio and sc["notes"] >= least_notes] or tab
         sc, v = min(ok, key=lambda x: (x[0]["D"], x[0]["changes"], x[0]["capo"]))
         out[name] = (sc["capo"], v, sc)
     return out, decoder
@@ -568,7 +607,7 @@ def main(argv=None):
         with open(args.sheet, "w", encoding="utf-8") as fh:
             fh.write(text)
     if extras:
-        audio = fidelity.Audio.load(args.song)
+        audio = fidelity.Audio.load(args.song, lv_chordia_heads_for(args.song, song))
         versions_scored = tradeoff(list(lab.read_lab(source)), audio, table)
         found, decoder = levels(list(lab.read_lab(source)), audio, table)
         files = {}
@@ -589,10 +628,10 @@ def main(argv=None):
                                                                     "chart": x.chart} for x in plan],
                                            table, beat_times, extras["word starts"]))
         lines += ["", "difficulty and fidelity (fidelity against the tab's chords; chord-evaluation/fidelity.py):",
-                  f"  {'version':<12} {'capo':>4} {'D':>6} {'changes':>8} " + " ".join(f"{m:>7}" for m in fidelity.METRICS)]
+                  f"  {'version':<12} {'capo':>4} {'D':>6} {'changes':>8} " + " ".join(f"{m:>10}" for m in fidelity.available(audio))]
         for name, v in versions_scored.items():
             lines.append(f"  {name:<12} {v['capo']:>4} {v['D']:>6} {v['changes']:>8} "
-                         + " ".join(f"{v[m]:>7}" for m in fidelity.METRICS))
+                         + " ".join(f"{v[m]:>10}" for m in fidelity.available(audio)))
         with open(os.path.join(TAB_CHORDS, song + ".report.json"), "w") as fh:
             json.dump(dict(extras["aligned"], url=args.tab, recommended_capo=choice, versions=versions_scored),
                       fh, indent=1)
