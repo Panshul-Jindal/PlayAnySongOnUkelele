@@ -1,0 +1,62 @@
+{
+ "tab words": 264,
+ "heard words": 253,
+ "tab words matched": 230,
+ "chords": {
+  "word": 42,
+  "word, interpolated": 15,
+  "line end": 8
+ },
+ "capo": 2,
+ "snap shift s (median, 90%, max)": [
+  0.09,
+  0.16,
+  0.18
+ ],
+ "key": {
+  "tab capo": 2,
+  "fit at capo": 0.84,
+  "best shift": 2,
+  "fit at best": 0.84,
+  "used": 2
+ },
+ "url": "https://tabs.ultimate-guitar.com/tab/miley-cyrus/the-climb-chords-793423",
+ "recommended_capo": 4,
+ "versions": {
+  "as the tab": {
+   "capo": 4,
+   "w_fit": null,
+   "D": 2.99,
+   "changes": 61,
+   "notes": 1.0,
+   "chroma": 1.0,
+   "lv-chordia": 1.0
+  },
+  "triads only": {
+   "capo": 4,
+   "D": 2.99,
+   "changes": 61,
+   "notes": 1.0,
+   "chroma": 1.0,
+   "lv-chordia": 1.0
+  },
+  "simplified": {
+   "capo": 4,
+   "w_fit": 1,
+   "D": 2.75,
+   "changes": 42,
+   "notes": 0.974,
+   "chroma": 0.973,
+   "lv-chordia": 0.915
+  },
+  "easiest": {
+   "capo": 4,
+   "w_fit": 0.5,
+   "D": 2.69,
+   "changes": 39,
+   "notes": 0.959,
+   "chroma": 0.936,
+   "lv-chordia": 0.783
+  }
+ }
+}

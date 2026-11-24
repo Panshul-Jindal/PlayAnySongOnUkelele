@@ -609,7 +609,8 @@ def main(argv=None):
     if extras:
         audio = fidelity.Audio.load(args.song, lv_chordia_heads_for(args.song, song))
         versions_scored = tradeoff(list(lab.read_lab(source)), audio, table)
-        found, decoder = levels(list(lab.read_lab(source)), audio, table)
+        # basses dropped first, as everywhere in the pipeline: the chart has no slash chords
+        found, decoder = levels(drop_bass(list(lab.read_lab(source)))[0], audio, table)
         files = {}
         with open(extras["lyrics"], encoding="utf-8") as fh:
             tab_lyrics = chord_sheet.lyric_lines(fh.read())
