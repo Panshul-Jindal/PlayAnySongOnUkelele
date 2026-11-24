@@ -1,0 +1,59 @@
+{
+ "tab words": 324,
+ "heard words": 344,
+ "tab words matched": 277,
+ "chords": {
+  "free": 4,
+  "word": 41,
+  "line end": 31,
+  "word, interpolated": 4
+ },
+ "capo": -4,
+ "snap shift s (median, 90%, max)": [
+  0.05,
+  0.19,
+  0.26
+ ],
+ "key": {
+  "tab capo": 0,
+  "fit at capo": -0.13,
+  "best shift": -4,
+  "fit at best": 0.94,
+  "used": -4
+ },
+ "url": "https://tabs.ultimate-guitar.com/tab/lewis-capaldi/someone-you-loved-ukulele-2671980",
+ "recommended_capo": 1,
+ "versions": {
+  "as the tab": {
+   "capo": 1,
+   "w_fit": null,
+   "D": 3.17,
+   "changes": 80,
+   "notes": 1.0,
+   "chroma": 1.0
+  },
+  "triads only": {
+   "capo": 1,
+   "D": 3.17,
+   "changes": 80,
+   "notes": 1.0,
+   "chroma": 1.0
+  },
+  "simplified": {
+   "capo": 1,
+   "w_fit": 1,
+   "D": 2.74,
+   "changes": 79,
+   "notes": 0.931,
+   "chroma": 0.938
+  },
+  "easiest": {
+   "capo": 1,
+   "w_fit": 0.5,
+   "D": 2.71,
+   "changes": 77,
+   "notes": 0.903,
+   "chroma": 0.837
+  }
+ }
+}

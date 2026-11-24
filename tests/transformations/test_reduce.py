@@ -9,7 +9,8 @@ chord alone.
 import pytest
 
 from lab import Segment
-from reduce import reduce, reduce_label
+from reduce import reduce
+from triad import reduce_label
 
 
 @pytest.mark.parametrize("label, expected", [

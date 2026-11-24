@@ -1,0 +1,58 @@
+{
+ "tab words": 289,
+ "heard words": 291,
+ "tab words matched": 279,
+ "chords": {
+  "word": 88,
+  "line end": 11,
+  "word, interpolated": 2
+ },
+ "capo": 1,
+ "snap shift s (median, 90%, max)": [
+  0.11,
+  0.26,
+  3.96
+ ],
+ "key": {
+  "tab capo": 1,
+  "fit at capo": 0.94,
+  "best shift": 1,
+  "fit at best": 0.94,
+  "used": 1
+ },
+ "url": "https://tabs.ultimate-guitar.com/tab/ed-sheeran/perfect-ukulele-1961453",
+ "recommended_capo": 1,
+ "versions": {
+  "as the tab": {
+   "capo": 1,
+   "w_fit": null,
+   "D": 4.61,
+   "changes": 101,
+   "notes": 1.0,
+   "chroma": 1.0
+  },
+  "triads only": {
+   "capo": 1,
+   "D": 4.61,
+   "changes": 101,
+   "notes": 1.0,
+   "chroma": 1.0
+  },
+  "simplified": {
+   "capo": 1,
+   "w_fit": 4,
+   "D": 3.04,
+   "changes": 85,
+   "notes": 0.9,
+   "chroma": 1.068
+  },
+  "easiest": {
+   "capo": 1,
+   "w_fit": 0,
+   "D": 2.87,
+   "changes": 83,
+   "notes": 0.895,
+   "chroma": 0.952
+  }
+ }
+}

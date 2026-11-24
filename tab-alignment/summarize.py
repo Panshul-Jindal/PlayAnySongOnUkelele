@@ -73,6 +73,36 @@ def table(rows):
     return "\n".join(out) + "\n"
 
 
+LEVELS = ("as the tab", "triads only", "simplified", "easiest")
+
+
+def simplification_table(songs):
+    """Per song and level: capo, difficulty D, chord changes, notes kept, likelihood ratio (main.py's report)."""
+    out = ["| song | " + " | ".join(LEVELS) + " |", "|---|" + "---|" * len(LEVELS),
+           ]
+    sums = {lv: [0.0, 0.0, 0.0, 0] for lv in LEVELS}
+    for song in songs:
+        path = os.path.join(RESULTS, song + ".report.json")
+        if not os.path.exists(path):
+            continue
+        with open(path) as fh:
+            versions = json.load(fh).get("versions")
+        if not versions or not all(lv in versions for lv in LEVELS):
+            continue
+        cells = []
+        for lv in LEVELS:
+            v = versions[lv]
+            cells.append(f"D {v['D']:.2f}, capo {v['capo']}, {v['changes']} ch, notes {v['notes']:.2f}, LR {v['chroma']:.2f}")
+            acc = sums[lv]
+            acc[0] += v["D"]; acc[1] += v["notes"]; acc[2] += v["chroma"]; acc[3] += 1
+        out.append(f"| {song} | " + " | ".join(cells) + " |")
+    n = sums[LEVELS[0]][3]
+    if n:
+        out.append(f"| **mean of {n} songs** | " + " | ".join(
+            f"D {sums[lv][0] / n:.2f}, notes {sums[lv][1] / n:.2f}, LR {sums[lv][2] / n:.2f}" for lv in LEVELS) + " |")
+    return "\n".join(out) + "\n"
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("songs", nargs="?", default=os.path.join(HERE, "songs.csv"), help="song,url per line")
@@ -83,7 +113,8 @@ def main():
     for song in songs:
         row = song_row(song)
         (rows.append(row) if row else skipped.append(song))
-    text = table(rows)
+    text = "## Website to .lab\n\n" + table(rows) + "\n## Simplification (D: difficulty, ch: chord changes, " \
+        "notes: share of the tab's notes kept, LR: likelihood ratio against the tab)\n\n" + simplification_table(songs)
     if skipped:
         text += f"\nNot run yet: {', '.join(skipped)}\n"
     os.makedirs(RESULTS, exist_ok=True)

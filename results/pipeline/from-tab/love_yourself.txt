@@ -1,0 +1,33 @@
+love_yourself.lab: 134 segments, 232.8 s of chords
+
+bass dropped: 0 segments, 0.0% of chord time
+
+capo     D   wins of 99 weight settings  (D with weights span 3, fingers 1, barre 1)
+   0 10.48     0.0%
+   1  8.96     0.0%
+   2  4.98     0.0%
+   3 11.45     0.0%
+   4  2.96   100.0%   <- recommended
+   5 10.81     0.0%
+   6  8.38     0.0%   above fret 5: not considered
+   7  6.64     0.0%   above fret 5: not considered
+   8 11.16     0.0%   above fret 5: not considered
+   9  4.88     0.0%   above fret 5: not considered
+  10 10.52     0.0%   above fret 5: not considered
+  11  4.96     0.0%   above fret 5: not considered
+
+capo 4: the shapes to play, by share of chord time
+  C (sounds E)        41.5%   frets 0003  fingers 0003   span 0  fingers 1  barre 0   d 1
+  G (sounds B)        25.9%   frets 0232  fingers 0132   span 1  fingers 3  barre 0   d 6
+  F (sounds A)        16.6%   frets 2010  fingers 2010   span 1  fingers 2  barre 0   d 5
+  Am (sounds C#m)     16.0%   frets 2000  fingers 2000   span 0  fingers 1  barre 0   d 1
+
+capo 0: the shapes to play, by share of chord time
+  E                   41.5%   frets 1402  fingers 1402   span 3  fingers 3  barre 0   d 12
+  B                   25.9%   frets 4322  fingers 3211   span 2  fingers 3  barre 1   d 10
+  A                   16.6%   frets 2100  fingers 2100   span 1  fingers 2  barre 0   d 5
+  C#m                 16.0%   frets 1444  fingers 1234   span 3  fingers 4  barre 0   d 13
+
+shapes in a row (difficulty/voicings.py, a finger move counts 2 points of d):
+  chart's first shapes: d 507 in all, 222 finger moves
+  chosen shapes:        d 507 in all, 222 finger moves

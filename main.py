@@ -34,7 +34,7 @@ from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 for folder in ("common", "beat-tracking", "chord-estimation", "chord-evaluation", "difficulty", "play-along",
-               "preprocessing", "tab-alignment", "transformations"):
+               "preprocessing", "simplification", "tab-alignment", "transformations"):
     sys.path.insert(0, os.path.join(HERE, folder))
 
 import chart
@@ -42,6 +42,8 @@ import chord_sheet
 import difficulty
 import estimate_chords
 import evaluate
+import fidelity
+import simplify
 import harte
 import lab
 import names
@@ -49,7 +51,7 @@ from capo import PRACTICAL, capo_versions
 from drop_bass import drop_bass
 import voicings
 from merge_short import merge_short
-from reduce import reduce_label
+from triad import reduce_label
 from substitute import parse as parse_substitutions, substitute
 from remove_centre import write as write_centre_removed
 import align_tab
@@ -214,6 +216,87 @@ def shapes_in_a_row(version, table, w_move):
         lines.append(f"  {names.name(label):<6} {''.join(map(str, frets))} (fingers {''.join(map(str, fingers))})"
                      f" instead of {''.join(map(str, was)) if was else 'no chart shape'}, {n} times")
     return path, lines
+
+
+def tradeoff(original, audio, table):
+    """Difficulty and fidelity of the baseline versions of a song: as given, and every chord
+    reduced to its triad. Each at its best capo (0-5), D from difficulty/difficulty.py, every
+    fidelity metric of chord-evaluation/fidelity.py against the original. **[ORIGINAL]**"""
+    out = {}
+    for name, reduced in (("as the tab", False), ("triads only", True)):
+        _, _, _, plain, _, versions = easy_transform(original, reduced=reduced)
+        scores = diff_estimator(versions, table)
+        capo = best(scores)
+        out[name] = {"capo": capo, "D": round(scores[capo], 2),
+                     "changes": sum(1 for a, b in zip(plain, plain[1:]) if a.label != b.label),
+                     **{m: round(f(original, plain, audio), 3) for m, f in fidelity.METRICS.items()}}
+    return out
+
+
+def levels(original, audio, table):
+    """{level: (capo, segments as they sound, scores)} for "as the tab" and simplify.LEVELS.
+
+    Decodes the song (simplification/simplify.py) at every capo 0-5 and every
+    trade-off weight; "as the tab" is the original at its easiest capo; each
+    other level is the decoded version with the smallest D whose chroma
+    fidelity is at least the level's floor. **[ORIGINAL]**
+    """
+    from transpose import transpose
+    import numpy as np
+    starts = np.array([s.start for s in original])
+    frames = {i: [k for k, t in enumerate(audio.times) if s.start <= t < s.end] for i, s in enumerate(original)}
+    fits = {}
+
+    def fit(i, label):     # mean log-probability of the chord over the segment's frames
+        if (i, label) not in fits:
+            idx = frames[i]
+            ok = idx and fidelity.template(label) is not None
+            fits[i, label] = float(np.mean(fidelity.log_prob(label, audio.chroma[:, idx]))) if ok else 0.0
+        return fits[i, label]
+
+    def shape_at(label, capo):
+        p = chart.first_position(transpose(label, -capo), table)
+        return p
+
+    found = []
+    for capo in PRACTICAL:
+        d_cache, shape_cache = {}, {}
+
+        def d(label):
+            if label not in d_cache:
+                p = shape_at(label, capo)
+                d_cache[label] = difficulty.shape_difficulty(p) if p else None
+            return d_cache[label]
+
+        def shape(label):
+            if label not in shape_cache:
+                p = shape_at(label, capo)
+                shape_cache[label] = voicings.Shape(tuple(p.frets), tuple(p.fingers), True) if p else None
+            return shape_cache[label]
+
+        def moves(a, b):
+            x, y = shape(a), shape(b)
+            return voicings.moves(x, y) if x and y else 0
+
+        for w in (float("inf"),) + simplify.W_FIT:
+            version = simplify.simplify(original, d, fit, moves, w)
+            played = [s._replace(label=transpose(s.label, -capo)) for s in version]
+            D = difficulty.song_difficulty(played, table)[0]
+            if D is None:
+                continue
+            scores = {"capo": capo, "w_fit": w, "D": round(D, 2),
+                      "changes": len(version) - 1,
+                      **{m: round(f(original, version, audio), 3) for m, f in fidelity.METRICS.items()}}
+            found.append((scores, version))
+    out = {}
+    tab = [(sc, v) for sc, v in found if sc["w_fit"] == float("inf")]
+    sc, v = min(tab, key=lambda x: (x[0]["D"], x[0]["capo"]))
+    out["as the tab"] = (sc["capo"], v, sc)
+    for name, least_ratio, least_notes in simplify.LEVELS:
+        ok = [(sc, v) for sc, v in found if sc["chroma"] >= least_ratio and sc["notes"] >= least_notes] or tab
+        sc, v = min(ok, key=lambda x: (x[0]["D"], x[0]["changes"], x[0]["capo"]))
+        out[name] = (sc["capo"], v, sc)
+    return out
 
 
 def diff_estimator(versions, table, weights=difficulty.DEFAULT):
@@ -472,8 +555,20 @@ def main(argv=None):
         with open(args.sheet, "w", encoding="utf-8") as fh:
             fh.write(text)
     if extras:
+        audio = fidelity.Audio.load(args.song)
+        versions_scored = tradeoff(list(lab.read_lab(source)), audio, table)
+        found = levels(list(lab.read_lab(source)), audio, table)
+        for name, (capo, version, sc) in found.items():
+            versions_scored[name] = {k: (None if v == float("inf") else v) for k, v in sc.items()}
+            lab.write_lab(os.path.join(args.out, "levels", f"{song}.{name.replace(' ', '_')}.lab"), version)
+        lines += ["", "difficulty and fidelity (fidelity against the tab's chords; chord-evaluation/fidelity.py):",
+                  f"  {'version':<12} {'capo':>4} {'D':>6} {'changes':>8} " + " ".join(f"{m:>7}" for m in fidelity.METRICS)]
+        for name, v in versions_scored.items():
+            lines.append(f"  {name:<12} {v['capo']:>4} {v['D']:>6} {v['changes']:>8} "
+                         + " ".join(f"{v[m]:>7}" for m in fidelity.METRICS))
         with open(os.path.join(TAB_CHORDS, song + ".report.json"), "w") as fh:
-            json.dump(dict(extras["aligned"], url=args.tab, recommended_capo=choice), fh, indent=1)
+            json.dump(dict(extras["aligned"], url=args.tab, recommended_capo=choice, versions=versions_scored),
+                      fh, indent=1)
         page = os.path.join(PAGES, song + ".html")
         write_page(page, os.path.join(args.out, song + ".lab"), os.path.join(args.out, song + ".shapes.json"),
                    choice, extras, table)

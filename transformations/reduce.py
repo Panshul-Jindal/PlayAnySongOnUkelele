@@ -13,29 +13,7 @@ easier than B `4322` (transformations/README.md). So the pipeline and the
 play-along page only use a reduction where it scores easier.
 """
 
-import harte
-
-#: degrees -> the triad they reduce to; checked in this order
-TRIADS = (("b3", "min"), ("3", "maj"))
-
-
-def reduce_label(label):
-    """``'A:7'`` -> ``'A:maj'``, ``'D:min7'`` -> ``'D:min'``, ``'G:sus4'`` -> ``'G:maj'``;
-    dim, aug, N and X unchanged."""
-    root, quality, bass = harte.split(label)
-    if quality is None:
-        return label
-    degrees = harte.degrees(label)
-    semis = {harte.degree_to_semitones(d) % 12 for d in degrees}
-    if 7 not in semis:                                    # no perfect fifth: dim, aug, (b5) chords
-        return label
-    triad = "min" if 3 in semis and 4 not in semis else "maj"
-    out = f"{root}:{triad}"
-    if bass is not None:
-        b = harte.degree_to_semitones(bass) % 12
-        if b in ({0, 3, 7} if triad == "min" else {0, 4, 7}) and b != 0:
-            out += "/" + bass
-    return out
+from triad import reduce_label
 
 
 def reduce(segments):

@@ -37,5 +37,5 @@ explicit = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # Our scripts are not packages, so tests import them from their folders.
-pythonpath = ["beat-tracking", "chord-estimation", "chord-evaluation", "common", "difficulty", "play-along", "preprocessing", "tab-alignment", "transformations", "."]
+pythonpath = ["beat-tracking", "chord-estimation", "chord-evaluation", "common", "difficulty", "play-along", "preprocessing", "simplification", "tab-alignment", "transformations", "."]
 addopts = ["--import-mode=importlib"]

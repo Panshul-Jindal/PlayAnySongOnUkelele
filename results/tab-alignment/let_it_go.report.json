@@ -1,0 +1,58 @@
+{
+ "tab words": 328,
+ "heard words": 277,
+ "tab words matched": 252,
+ "chords": {
+  "word": 78,
+  "word, interpolated": 11,
+  "line end": 3
+ },
+ "capo": 1,
+ "snap shift s (median, 90%, max)": [
+  0.08,
+  0.2,
+  0.23
+ ],
+ "key": {
+  "tab capo": 1,
+  "fit at capo": 0.98,
+  "best shift": 1,
+  "fit at best": 0.98,
+  "used": 1
+ },
+ "url": "https://tabs.ultimate-guitar.com/tab/misc-cartoons/frozen-let-it-go-ukulele-1492968",
+ "recommended_capo": 1,
+ "versions": {
+  "as the tab": {
+   "capo": 1,
+   "w_fit": null,
+   "D": 3.8,
+   "changes": 91,
+   "notes": 1.0,
+   "chroma": 1.0
+  },
+  "triads only": {
+   "capo": 1,
+   "D": 3.77,
+   "changes": 86,
+   "notes": 0.995,
+   "chroma": 0.994
+  },
+  "simplified": {
+   "capo": 1,
+   "w_fit": 0.25,
+   "D": 2.24,
+   "changes": 75,
+   "notes": 0.957,
+   "chroma": 0.902
+  },
+  "easiest": {
+   "capo": 1,
+   "w_fit": 0,
+   "D": 2.24,
+   "changes": 75,
+   "notes": 0.957,
+   "chroma": 0.897
+  }
+ }
+}
