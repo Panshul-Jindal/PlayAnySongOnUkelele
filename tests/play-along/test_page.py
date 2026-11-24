@@ -169,3 +169,36 @@ def test_the_pulse_is_brightest_on_a_beat():
 
 def test_lines_lab():
     assert js("linesLab([1, 2.5], 4)") == "1.000\t2.500\tline 1\n2.500\t4.000\tline 2\n"
+
+
+# ---- the decoder (simplification/simplify.py, ported) ----
+
+def test_moves_as_difficulty_voicings_counts_them():
+    # difficulty/voicings.py moves(): a whole-hand shift counts once, Em 0432 (fingers
+    # 0321) -> B7 4320 (fingers 3210): every finger moves one string up, same frets
+    em = {"frets": [0, 4, 3, 2], "fingers": [0, 3, 2, 1]}
+    b7 = {"frets": [4, 3, 2, 0], "fingers": [3, 2, 1, 0]}
+    assert js(f"moves({em}, {b7})".replace("'", '"')) == 1
+    # C 0003 -> Am 2000: finger 3 lifted (free), finger 2 put down: 1
+    c = {"frets": [0, 0, 0, 3], "fingers": [0, 0, 0, 3]}
+    am = {"frets": [2, 0, 0, 0], "fingers": [2, 0, 0, 0]}
+    assert js(f"moves({c}, {am})".replace("'", '"')) == 1
+
+
+DEC = """{steps: [{start: 0, end: 4, label: "G:7", options: [
+            {label: "G:7", fit: 0, kept: 1}, {label: "G:maj", fit: 0, kept: 0.75}]}],
+          chords: {"G:7": {names: ["G7"], shapes: [null], d: [9]}, "G:maj": {names: ["G"], shapes: [null], d: [1]}},
+          w_fit: [1], change: 2, move: 1, no_shape: 20, levels: {"simplified": [0.9, 0.7]}}"""
+
+
+def test_decode_takes_the_easier_option_when_the_music_fits_both():
+    # one 4 s step; both options fit the music alike, so at w = 1 the easier G (d 1) wins;
+    # D 1, notes kept 0.75 (3 of G7's 4 notes), likelihood ratio exp(0) = 1
+    r = js(f"decodeSong({DEC}, 0, 1, new Set())")
+    assert r == {"path": [1], "D": 1, "ratio": 1, "notes": 0.75}
+    assert js(f"decodeSong({DEC}, 0, Infinity, new Set()).path") == [0]
+
+
+def test_a_shape_marked_hard_costs_more():
+    # G marked too hard: G costs 1 + 10 against G7's 9, so G7 stays
+    assert js(f'decodeSong({DEC}, 0, 1, new Set(["G"])).path') == [0]

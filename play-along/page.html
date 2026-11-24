@@ -132,6 +132,7 @@ button:disabled { opacity: .5; }
   <button id="play" disabled>▶</button>
   <input id="seek" type="range" min="0" step="0.1" value="0" disabled>
   <span id="time"></span>
+  <label id="levellabel" hidden>level <select id="level"></select></label>
   <label>capo <select id="capo"></select></label>
   <label>speed <select id="speed">
     <option value="1">1×</option><option value="0.75">0.75×</option><option value="0.5">0.5×</option>
@@ -294,45 +295,113 @@ function linesLab(starts, end) {
     (i + 1 < starts.length ? starts[i + 1] : end).toFixed(3) + "\tline " + (i + 1)).join("\n") + "\n";
 }
 
-// ---- personalisation: which chord a player plays, and at which capo ----
+// ---- simplification and personalisation: the decoder of simplification/simplify.py ----
 
 const HARD_PENALTY = 10;   // d points a shape the player marked too hard costs on top of its own
 
-function playedAs(seg, c, hard) {
-  // what a player plays for seg at capo c, given the shape names they marked
-  // too hard: the chord's own shape, or its triad (transformations/reduce.py)
-  // when the own shape is marked and the triad is not. seg.own holds the
-  // chord's own names and shapes once the page has started swapping
-  const own = seg.own || seg;
-  const mine = {name: own.names[c], shape: own.shapes[c], d: seg.d ? seg.d[c] : null, swapped: false};
-  const t = seg.triad;
-  if (!t || !hard.has(mine.name) || hard.has(t.names[c]) || !t.shapes[c]) return mine;
-  return {name: t.names[c], shape: t.shapes[c], d: t.d[c], swapped: true};
+function placement(shape) {
+  // {finger: "string:fret,..."} for each finger pressing a string (difficulty/voicings.py placement)
+  const out = {};
+  if (!shape || !shape.fingers) return out;
+  shape.frets.forEach((f, s) => {
+    const finger = shape.fingers[s];
+    if (finger) (out[finger] = out[finger] || []).push([s, f]);
+  });
+  return out;
 }
 
-function personalCost(segs, c, hard) {
-  // the song's difficulty D at capo c for this player: the time-weighted mean
-  // of d (difficulty/difficulty.py) over the chords played, plus HARD_PENALTY
-  // for each shape they marked too hard; chords without a score are left out
-  let total = 0, scored = 0;
-  for (const s of segs) {
-    if (s.label === "N" || s.label === "X") continue;
-    const p = playedAs(s, c, hard);
-    if (p.d === null || p.d === undefined) continue;
-    total += s.end - s.start;
-    scored += (s.end - s.start) * (p.d + (hard.has(p.name) ? HARD_PENALTY : 0));
+function moves(a, b) {
+  // finger moves from shape a to shape b (difficulty/voicings.py moves): a finger put down
+  // costs 1; fingers that all shift by the same strings and frets count once together; any
+  // other movement, or a finger forming or leaving a barre, costs 1 each
+  const pa = placement(a), pb = placement(b);
+  let placed = 0;
+  const motions = new Set();
+  for (const finger in pb) {
+    const before = pa[finger], where = pb[finger];
+    const same = before && before.length === where.length &&
+      before.every((p, k) => p[0] === where[k][0] && p[1] === where[k][1]);
+    if (same) continue;
+    if (!before) placed++;
+    else if (before.length === 1 && where.length === 1)
+      motions.add((where[0][0] - before[0][0]) + "," + (where[0][1] - before[0][1]));
+    else motions.add("reshape" + finger);
   }
-  return total ? scored / total : Infinity;
+  return placed + motions.size;
 }
 
-function bestCapo(segs, hard, capos) {
-  // of the given capos, the one with the smallest personalCost; on a tie, the lower
-  let best = capos[0], least = personalCost(segs, capos[0], hard);
-  for (const c of capos) {
-    const cost = personalCost(segs, c, hard);
-    if (cost < least - 1e-9) { best = c; least = cost; }
+function decodeSong(dec, capo, w, hard) {
+  // the cheapest option per step (Viterbi, common/viterbi.py) at this capo and trade-off
+  // weight w (Infinity keeps the original), with each shape in `hard` costing HARD_PENALTY
+  // more per second; returns {path: option index per step, D, ratio, notes}
+  const steps = dec.steps, ch = dec.chords;
+  const dOf = label => { const d = ch[label].d[capo]; return d === null ? dec.no_shape : d; };
+  const unary = (st, o) => {
+    if (o.label === "N" || o.label === "X") return 0;
+    const dur = st.end - st.start, tabFit = st.options[0].fit;
+    const pen = hard.has(ch[o.label].names[capo]) ? HARD_PENALTY : 0;
+    if (w === Infinity) return o.label === st.label ? dur * (dOf(o.label) + pen) : 1e9;
+    return dur * (dOf(o.label) + pen + w * (tabFit - o.fit));
+  };
+  const pair = (x, y) => x === y ? 0 : dec.change + dec.move * moves(ch[x].shapes[capo], ch[y].shapes[capo]);
+  let cost = steps[0].options.map(o => unary(steps[0], o));
+  const back = [];
+  for (let t = 1; t < steps.length; t++) {
+    const prev = steps[t - 1].options, here = [], ptr = [];
+    steps[t].options.forEach(o => {
+      let best = 0, bestCost = Infinity;
+      prev.forEach((p, i) => {
+        const c = cost[i] + pair(p.label, o.label);
+        if (c < bestCost) { bestCost = c; best = i; }
+      });
+      here.push(bestCost + unary(steps[t], o));
+      ptr.push(best);
+    });
+    cost = here;
+    back.push(ptr);
   }
-  return best;
+  let j = cost.indexOf(Math.min(...cost));
+  const path = [j];
+  for (let t = back.length - 1; t >= 0; t--) { j = back[t][j]; path.push(j); }
+  path.reverse();
+  // the version's scores: D (time-weighted d over chords with a shape, plus the penalty for
+  // marked shapes), likelihood ratio and notes kept against the original (fidelity.py)
+  let dSum = 0, dTime = 0, fitDiff = 0, fitTime = 0, kept = 0, chordTime = 0;
+  steps.forEach((st, t) => {
+    const o = st.options[path[t]], dur = st.end - st.start;
+    if (st.label === "N" || st.label === "X") return;
+    const d = ch[o.label].d[capo];
+    if (d !== null) { dSum += dur * (d + (hard.has(ch[o.label].names[capo]) ? HARD_PENALTY : 0)); dTime += dur; }
+    fitDiff += dur * (o.fit - st.options[0].fit); fitTime += dur;
+    kept += dur * o.kept; chordTime += dur;
+  });
+  return {path, D: dTime ? dSum / dTime : Infinity, ratio: fitTime ? Math.exp(fitDiff / fitTime) : 1,
+          notes: chordTime ? kept / chordTime : 1};
+}
+
+function pickLevel(dec, level, hard) {
+  // simplify.py's levels for this player: "as the tab" is the original at its easiest capo;
+  // another level is the easiest decoded version (capo 0-5, every w) that keeps the level's
+  // floors of likelihood ratio and notes kept. Returns {capo, path, D, ratio, notes}
+  const tries = [];
+  for (let capo = 0; capo <= 5; capo++)
+    for (const w of [Infinity, ...dec.w_fit]) tries.push(Object.assign({capo, w}, decodeSong(dec, capo, w, hard)));
+  const floors = dec.levels[level];
+  const ok = tries.filter(r => level === "as the tab" ? r.w === Infinity : r.ratio >= floors[0] - 1e-9 && r.notes >= floors[1] - 1e-9);
+  const pool = ok.length ? ok : tries.filter(r => r.w === Infinity);
+  return pool.reduce((a, b) => (b.D < a.D - 1e-9 || (Math.abs(b.D - a.D) < 1e-9 && b.capo < a.capo)) ? b : a);
+}
+
+function segmentsOf(dec, path) {
+  // the decoded chords as page segments, consecutive repeats merged
+  const out = [];
+  dec.steps.forEach((st, t) => {
+    const label = st.options[path[t]].label, c = dec.chords[label];
+    const last = out[out.length - 1];
+    if (last && last.label === label && Math.abs(last.end - st.start) < 1e-9) last.end = st.end;
+    else out.push({start: st.start, end: st.end, label, names: c.names, shapes: c.shapes});
+  });
+  return out;
 }
 
 function barOffset(beats, starts) {
@@ -361,8 +430,8 @@ function strumStep(beats, t, perBeat, steps, offset) {
 // ---- the page ----
 
 const DATA = JSON.parse(document.getElementById("song-data").textContent);
-const SEGS = DATA.segments;
-const STARTS = SEGS.map(s => s.start);
+let SEGS = DATA.segments;
+let STARTS = SEGS.map(s => s.start);
 const BEATS = DATA.beats || [];
 // a page made from a tab keeps its taps apart from a page of the same song made otherwise
 const STORE = "play-along:" + DATA.source + (DATA.words ? ":tab" : "") + ":lines";
@@ -641,10 +710,11 @@ document.addEventListener("keydown", e => {
   else if (!tapping && e.code === "ArrowRight") audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
 });
 
-// ---- personalisation: "too hard" marks, kept per player across songs ----
+// ---- levels and personalisation: "too hard" marks, kept per player across songs ----
 
 const HARD_STORE = "ukulele-player:hard-shapes";
-const PERSONAL = SEGS.length > 0 && Array.isArray(SEGS[0].d);   // pages made from a tab carry the scores
+const DEC = DATA.decoder || null;
+let level = DATA.level || null;
 let hard = new Set();
 try { hard = new Set(JSON.parse(localStorage.getItem(HARD_STORE)) || []); } catch (e) { hard = new Set(); }
 
@@ -652,35 +722,44 @@ function saveHard() {
   try { localStorage.setItem(HARD_STORE, JSON.stringify([...hard])); } catch (e) { /* this visit only */ }
 }
 
-function applyHard() {
-  // every chord's names and shapes as this player plays them, at every capo
-  for (const s of SEGS) {
-    for (let c = 0; c < 12; c++) {
-      const p = playedAs(s, c, hard);
-      s.names[c] = p.name;
-      s.shapes[c] = p.shape;
-    }
-  }
+function useSegments(segs, c) {
+  SEGS = segs;
+  STARTS = SEGS.map(s => s.start);
+  capo = c;
+  $("capo").value = capo;
+  shown.seg = -1;
 }
 
-function frets(shape) { return shape && shape.frets ? shape.frets.join("") : "?"; }
+function applyLevel() {
+  // the level's own chords and shapes (worked out offline) while nothing is marked too hard;
+  // else the decoder's version for this player
+  if (!hard.size) {
+    const L = DATA.levels[level];
+    useSegments(L.segments, L.capo);
+    return null;
+  }
+  const r = pickLevel(DEC, level, hard);
+  useSegments(segmentsOf(DEC, r.path), r.capo);
+  return r;
+}
+
+function describe(r) {
+  const L = r || DATA.levels[level].scores;
+  const ratio = r ? r.ratio : L.chroma, notes = r ? r.notes : L.notes, D = r ? r.D : L.D;
+  return level + ": capo " + (capo || "none") + ", difficulty " + D.toFixed(2) + ", keeps " +
+    Math.round(100 * notes) + "% of the tab's notes, audio fit " + ratio.toFixed(2) + " of the tab's";
+}
 
 function markHard() {
-  const t = audio.currentTime || 0;
-  const seg = SEGS[Math.max(0, indexAt(STARTS, t))];
+  const seg = SEGS[Math.max(0, indexAt(STARTS, audio.currentTime || 0))];
   if (!seg || seg.label === "N" || seg.label === "X") return;
   const name = seg.names[capo];
   hard.add(name);
   saveHard();
-  applyHard();
-  const was = capo;
-  capo = bestCapo(SEGS, hard, [0, 1, 2, 3, 4, 5]);
-  $("capo").value = capo;
-  let text = name + " marked too hard.";
-  if (capo !== was) text += " Capo moved to " + (capo ? "fret " + capo : "none") + ": easier for you overall.";
-  if (seg.names[capo] !== name && capo === was) text += " Playing " + seg.names[capo] + " instead.";
-  if (capo === was && seg.names[capo] === name) text += " No easier way found for it; it costs more when choosing the capo.";
-  say("hard", "info", text);
+  const was = capo, r = applyLevel();
+  const still = SEGS.some(s => s.names[capo] === name);
+  say("hard", "info", name + " marked too hard. " + (capo !== was ? "Capo moved to " + (capo ? "fret " + capo : "none") + ". " : "") +
+      (still ? name + " is still needed in places: no easier way keeps the song." : "No more " + name + ".") + " Now " + describe(r) + ".");
   showHard();
   render(true);
 }
@@ -691,20 +770,19 @@ function showHard() {
 }
 
 function exportFeedback() {
-  // rows for data/player-feedback/comparisons.csv: each swap the page made, the
-  // triad played (easier) against the shape marked too hard (harder)
+  // rows for data/player-feedback/comparisons.csv: where the decoder now plays another chord
+  // than the tab, the chord played (easier) against the tab's shape marked too hard (harder)
   const player = (prompt("Your player id for the feedback file", "p1") || "p1").trim();
   const date = new Date().toISOString().slice(0, 10);
   const rows = new Set();
-  for (const s of SEGS) {
-    const p = playedAs(s, capo, hard);
-    if (!p.swapped) continue;
-    const own = s.own;
-    rows.add([date, player, DATA.song || DATA.source, capo, p.name + " " + frets(p.shape),
-              own.names[capo] + " " + frets(own.shapes[capo]), "yes",
-              '"marked too hard in the play-along page"'].join(","));
+  const frets = shape => shape && shape.frets ? shape.frets.join("") : "?";
+  for (const st of DEC.steps) {
+    const tab = DEC.chords[st.label], now = SEGS[Math.max(0, indexAt(STARTS, st.start + 1e-6))];
+    if (!tab || !now || now.label === st.label || !hard.has(tab.names[capo])) continue;
+    rows.add([date, player, DATA.song || DATA.source, capo, now.names[capo] + " " + frets(now.shapes[capo]),
+              tab.names[capo] + " " + frets(tab.shapes[capo]), "yes", '"marked too hard in the play-along page"'].join(","));
   }
-  const text = rows.size ? [...rows].join("\n") + "\n" : "# no swaps yet: marked too hard, with no easier triad: " + [...hard].join(" ") + "\n";
+  const text = rows.size ? [...rows].join("\n") + "\n" : "# marked too hard, with no easier chord used: " + [...hard].join(" ") + "\n";
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([text], {type: "text/csv"}));
   a.download = "feedback.csv";
@@ -713,29 +791,30 @@ function exportFeedback() {
   a.remove();
 }
 
-if (PERSONAL) {
-  for (const s of SEGS) s.own = {names: s.names.slice(), shapes: s.shapes.slice()};
+if (DEC && DATA.levels) {
+  $("levellabel").hidden = false;
+  for (const name of Object.keys(DATA.levels)) $("level").add(new Option(name, name));
+  $("level").value = level;
+  $("level").addEventListener("change", e => {
+    level = e.target.value;
+    const r = applyLevel();
+    say("hard", "info", "Now " + describe(r) + ".");
+    render(true);
+    e.target.blur();
+  });
   $("hardrow").hidden = false;
   $("hardkey").hidden = false;
   if (hard.size) {
-    applyHard();
-    const mine = bestCapo(SEGS, hard, [0, 1, 2, 3, 4, 5]);
-    if (mine !== capo) {
-      say("hard", "info", "Opened at capo " + (mine ? "fret " + mine : "none") + " instead of " +
-          (capo ? "fret " + capo : "none") + ": easier with the chords you find too hard.");
-      capo = mine;
-      $("capo").value = capo;
-    }
+    const r = applyLevel();
+    say("hard", "info", "Your too-hard chords (" + [...hard].join(", ") + ") are left out where the song allows. " + describe(r) + ".");
   }
   showHard();
   $("hard").addEventListener("click", e => { markHard(); e.currentTarget.blur(); });
   $("resethard").addEventListener("click", e => {
     hard = new Set();
     saveHard();
-    applyHard();
-    capo = DATA.capo || 0;
-    $("capo").value = capo;
-    say("hard", "info", "Your too-hard marks are cleared.");
+    applyLevel();
+    say("hard", "info", "Your too-hard marks are cleared. Now " + describe(null) + ".");
     showHard();
     render(true);
     e.currentTarget.blur();
@@ -782,6 +861,23 @@ if (STRUMS.length && STRUMS[0].steps.length) {
     requestAnimationFrame(strumFrame);
   })();
 }
+
+// ?audio=URL&lyrics=URL: load them without asking (the app in app.py serves the page so)
+(function loadFromLinks() {
+  const params = new URLSearchParams(location.search);
+  if (params.get("audio")) {
+    audioName = decodeURIComponent(params.get("audio").split("/").pop());
+    audio.src = params.get("audio");
+  }
+  if (params.get("lyrics")) {
+    fetch(params.get("lyrics")).then(r => r.ok ? r.text() : Promise.reject(r.status)).then(text => {
+      lyrics = lyricLines(text);
+      shown.line = -2;
+      checkLyrics();
+      updateButtons();
+    }).catch(e => say("lyrics", "warn", "Could not load the lyrics (" + e + "). Load them with the button."));
+  }
+})();
 
 loadLineTimes();
 (function frame() { render(false); requestAnimationFrame(frame); })();

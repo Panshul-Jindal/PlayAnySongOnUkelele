@@ -289,6 +289,7 @@ def levels(original, audio, table):
                       **{m: round(f(original, version, audio), 3) for m, f in fidelity.METRICS.items()}}
             found.append((scores, version))
     out = {}
+    decoder = decoder_data(original, fit, table)
     tab = [(sc, v) for sc, v in found if sc["w_fit"] == float("inf")]
     sc, v = min(tab, key=lambda x: (x[0]["D"], x[0]["capo"]))
     out["as the tab"] = (sc["capo"], v, sc)
@@ -296,7 +297,35 @@ def levels(original, audio, table):
         ok = [(sc, v) for sc, v in found if sc["chroma"] >= least_ratio and sc["notes"] >= least_notes] or tab
         sc, v = min(ok, key=lambda x: (x[0]["D"], x[0]["changes"], x[0]["capo"]))
         out[name] = (sc["capo"], v, sc)
-    return out
+    return out, decoder
+
+
+def decoder_data(original, fit, table):
+    """What play-along/page.html needs to re-decode the song in the browser when a player
+    marks a shape too hard: simplify.py's steps, each option's fit (mean log-probability)
+    and share of the original's notes kept; for every label, its name, shape and d at
+    each capo; and simplify.py's constants."""
+    from transpose import transpose
+    steps = simplify.steps(original)
+    chords = {}
+    out_steps = []
+    for i, (seg, opts) in enumerate(zip(original, steps)):
+        po = harte.pitch_classes(seg.label)
+        rows = []
+        for label in opts:
+            if label not in chords:
+                played = [transpose(label, -c) for c in play_along.CAPOS]
+                positions = [chart.first_position(p, table) if harte.split(p)[1] else None for p in played]
+                chords[label] = {"names": [names.name(p) for p in played],
+                                 "shapes": [play_along.shape(p, table) for p in played],
+                                 "d": [difficulty.shape_difficulty(x) if x else None for x in positions]}
+            ps = harte.pitch_classes(label)
+            kept = len(po & ps) / len(po) if po and ps else (1.0 if not po else 0.0)
+            rows.append({"label": label, "fit": round(fit(i, label), 4), "kept": round(kept, 4)})
+        out_steps.append({"start": seg.start, "end": seg.end, "label": seg.label, "options": rows})
+    return {"steps": out_steps, "chords": chords, "w_fit": list(simplify.W_FIT), "change": simplify.CHANGE,
+            "move": simplify.MOVE, "no_shape": simplify.NO_SHAPE,
+            "levels": {name: [ratio, notes] for name, ratio, notes in simplify.LEVELS}}
 
 
 def diff_estimator(versions, table, weights=difficulty.DEFAULT):
@@ -388,59 +417,43 @@ def strummings(tab):
     return out
 
 
-def alternatives(label):
-    """Chords a player can play instead of `label` and still sound every note of its triad:
-    the triad itself (transformations/reduce.py), and the triad with its minor seventh
-    added (G -> G7, Am -> Am7). **[ORIGINAL]** choice. Empty for N, X, dim and aug."""
-    if label in (harte.NO_CHORD, harte.UNKNOWN):
-        return []
-    triad = reduce_label(label)
-    root, quality, _ = harte.split(triad)
-    if quality not in ("maj", "min"):
-        return []
-    return [c for c in (triad, f"{root}:{'7' if quality == 'maj' else 'min7'}") if c != label]
+#: the levels a page offers, and the one it opens at
+PAGE_LEVELS = ("as the tab", "simplified", "easiest")
+OPEN_LEVEL = "simplified"
 
 
-def personal(segments, table):
-    """For the page's "too hard" button: at every capo, each chord's d (difficulty/difficulty.py,
-    None without a chart shape), and the easiest of its alternatives() there by d, with its
-    name, shape and d (under "triad", the page's name for it)."""
+def level_files(out, song, name, capo, version, table, w_move=2.0):
+    """Write a level's chords (no basses) and its shapes in a row (difficulty/voicings.py) to
+    <out>/levels/; return (lab path, shapes path, the chords, the shape plan)."""
     from transpose import transpose
-
-    def d_of(label):
-        p = chart.first_position(label, table)
-        return difficulty.shape_difficulty(p) if p else None
-
-    for seg in segments:
-        seg["d"] = [d_of(transpose(seg["label"], -c)) for c in play_along.CAPOS]
-        seg["triad"] = None
-        options = alternatives(seg["label"])
-        if not options:
-            continue
-        easier = {"label": [], "names": [], "shapes": [], "d": []}
-        for c in play_along.CAPOS:
-            scored = [(d_of(transpose(o, -c)), o) for o in options]
-            scored = [(d, o) for d, o in scored if d is not None]
-            d, o = min(scored) if scored else (None, None)
-            played = transpose(o, -c) if o else None
-            easier["label"].append(o)
-            easier["names"].append(names.name(played) if o else None)
-            easier["shapes"].append(play_along.shape(played, table) if o else None)
-            easier["d"].append(d)
-        seg["triad"] = easier
-    return segments
+    plain, _ = drop_bass(version)
+    base = os.path.join(out, "levels", f"{song}.{name.replace(' ', '_')}")
+    lab.write_lab(base + ".lab", plain)
+    played = [s._replace(label=transpose(s.label, -capo)) for s in plain]
+    path, _ = shapes_in_a_row(played, table, w_move)
+    with open(base + ".shapes.json", "w") as fh:
+        json.dump({"capo": capo, "w_move": w_move, "shapes": [
+            None if x is None else {"start": seg.start, "label": seg.label, "frets": list(x.frets),
+                                    "fingers": list(x.fingers), "chart": x.chart}
+            for seg, x in zip(played, path)]}, fh, indent=1)
+    return base + ".lab", base + ".shapes.json", plain, path
 
 
-def write_page(path, lab_path, shapes_path, capo, extras, table):
-    """The play-along page for a song from a tab: chords, line times, beats, chosen shapes,
-    and what the "too hard" button and the strumming row need."""
+def write_page(path, files, decoder, scores, extras, table, song):
+    """The play-along page for a song from a tab, with every level of PAGE_LEVELS (its chords,
+    capo and shapes), the decoder data for re-decoding when a player marks a shape too hard,
+    and the tab's strumming."""
     tab = extras["tab"]
-    data = play_along.song_data(lab_path, f"{tab['song']} · {tab['artist']}", extras["lines"], capo, table,
-                                extras["beats"], shapes_path)
-    personal(data["segments"], table)
-    data["strummings"] = strummings(tab)
-    data["words"] = extras["word starts"]   # per line, its words' start times: chords go over the nearest
-    data["song"] = os.path.splitext(os.path.basename(lab_path))[0]
+    title = f"{tab['song']} · {tab['artist']}"
+    levels_ = {}
+    for name in PAGE_LEVELS:
+        lab_path, shapes_path, capo = files[name]
+        d = play_along.song_data(lab_path, title, extras["lines"], capo, table, extras["beats"], shapes_path)
+        levels_[name] = {"capo": capo, "segments": d["segments"], "scores": scores[name]}
+    data = play_along.song_data(files[OPEN_LEVEL][0], title, extras["lines"], files[OPEN_LEVEL][2], table,
+                                extras["beats"], files[OPEN_LEVEL][1])
+    data.update({"levels": levels_, "level": OPEN_LEVEL, "decoder": decoder, "strummings": strummings(tab),
+                 "words": extras["word starts"], "song": song})
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(play_along.render(data))
@@ -557,10 +570,24 @@ def main(argv=None):
     if extras:
         audio = fidelity.Audio.load(args.song)
         versions_scored = tradeoff(list(lab.read_lab(source)), audio, table)
-        found = levels(list(lab.read_lab(source)), audio, table)
+        found, decoder = levels(list(lab.read_lab(source)), audio, table)
+        files = {}
+        with open(extras["lyrics"], encoding="utf-8") as fh:
+            tab_lyrics = chord_sheet.lyric_lines(fh.read())
+        line_starts = [s.start for s in lab.read_lab(extras["lines"])]
+        from beats import read_beats
+        beat_times = read_beats(extras["beats"])[0]
         for name, (capo, version, sc) in found.items():
             versions_scored[name] = {k: (None if v == float("inf") else v) for k, v in sc.items()}
-            lab.write_lab(os.path.join(args.out, "levels", f"{song}.{name.replace(' ', '_')}.lab"), version)
+            lab_path, shapes_path, plain_level, plan = level_files(args.out, song, name, capo, version, table)
+            files[name] = (lab_path, shapes_path, capo)
+            sheet_path = os.path.join(SONGS, song, f"chord_sheet_level_{name.replace(' ', '_')}.txt")
+            with open(sheet_path, "w", encoding="utf-8") as fh:     # holds lyrics: the song's folder, git-ignored
+                fh.write(chord_sheet.sheet(plain_level, capo, tab_lyrics, line_starts,
+                                           f"{extras['tab']['song']} · {extras['tab']['artist']}: {name}",
+                                           [None if x is None else {"frets": list(x.frets), "fingers": list(x.fingers),
+                                                                    "chart": x.chart} for x in plan],
+                                           table, beat_times, extras["word starts"]))
         lines += ["", "difficulty and fidelity (fidelity against the tab's chords; chord-evaluation/fidelity.py):",
                   f"  {'version':<12} {'capo':>4} {'D':>6} {'changes':>8} " + " ".join(f"{m:>7}" for m in fidelity.METRICS)]
         for name, v in versions_scored.items():
@@ -570,8 +597,7 @@ def main(argv=None):
             json.dump(dict(extras["aligned"], url=args.tab, recommended_capo=choice, versions=versions_scored),
                       fh, indent=1)
         page = os.path.join(PAGES, song + ".html")
-        write_page(page, os.path.join(args.out, song + ".lab"), os.path.join(args.out, song + ".shapes.json"),
-                   choice, extras, table)
+        write_page(page, files, decoder, versions_scored, extras, table, song)
         a = extras["aligned"]
         k = a["key"]
         key = (f"the tab's chords sound {k['used']:+d} semitones as written (its capo {k['tab capo']}; "

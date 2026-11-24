@@ -89,13 +89,10 @@ def options(label):
     return unique
 
 
-def simplify(segments, d, fit, moves, w_fit):
-    """The decoded version of `segments` (merged where a chord repeats).
-
-    d(label): shape difficulty (None: no shape); fit(i, label): fit of label
-    over segment i; moves(a, b): finger moves from chord a to chord b.
-    """
-    steps = []
+def steps(segments):
+    """For each segment, the labels the decoder may choose: options(), plus, for a
+    chord shorter than PASSING, the chords either side of it."""
+    out = []
     for i, s in enumerate(segments):
         opts = options(s.label)
         for j in (i - 1, i + 1):
@@ -103,7 +100,18 @@ def simplify(segments, d, fit, moves, w_fit):
                     and s.label not in (harte.NO_CHORD, harte.UNKNOWN) \
                     and segments[j].label not in (harte.NO_CHORD, harte.UNKNOWN):
                 opts.append(segments[j].label)
-        steps.append(opts)
+        out.append(opts)
+    return out
+
+
+def simplify(segments, d, fit, moves, w_fit):
+    """The decoded version of `segments` (merged where a chord repeats).
+
+    d(label): shape difficulty (None: no shape); fit(i, label): fit of label
+    over segment i; moves(a, b): finger moves from chord a to chord b.
+    play-along/page.html's decodeSong does the same in the browser.
+    """
+    steps_ = steps(segments)
 
     def unary(i, label):
         s = segments[i]
@@ -114,17 +122,17 @@ def simplify(segments, d, fit, moves, w_fit):
         lost = fit(i, s.label) - fit(i, label)
         return (s.end - s.start) * (cost + (w_fit * lost if w_fit != float("inf") else (0 if label == s.label else 1e9)))
 
-    costs = [[unary(i, o) for o in opts] for i, opts in enumerate(steps)]
+    costs = [[unary(i, o) for o in opts] for i, opts in enumerate(steps_)]
 
     def pair(t, a, b):
-        x, y = steps[t - 1][a], steps[t][b]
+        x, y = steps_[t - 1][a], steps_[t][b]
         if x == y:
             return 0.0
         return CHANGE + MOVE * moves(x, y)
 
     path, _ = decode(costs, pair)
     out = []
-    for s, opts, k in zip(segments, steps, path):
+    for s, opts, k in zip(segments, steps_, path):
         label = opts[k]
         if out and out[-1].label == label and out[-1].end == s.start:
             out[-1] = lab.Segment(out[-1].start, s.end, label)

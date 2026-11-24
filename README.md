@@ -66,6 +66,30 @@ uv run python beat-tracking/track_beats.py \
 Give the beat file to the play-along page with `--beats`, and it shows a pulse
 on each beat, the tempo, and an optional click. See `beat-tracking/README.md`.
 
+## The app: for testers
+
+```bash
+uv run python app.py            # http://127.0.0.1:7860 on this computer
+uv run python app.py --share    # also a public link to send a tester (Gradio, 72 hours)
+```
+
+Paste an Ultimate Guitar ukulele tab link and upload the song's recording (the
+original studio version). The app runs the pipeline below and links to a
+play-along page with the recording and lyrics already loaded:
+
+- **level**: *as the tab* (only the capo chosen), *simplified* (keeps at least
+  90% of the tab's notes and 0.9 of its audio fit), *easiest* (at least 75%
+  and 0.75);
+- **Too hard for me** (or H): marks the chord shape being played; the page
+  re-decodes the song in the browser so that shape costs more, keeping the
+  level's fidelity floors, and remembers the marks across songs;
+- **Export feedback**: the swaps it made, as rows for
+  `data/player-feedback/comparisons.csv`.
+
+The first run of a song takes a few minutes on a CPU (vocal separation and
+speech recognition); its files go to `data/preprocessed/app/`, which git
+ignores, and the app serves nothing else.
+
 ## From an Ultimate Guitar tab: the play-along page
 
 Give a recording and its Ultimate Guitar tab: the chords come from the tab,
